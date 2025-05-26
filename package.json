@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "prepare": "husky",
+    "postinstall": "node ./scripts/patch-script.js",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "format": "eslint . --fix && prettier --write .",
     "lint": "prettier --check . && eslint .",
