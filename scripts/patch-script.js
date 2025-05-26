@@ -6,16 +6,7 @@ import fs from 'fs';
 import path from 'path';
 
 // Path to the file we need to modify
-const filePath = path.join(
-  process.cwd(),
-  'node_modules',
-  '@sveltejs',
-  'kit',
-  'src',
-  'exports',
-  'vite',
-  'index.js'
-);
+const filePath = path.join(process.cwd(), 'node_modules', '@sveltejs', 'kit', 'src', 'exports', 'vite', 'index.js');
 
 console.log(`Checking for SvelteKit file at: ${filePath}`);
 
