@@ -11,11 +11,5 @@
     "strict": true,
     "moduleResolution": "bundler"
   },
-  "include": [
-    ".storybook/**/*.ts",
-    "e2e/**/*.ts",
-    "src/**/*.ts",
-    "src/**/*.svelte",
-    "*.ts"
-  ]
+  "include": [".storybook/**/*.ts", "e2e/**/*.ts", "src/**/*.ts", "src/**/*.svelte", "*.ts"]
 }

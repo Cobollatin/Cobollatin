@@ -1,4 +1,77 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
+  "nav": {
+    "about": "Acerca de",
+    "experience": "Experiencia",
+    "projects": "Proyectos",
+    "blog": "Blog",
+    "contact": "Contacto"
+  },
+  "hero": {
+    "name": "John Doe",
+    "title": "Desarrollador Full Stack y Entusiasta de la Tecnología",
+    "description": "Apasionado por crear aplicaciones hermosas, funcionales y fáciles de usar. Me especializo en tecnologías web modernas y me encanta resolver problemas complejos con código limpio y eficiente.",
+    "skills_title": "Habilidades Técnicas"
+  },
+  "experience": {
+    "title": "Experiencia",
+    "subtitle": "Mi trayectoria profesional y logros destacados",
+    "senior_dev": "Desarrollador Frontend Senior",
+    "senior_dev_company": "Tech Solutions Inc.",
+    "senior_dev_period": "2022 - Presente",
+    "senior_dev_desc": "Lideré el desarrollo de aplicaciones web modernas usando React y Vue.js. Mentoré desarrolladores junior e implementé mejores prácticas.",
+    "fullstack_dev": "Desarrollador Full Stack",
+    "fullstack_dev_company": "Digital Agency Co.",
+    "fullstack_dev_period": "2020 - 2022",
+    "fullstack_dev_desc": "Desarrollé y mantuve múltiples sitios web y aplicaciones web para clientes. Trabajé con varias tecnologías incluyendo Node.js, Python y frameworks frontend modernos.",
+    "junior_dev": "Desarrollador Junior",
+    "junior_dev_company": "StartUp Ventures",
+    "junior_dev_period": "2019 - 2020",
+    "junior_dev_desc": "Inicié mi carrera desarrollando sitios web responsivos y aprendiendo prácticas de desarrollo modernas. Adquirí experiencia en metodologías de desarrollo ágil."
+  },
+  "projects": {
+    "title": "Proyectos Destacados",
+    "subtitle": "Algunos de mis trabajos recientes y proyectos personales",
+    "ecommerce_title": "Plataforma de E-commerce",
+    "ecommerce_desc": "Una solución de comercio electrónico full-stack construida con SvelteKit e integración con Stripe.",
+    "task_title": "Aplicación de Gestión de Tareas",
+    "task_desc": "Una herramienta colaborativa de gestión de tareas con actualizaciones en tiempo real y funciones de equipo.",
+    "weather_title": "Panel de Clima",
+    "weather_desc": "Hermoso panel de clima con mapas interactivos y pronósticos detallados."
+  },
+  "blog": {
+    "title": "Últimas Publicaciones del Blog",
+    "subtitle": "Reflexiones sobre desarrollo, tecnología y mejores prácticas",
+    "view_all": "Ver Todas las Publicaciones",
+    "read_more": "Leer más",
+    "svelte_title": "Entendiendo Svelte 5: El Futuro de la Programación Reactiva",
+    "svelte_excerpt": "Explorando el nuevo sistema de runas y cómo cambia la forma en que pensamos sobre la reactividad en aplicaciones Svelte.",
+    "sveltekit_title": "Construyendo Aplicaciones Web Escalables con SvelteKit",
+    "sveltekit_excerpt": "Mejores prácticas y patrones para crear aplicaciones SvelteKit mantenibles y eficientes.",
+    "css_title": "El Arte de CSS Grid: Técnicas de Layout Modernas",
+    "css_excerpt": "Inmersión profunda en CSS Grid y cómo crear layouts complejos y responsivos con facilidad."
+  },
+  "contact": {
+    "title": "Ponte en Contacto",
+    "subtitle": "Hablemos sobre tu próximo proyecto u oportunidad",
+    "info_title": "Información de Contacto",
+    "form_name": "Nombre",
+    "form_name_placeholder": "Tu nombre",
+    "form_email": "Email",
+    "form_email_placeholder": "tu@email.com",
+    "form_subject": "Asunto",
+    "form_subject_placeholder": "¿De qué se trata?",
+    "form_message": "Mensaje",
+    "form_message_placeholder": "Tu mensaje...",
+    "form_send": "Enviar Mensaje"
+  },
+  "footer": {
+    "copyright": "© 2024 John Doe. Todos los derechos reservados.",
+    "built_with": "Construido con ❤️ usando SvelteKit y Tailwind CSS"
+  },
+  "meta": {
+    "title": "John Doe - Desarrollador Full Stack",
+    "description": "Portafolio personal y blog de John Doe, un desarrollador full-stack apasionado especializado en tecnologías web modernas."
+  },
   "title": "Cobollatin"
 }
