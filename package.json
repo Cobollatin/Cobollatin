@@ -19,7 +19,9 @@
   },
   "dependencies": {
     "@inlang/paraglide-js": "^2.0.13",
-    "@tailwindcss/postcss": "^4.1.7"
+    "@tailwindcss/postcss": "^4.1.7",
+    "carbon-components-svelte": "^0.82.0",
+    "carbon-icons-svelte": "^12.0.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3",
