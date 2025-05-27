@@ -1,1 +1,349 @@
 @import 'tailwindcss';
+
+@theme {
+  /* ===========================================
+     IBM Carbon Design System Theme Configuration
+     =========================================== */
+
+  /* Base colors */
+  --color-white: oklch(1 0 0);
+  --color-black: oklch(0 0 0);
+
+  /* Carbon Gray Scale (Official Carbon values) */
+  --color-gray-10: oklch(0.99 0 0);
+  --color-gray-20: oklch(0.96 0 0);
+  --color-gray-30: oklch(0.92 0 0);
+  --color-gray-40: oklch(0.87 0 0);
+  --color-gray-50: oklch(0.8 0 0);
+  --color-gray-60: oklch(0.68 0 0);
+  --color-gray-70: oklch(0.57 0 0);
+  --color-gray-80: oklch(0.46 0 0);
+  --color-gray-90: oklch(0.32 0 0);
+  --color-gray-100: oklch(0.16 0 0);
+
+  /* Carbon Cool Gray Scale */
+  --color-cool-gray-10: oklch(0.99 0.003 220);
+  --color-cool-gray-20: oklch(0.96 0.003 220);
+  --color-cool-gray-30: oklch(0.92 0.005 220);
+  --color-cool-gray-40: oklch(0.87 0.007 220);
+  --color-cool-gray-50: oklch(0.8 0.009 220);
+  --color-cool-gray-60: oklch(0.68 0.011 220);
+  --color-cool-gray-70: oklch(0.57 0.013 220);
+  --color-cool-gray-80: oklch(0.46 0.015 220);
+  --color-cool-gray-90: oklch(0.32 0.017 220);
+  --color-cool-gray-100: oklch(0.16 0.019 220);
+
+  /* Carbon Blue Scale (Primary brand color) */
+  --color-blue-10: oklch(0.99 0.01 240);
+  --color-blue-20: oklch(0.95 0.02 240);
+  --color-blue-30: oklch(0.9 0.04 240);
+  --color-blue-40: oklch(0.82 0.08 240);
+  --color-blue-50: oklch(0.73 0.12 240);
+  --color-blue-60: oklch(0.61 0.15 240);
+  --color-blue-70: oklch(0.48 0.18 240);
+  --color-blue-80: oklch(0.36 0.15 240);
+  --color-blue-90: oklch(0.25 0.12 240);
+  --color-blue-100: oklch(0.15 0.08 240);
+
+  /* Carbon Red Scale */
+  --color-red-10: oklch(0.99 0.01 12);
+  --color-red-20: oklch(0.96 0.03 12);
+  --color-red-30: oklch(0.92 0.06 12);
+  --color-red-40: oklch(0.86 0.1 12);
+  --color-red-50: oklch(0.77 0.15 12);
+  --color-red-60: oklch(0.64 0.2 12);
+  --color-red-70: oklch(0.5 0.22 12);
+  --color-red-80: oklch(0.37 0.18 12);
+  --color-red-90: oklch(0.27 0.14 12);
+  --color-red-100: oklch(0.18 0.1 12);
+
+  /* Carbon Green Scale */
+  --color-green-10: oklch(0.99 0.01 142);
+  --color-green-20: oklch(0.95 0.03 142);
+  --color-green-30: oklch(0.9 0.06 142);
+  --color-green-40: oklch(0.82 0.1 142);
+  --color-green-50: oklch(0.73 0.14 142);
+  --color-green-60: oklch(0.61 0.17 142);
+  --color-green-70: oklch(0.48 0.19 142);
+  --color-green-80: oklch(0.36 0.16 142);
+  --color-green-90: oklch(0.25 0.12 142);
+  --color-green-100: oklch(0.16 0.08 142);
+
+  /* Carbon Yellow Scale */
+  --color-yellow-10: oklch(0.99 0.01 85);
+  --color-yellow-20: oklch(0.97 0.03 85);
+  --color-yellow-30: oklch(0.93 0.08 85);
+  --color-yellow-40: oklch(0.88 0.13 85);
+  --color-yellow-50: oklch(0.81 0.16 85);
+  --color-yellow-60: oklch(0.72 0.18 85);
+  --color-yellow-70: oklch(0.62 0.19 85);
+  --color-yellow-80: oklch(0.51 0.17 85);
+  --color-yellow-90: oklch(0.4 0.14 85);
+  --color-yellow-100: oklch(0.3 0.11 85);
+
+  /* Carbon Cyan Scale */
+  --color-cyan-10: oklch(0.99 0.01 195);
+  --color-cyan-20: oklch(0.95 0.03 195);
+  --color-cyan-30: oklch(0.89 0.06 195);
+  --color-cyan-40: oklch(0.8 0.1 195);
+  --color-cyan-50: oklch(0.69 0.14 195);
+  --color-cyan-60: oklch(0.56 0.17 195);
+  --color-cyan-70: oklch(0.43 0.19 195);
+  --color-cyan-80: oklch(0.31 0.16 195);
+  --color-cyan-90: oklch(0.21 0.12 195);
+  --color-cyan-100: oklch(0.14 0.08 195);
+
+  /* Carbon Magenta Scale */
+  --color-magenta-10: oklch(0.99 0.01 320);
+  --color-magenta-20: oklch(0.96 0.03 320);
+  --color-magenta-30: oklch(0.91 0.06 320);
+  --color-magenta-40: oklch(0.84 0.1 320);
+  --color-magenta-50: oklch(0.74 0.15 320);
+  --color-magenta-60: oklch(0.62 0.19 320);
+  --color-magenta-70: oklch(0.48 0.21 320);
+  --color-magenta-80: oklch(0.36 0.18 320);
+  --color-magenta-90: oklch(0.26 0.14 320);
+  --color-magenta-100: oklch(0.17 0.1 320);
+
+  /* Carbon Purple Scale */
+  --color-purple-10: oklch(0.99 0.01 285);
+  --color-purple-20: oklch(0.96 0.03 285);
+  --color-purple-30: oklch(0.91 0.06 285);
+  --color-purple-40: oklch(0.83 0.1 285);
+  --color-purple-50: oklch(0.73 0.15 285);
+  --color-purple-60: oklch(0.61 0.18 285);
+  --color-purple-70: oklch(0.48 0.2 285);
+  --color-purple-80: oklch(0.36 0.17 285);
+  --color-purple-90: oklch(0.26 0.13 285);
+  --color-purple-100: oklch(0.17 0.09 285);
+
+  /* Carbon Teal Scale */
+  --color-teal-10: oklch(0.99 0.01 175);
+  --color-teal-20: oklch(0.95 0.03 175);
+  --color-teal-30: oklch(0.89 0.06 175);
+  --color-teal-40: oklch(0.8 0.1 175);
+  --color-teal-50: oklch(0.69 0.14 175);
+  --color-teal-60: oklch(0.56 0.17 175);
+  --color-teal-70: oklch(0.43 0.19 175);
+  --color-teal-80: oklch(0.31 0.16 175);
+  --color-teal-90: oklch(0.21 0.12 175);
+  --color-teal-100: oklch(0.14 0.08 175);
+
+  /* Carbon Spacing Scale (in rem) */
+  --spacing-1: 0.125rem; /* 2px */
+  --spacing-2: 0.25rem; /* 4px */
+  --spacing-3: 0.5rem; /* 8px */
+  --spacing-4: 0.75rem; /* 12px */
+  --spacing-5: 1rem; /* 16px */
+  --spacing-6: 1.5rem; /* 24px */
+  --spacing-7: 2rem; /* 32px */
+  --spacing-8: 2.5rem; /* 40px */
+  --spacing-9: 3rem; /* 48px */
+  --spacing-10: 4rem; /* 64px */
+  --spacing-11: 5rem; /* 80px */
+  --spacing-12: 6rem; /* 96px */
+  --spacing-13: 10rem; /* 160px */
+  --spacing-14: 11rem; /* 176px */
+  --spacing-15: 12rem; /* 192px */
+
+  /* Carbon Layout Spacing */
+  --layout-1: 1rem; /* 16px */
+  --layout-2: 1.5rem; /* 24px */
+  --layout-3: 2rem; /* 32px */
+  --layout-4: 3rem; /* 48px */
+  --layout-5: 4rem; /* 64px */
+  --layout-6: 6rem; /* 96px */
+  --layout-7: 10rem; /* 160px */
+
+  /* Carbon Typography Scale */
+  --font-size-caption-1: 0.75rem; /* 12px - Caption 01 */
+  --font-size-caption-2: 0.875rem; /* 14px - Caption 02 */
+  --font-size-label-1: 0.75rem; /* 12px - Label 01 */
+  --font-size-label-2: 0.875rem; /* 14px - Label 02 */
+  --font-size-helper-text: 0.75rem; /* 12px - Helper text */
+  --font-size-body-compact-1: 0.875rem; /* 14px - Body compact 01 */
+  --font-size-body-compact-2: 1rem; /* 16px - Body compact 02 */
+  --font-size-body-1: 0.875rem; /* 14px - Body 01 */
+  --font-size-body-2: 1rem; /* 16px - Body 02 */
+  --font-size-code-1: 0.75rem; /* 12px - Code 01 */
+  --font-size-code-2: 0.875rem; /* 14px - Code 02 */
+  --font-size-heading-1: 0.875rem; /* 14px - Heading 01 */
+  --font-size-heading-2: 1rem; /* 16px - Heading 02 */
+  --font-size-heading-3: 1.25rem; /* 20px - Heading 03 */
+  --font-size-heading-4: 1.75rem; /* 28px - Heading 04 */
+  --font-size-heading-5: 2rem; /* 32px - Heading 05 */
+  --font-size-heading-6: 2.625rem; /* 42px - Heading 06 */
+  --font-size-heading-7: 3.375rem; /* 54px - Heading 07 */
+  --font-size-display-1: 2.625rem; /* 42px - Display 01 */
+  --font-size-display-2: 3.375rem; /* 54px - Display 02 */
+  --font-size-display-3: 4.25rem; /* 68px - Display 03 */
+  --font-size-display-4: 6rem; /* 96px - Display 04 */
+
+  /* Carbon Line Heights */
+  --line-height-caption-1: 1.33333; /* 16px */
+  --line-height-caption-2: 1.28571; /* 18px */
+  --line-height-label-1: 1.33333; /* 16px */
+  --line-height-label-2: 1.28571; /* 18px */
+  --line-height-helper-text: 1.33333; /* 16px */
+  --line-height-body-compact-1: 1.28571; /* 18px */
+  --line-height-body-compact-2: 1.375; /* 22px */
+  --line-height-body-1: 1.42857; /* 20px */
+  --line-height-body-2: 1.5; /* 24px */
+  --line-height-code-1: 1.33333; /* 16px */
+  --line-height-code-2: 1.28571; /* 18px */
+  --line-height-heading-1: 1.28571; /* 18px */
+  --line-height-heading-2: 1.5; /* 24px */
+  --line-height-heading-3: 1.4; /* 28px */
+  --line-height-heading-4: 1.28571; /* 36px */
+  --line-height-heading-5: 1.25; /* 40px */
+  --line-height-heading-6: 1.19048; /* 50px */
+  --line-height-heading-7: 1.18519; /* 64px */
+  --line-height-display-1: 1.19048; /* 50px */
+  --line-height-display-2: 1.18519; /* 64px */
+  --line-height-display-3: 1.17647; /* 80px */
+  --line-height-display-4: 1.16667; /* 112px */
+
+  /* Carbon Font Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+
+  /* Carbon Font Families */
+  --font-family-sans:
+    'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-family-mono: 'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', Courier, monospace;
+  --font-family-serif: 'IBM Plex Serif', 'Times New Roman', Georgia, serif;
+  --font-family-condensed: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;
+
+  /* Carbon Border Radius */
+  --radius-none: 0;
+  --radius-sm: 0.125rem; /* 2px */
+  --radius-default: 0.25rem; /* 4px */
+  --radius-md: 0.5rem; /* 8px */
+  --radius-lg: 0.75rem; /* 12px */
+  --radius-xl: 1rem; /* 16px */
+  --radius-full: 9999px;
+
+  /* Carbon Drop Shadows */
+  --shadow-01: 0 2px 6px 0 rgba(0, 0, 0, 0.3);
+  --shadow-02: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
+  --shadow-03: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
+
+  /* Carbon Motion Easing */
+  --ease-standard-productive: cubic-bezier(0.2, 0, 0.38, 0.9);
+  --ease-standard-expressive: cubic-bezier(0.4, 0.14, 0.3, 1);
+  --ease-entrance-productive: cubic-bezier(0, 0, 0.38, 0.9);
+  --ease-entrance-expressive: cubic-bezier(0, 0, 0.3, 1);
+  --ease-exit-productive: cubic-bezier(0.2, 0, 1, 0.9);
+  --ease-exit-expressive: cubic-bezier(0.4, 0.14, 1, 1);
+
+  /* Carbon Motion Durations */
+  --duration-fast-1: 70ms;
+  --duration-fast-2: 110ms;
+  --duration-moderate-1: 150ms;
+  --duration-moderate-2: 240ms;
+  --duration-slow-1: 400ms;
+  --duration-slow-2: 700ms;
+
+  /* Carbon Layers (z-index) */
+  --layer-dropdown: 6000;
+  --layer-modal: 9000;
+  --layer-overlay: 8000;
+  --layer-popup: 6000;
+
+  /* Carbon Breakpoints */
+  --breakpoint-sm: 320px; /* Small */
+  --breakpoint-md: 672px; /* Medium */
+  --breakpoint-lg: 1056px; /* Large */
+  --breakpoint-xl: 1312px; /* Extra Large */
+  --breakpoint-max: 1584px; /* Maximum */
+
+  /* Carbon Grid */
+  --grid-gutter: 2rem; /* 32px */
+  --grid-margin: 5vw;
+  --grid-condensed-gutter: 0.0625rem; /* 1px */
+  --grid-narrow-gutter: 1rem; /* 16px */
+
+  /* Focus outline */
+  --focus-outline: 2px solid var(--color-blue-60);
+  --focus-outline-offset: 2px;
+
+  /* Interaction states */
+  --hover-primary: var(--color-blue-70);
+  --hover-primary-text: var(--color-blue-70);
+  --hover-danger: var(--color-red-60);
+  --hover-secondary: var(--color-gray-80);
+  --hover-tertiary: var(--color-gray-20);
+
+  --active-primary: var(--color-blue-80);
+  --active-secondary: var(--color-gray-40);
+  --active-tertiary: var(--color-gray-30);
+
+  --disabled-01: var(--color-gray-10);
+  --disabled-02: var(--color-gray-30);
+  --disabled-03: var(--color-gray-50);
+
+  /* Field colors */
+  --field-01: var(--color-white);
+  --field-02: var(--color-gray-10);
+  --field-03: var(--color-gray-20);
+
+  /* Background colors */
+  --background: var(--color-white);
+  --background-inverse: var(--color-gray-80);
+  --background-brand: var(--color-blue-60);
+  --background-hover: rgba(141, 141, 141, 0.12);
+  --background-active: rgba(141, 141, 141, 0.4);
+  --background-selected: rgba(141, 141, 141, 0.24);
+  --background-selected-hover: rgba(141, 141, 141, 0.32);
+
+  /* Text colors */
+  --text-primary: var(--color-gray-100);
+  --text-secondary: var(--color-gray-70);
+  --text-placeholder: var(--color-gray-40);
+  --text-helper: var(--color-gray-60);
+  --text-error: var(--color-red-60);
+  --text-inverse: var(--color-white);
+  --text-on-color: var(--color-white);
+  --text-on-color-disabled: var(--color-gray-50);
+
+  /* Link colors */
+  --link-primary: var(--color-blue-60);
+  --link-primary-hover: var(--color-blue-70);
+  --link-secondary: var(--color-gray-70);
+  --link-visited: var(--color-purple-60);
+  --link-inverse: var(--color-blue-40);
+
+  /* Icon colors */
+  --icon-primary: var(--color-gray-100);
+  --icon-secondary: var(--color-gray-70);
+  --icon-on-color: var(--color-white);
+  --icon-on-color-disabled: var(--color-gray-50);
+  --icon-interactive: var(--color-blue-60);
+  --icon-inverse: var(--color-white);
+  --icon-disabled: var(--color-gray-40);
+
+  /* Support colors */
+  --support-error: var(--color-red-60);
+  --support-success: var(--color-green-60);
+  --support-warning: var(--color-yellow-30);
+  --support-info: var(--color-blue-70);
+  --support-error-inverse: var(--color-red-50);
+  --support-success-inverse: var(--color-green-40);
+  --support-warning-inverse: var(--color-yellow-30);
+  --support-info-inverse: var(--color-blue-50);
+
+  /* Border colors */
+  --border-subtle-00: var(--color-gray-20);
+  --border-subtle-01: var(--color-gray-30);
+  --border-subtle-02: var(--color-gray-20);
+  --border-subtle-03: var(--color-gray-20);
+  --border-strong-01: var(--color-gray-50);
+  --border-strong-02: var(--color-gray-60);
+  --border-strong-03: var(--color-gray-50);
+  --border-tile-01: var(--color-gray-30);
+  --border-tile-02: var(--color-gray-40);
+  --border-tile-03: var(--color-gray-20);
+  --border-inverse: var(--color-gray-100);
+  --border-interactive: var(--color-blue-60);
+}
