@@ -1,11 +1,11 @@
 import { paraglideVitePlugin } from '@inlang/paraglide-js';
-import { svelteTesting } from '@testing-library/svelte/vite';
-import tailwindcss from '@tailwindcss/vite';
+import { storybookTest } from '@storybook/experimental-addon-test/vitest-plugin';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
+import tailwindcss from '@tailwindcss/vite';
+import { svelteTesting } from '@testing-library/svelte/vite';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { storybookTest } from '@storybook/experimental-addon-test/vitest-plugin';
+import { defineConfig } from 'vite';
 const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
 // More info at: https://storybook.js.org/docs/writing-tests/test-addon
