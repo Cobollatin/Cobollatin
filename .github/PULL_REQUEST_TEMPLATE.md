@@ -1,7 +1,22 @@
 ## Description
 
 A brief summary of the changes made in this pull request.
-*(e.g., "Fix typo on homepage", "Add new project to portfolio", "Update CV link")*
+_(e.g., "Fix typo on homepage", "Add new project to portfolio", "Update CV link", "Add blog post about TypeScript best practices")_
+
+## Type of Contribution
+
+- [ ] Bug fix
+- [ ] Feature enhancement
+- [ ] Blog post contribution
+- [ ] Documentation update
+- [ ] Other: ****\_\_\_****
+
+## Blog Post Specific (if applicable)
+
+- **Title**:
+- **Topic/Category**:
+- **Word Count**:
+- **Key takeaways**:
 
 ## Related Issue(s)
 
@@ -24,3 +39,5 @@ A brief summary of the changes made in this pull request.
 - [ ] Changes have been tested locally.
 - [ ] Relevant pages/components look as expected.
 - [ ] If applicable, documentation (e.g., README) updated.
+- [ ] **For blog posts**: Content is original, well-written, and follows style guidelines.
+- [ ] **For blog posts**: Proper metadata and formatting included.

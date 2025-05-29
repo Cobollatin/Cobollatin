@@ -1,38 +1,27 @@
 ### 👋 Hello there! I'm Adrian, a Software Engineer shaping the digital world!
 
 **Innovative Software Engineer & Architect | Crafting Scalable, High-Impact Solutions for a Global Landscape.**
+
 ---
+
 ## 👨‍💻 About Me
+
 I'm a Software Engineer with over 5 years of hands-on experience architecting and developing scalable solutions, from freelance projects to roles in renowned organizations across several continents. I've worked in diverse industries like banking, airport services, and logistics, and I'm comfortable with various cloud platforms including **AWS, Azure, GCP, and IBM Cloud**.
 
 My go-to technologies include **Java, C#, Laravel, Angular, and React**. I particularly enjoy conceptualizing reusable software libraries and have a knack for leading teams, driving the adoption of microservice architectures, and generally making systems more efficient.
 
 I'm also currently diving deeper into Informatics Engineering to keep the learning journey going. Fluent in both English and Spanish 🇪🇸🇬🇧, I'm passionate about how technology can bridge geographical and cultural divides—a passion fueled by working on projects across four continents! ⚡
+
 ---
+
 ## 🌱 What I'm Currently Working On & Learning
-- 🔭 I’m currently working on refining my skills in cloud architectures and exploring new AI-driven development tools!
-- 🌱 I’m currently learning more about advanced Kubernetes deployments and serverless technologies.
+
+- 🔭 I'm currently working on refining my skills in cloud architectures and exploring new AI-driven development tools!
+- 🌱 I'm currently learning more about advanced Kubernetes deployments and serverless technologies.
 - 💬 Ask me about Java, C#, Laravel, Angular, React, AWS, Azure, or GCP!
----
-## 🚀 My Latest Projects
 
-### Project Nova - Reactive Microservices Platform
-*   Architected and developed a high-performance, resilient microservices platform using reactive principles.
-*   Designed for real-time data processing and event streaming in a distributed environment.
-*   **Technologies:** Java 11, Spring Boot, RxJava, Kafka, AWS (EKS, MSK, S3, DynamoDB), Docker, Kubernetes.
-*   [View on GitHub (Placeholder)](https://github.com/Cobollatin/project-nova-placeholder) | [Technical Deep Dive (Placeholder)](https://www.cobollatin.com/blog/project-nova-deep-dive)
+---
 
-### Project Sentinel - Enterprise Telemetry & Monitoring Solution
-*   Led the development of a comprehensive telemetry system, from data collection to insightful dashboarding.
-*   Integrated with various enterprise systems and provided robust system monitoring capabilities.
-*   **Technologies:** C#, .NET 6, Azure (AKS, Service Bus, Monitor), React, TypeScript, Power BI.
-*   [View on GitHub (Placeholder)](https://github.com/Cobollatin/project-sentinel-placeholder)
----
-## 📝 Latest Blog Posts
-*   [Architecting for Resilience: Lessons from Large-Scale Deployments](https://www.cobollatin.com/blog/architecting-resilience-mock) - October 2023 *(Placeholder)*
-*   [The Power of Reactive Programming in Modern Java Applications](https://www.cobollatin.com/blog/reactive-java-mock) - September 2023 *(Placeholder)*
-*([More posts on my website...](https://www.cobollatin.com/blog) | Future posts may be dynamically updated here!)*
----
 ### 💻 Tech Stack
 
 **Languages:**
@@ -57,16 +46,16 @@ I'm also currently diving deeper into Informatics Engineering to keep the learni
 
 **DevOps, Tools & Platforms:**
 
-*CI/CD & Version Control:*
+_CI/CD & Version Control:_
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white) ![Bitbucket](https://img.shields.io/badge/Bitbucket-0052CC?style=for-the-badge&logo=bitbucket&logoColor=white) ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white) ![Azure DevOps](https://img.shields.io/badge/Azure_DevOps-0078D7?style=for-the-badge&logo=azure-devops&logoColor=white)
 
-*Containerization & Build:*
+_Containerization & Build:_
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white) ![Maven](https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apache-maven&logoColor=white)
 
-*Project Management & API Tools:*
+_Project Management & API Tools:_
 ![Jira](https://img.shields.io/badge/Jira-0052CC?style=for-the-badge&logo=jira&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white) ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)
 
-*Code Quality:*
+_Code Quality:_
 ![SonarQube](https://img.shields.io/badge/SonarQube-4E9BCD?style=for-the-badge&logo=sonarqube&logoColor=white)
 
 **Testing:**
@@ -76,15 +65,104 @@ I'm also currently diving deeper into Informatics Engineering to keep the learni
 **Mobile Development:**
 
 ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
+
 ---
+
 ### 📊 My GitHub Stats
 
 [![Adrian's GitHub Stats](https://github-readme-stats.vercel.app/api?username=Cobollatin&show_icons=true&theme=radical&hide_border=true&count_private=true)](https://github.com/Cobollatin)
+
 ---
+
+## 🚀 My Latest Projects
+
+### Project Nova - Reactive Microservices Platform
+
+- Architected and developed a high-performance, resilient microservices platform using reactive principles.
+- Designed for real-time data processing and event streaming in a distributed environment.
+- **Technologies:** Java 11, Spring Boot, RxJava, Kafka, AWS (EKS, MSK, S3, DynamoDB), Docker, Kubernetes.
+- [View on GitHub (Placeholder)](https://github.com/Cobollatin/project-nova-placeholder) | [Technical Deep Dive (Placeholder)](https://www.cobollatin.com/blog/project-nova-deep-dive)
+
+### Project Sentinel - Enterprise Telemetry & Monitoring Solution
+
+- Led the development of a comprehensive telemetry system, from data collection to insightful dashboarding.
+- Integrated with various enterprise systems and provided robust system monitoring capabilities.
+- **Technologies:** C#, .NET 6, Azure (AKS, Service Bus, Monitor), React, TypeScript, Power BI.
+- [View on GitHub (Placeholder)](https://github.com/Cobollatin/project-sentinel-placeholder)
+
+---
+
+## 🏆 Key Achievements
+
+- 🌐 **Multi-Cloud Architect**: Designed hybrid infrastructures spanning AWS, Azure, GCP, and IBM Cloud
+- 📚 **Library Pioneer**: Created reusable software libraries adopted organization-wide
+- 🚀 **DevOps Champion**: Implemented CI/CD pipelines, containerization, and cloud deployments
+- 🔄 **Reactive Systems**: Built high-performance microservices handling real-time data streams
+- 🌍 **Global Deployment**: Managed on-site server installations across Spanish airports
+
+---
+
+## 📝 Latest Blog Posts
+
+- [Architecting for Resilience: Lessons from Large-Scale Deployments](https://www.cobollatin.com/blog/architecting-resilience-mock) - October 2023 _(Placeholder)_
+- [The Power of Reactive Programming in Modern Java Applications](https://www.cobollatin.com/blog/reactive-java-mock) - September 2023 _(Placeholder)_
+  _([More posts on my website...](https://www.cobollatin.com/blog) | Future posts may be dynamically updated here!)_
+
+---
+
+## 📈 Current Focus
+
+- 🎯 **2024-2026**: Completing dual Master's degrees in Informatics & Software Engineering
+- 🔬 **Research**: Advanced Kubernetes deployments and serverless architectures
+- 🤖 **Innovation**: Exploring AI-driven development tools and automation
+- 🌐 **Collaboration**: Available for international projects and consulting
+
+---
+
+## 💼 Professional Journey
+
+```
+2025 → Software Architect @ AOS International (US)
+2024 → Software Engineer @ Encora (Multi-national)
+2023 → Tech Lead @ Niubiz (Banking - Peru)
+2022 → Various roles @ MDP, G&S, Devsu, Inty360
+2020-2022 → Freelance Full-Stack Developer
+2019-2020 → IT Administrator @ MixCom
+```
+
+---
+
+## 🎓 Education & Continuous Learning
+
+- **Dual Master's Program**: Informatics Engineering at European University of Madrid (Expected 9/10) | Software Engineering at UPC Peru (Expected 18/20 - Top 10%)
+- **Exchange Program**: Computer Science at University of Sheffield, UK (Class 2.1 Honours)
+- **4+ years** in Mathematics at National University of Engineering (UNI), Peru
+
+---
+
+## 🌟 Fun Facts
+
+- 🗣️ **Bilingual**: Native Spanish, Fluent English
+- 🌍 **4 Continents**: Worked across Americas and Europe
+- 🎓 **Academic Excellence**: Consistently top 10% student
+- ⚡ **Passion**: Bridging technology across geographical and cultural divides
+- 🕐 **Timezone**: Currently UTC-5 (Peru) / Available for global collaboration
+
+---
+
 ## 📫 Connect with me
+
 <p align="left">
-  <a href="https://github.com/Cobollatin/" target="_blank"><img align="center" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/github.svg" alt="Cobollatin GitHub" height="30" width="30" /></a>
-  <a href="mailto:cobollatin@cobollatin.com"><img align="center" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/gmail.svg" alt="Cobollatin Email" height="30" width="30" /></a>
-  <a href="https://www.linkedin.com/in/cobollatin/" target="_blank"><img align="center" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/linkedin.svg" alt="Adrian Marquina LinkedIn" height="30" width="30" /></a>
-  <a href="https://www.cobollatin.com/" target="_blank"><img align="center" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/html5.svg" alt="Cobollatin Website" height="30" width="30" /></a>
+  <a href="https://github.com/Cobollatin/" target="_blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/github.svg" alt="Cobollatin GitHub" height="30" width="40" /></a>
+  <a href="mailto:cobollatin@cobollatin.com"><img align="center" src="https://img.shields.io/badge/Email-cobollatin%40cobollatin.com-red?style=flat-square&logo=gmail" alt="Cobollatin Email" /></a>
+  <a href="https://www.linkedin.com/in/cobollatin/" target="_blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="Cobollatin LinkedIn" height="30" width="40" /></a>
+  <a href="https://www.instagram.com/cobollatin/" target="_blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" alt="Cobollatin Instagram" height="30" width="40" /></a>
+  <a href="https://x.com/Cobollatin" target="_blank"><img align="center" src="https://simpleicons.org/icons/x.svg" alt="Cobollatin X" height="30" width="40" /></a>
+  <a href="https://www.cobollatin.com/" target="_blank"><img align="center" src="https://www.svgrepo.com/show/292454/www.svg" alt="Cobollatin Website" height="30" width="40" /></a>
 </p>
+
+---
+
+## 💼 Let's Collaborate!
+
+💡 **Available for**: Technical consulting, architecture reviews, team leadership, and exciting projects that push technological boundaries!
