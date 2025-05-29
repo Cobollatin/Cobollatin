@@ -12,7 +12,7 @@ const preview: Preview = {
   },
   // Ignore https://github.com/storybookjs/storybook/issues/29951
   // @ts-expect-error Bug in Storybook
-  decorators: [() : Component<$$ComponentProps, object, ""> => NavbarDecorator],
+  decorators: [(): Component<$$ComponentProps, object, ''> => NavbarDecorator],
 };
 
 export default preview;

@@ -95,24 +95,22 @@ export const Secondary = {
     readTime: 8,
     tags: ['SvelteKit', 'Storybook', 'Web Development', 'Tutorial', 'JavaScript'],
     variant: 'full' as const,
-    imageUrl: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=400&fit=crop'
+    imageUrl: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=400&fit=crop',
   };
 </script>
 
 <svelte:head>
   <title>{blogData.title} - {m['app:platform']()}</title>
-  <meta name="description" content="Learn how to set up SvelteKit with Storybook for component-driven development. Complete guide with examples and best practices." />
+  <meta
+    name="description"
+    content="Learn how to set up SvelteKit with Storybook for component-driven development. Complete guide with examples and best practices."
+  />
 </svelte:head>
 
 <div class="container mx-auto px-4 py-8">
   <BlogPost {...blogData} />
-  
+
   <div class="mt-8 flex justify-center">
-    <a 
-      href="/blog" 
-      class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium"
-    >
-      ← Back to Blog
-    </a>
+    <a href="/blog" class="inline-flex items-center font-medium text-blue-600 hover:text-blue-800"> ← Back to Blog </a>
   </div>
 </div>

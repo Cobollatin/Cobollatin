@@ -9,7 +9,7 @@ _(e.g., "Fix typo on homepage", "Add new project to portfolio", "Update CV link"
 - [ ] Feature enhancement
 - [ ] Blog post contribution
 - [ ] Documentation update
-- [ ] Other: ****\_\_\_****
+- [ ] Other: \***\*\_\_\_\*\***
 
 ## Blog Post Specific (if applicable)
 
