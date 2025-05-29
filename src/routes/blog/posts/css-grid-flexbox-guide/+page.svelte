@@ -129,24 +129,22 @@
     readTime: 10,
     tags: ['CSS', 'Responsive Design', 'Web Development', 'Flexbox', 'Grid'],
     variant: 'full' as const,
-    imageUrl: 'https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&h=400&fit=crop'
+    imageUrl: 'https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&h=400&fit=crop',
   };
 </script>
 
 <svelte:head>
   <title>{blogData.title} - {m['app:platform']()}</title>
-  <meta name="description" content="Learn modern CSS layout techniques with Grid and Flexbox. Complete guide with practical examples for responsive web design." />
+  <meta
+    name="description"
+    content="Learn modern CSS layout techniques with Grid and Flexbox. Complete guide with practical examples for responsive web design."
+  />
 </svelte:head>
 
 <div class="container mx-auto px-4 py-8">
   <BlogPost {...blogData} />
-  
+
   <div class="mt-8 flex justify-center">
-    <a 
-      href="/blog" 
-      class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium"
-    >
-      ← Back to Blog
-    </a>
+    <a href="/blog" class="inline-flex items-center font-medium text-blue-600 hover:text-blue-800"> ← Back to Blog </a>
   </div>
 </div>
