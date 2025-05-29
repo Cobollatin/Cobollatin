@@ -1,25 +1,38 @@
 import { paraglideVitePlugin } from '@inlang/paraglide-js';
-import { storybookTest } from '@storybook/experimental-addon-test/vitest-plugin';
+import storybookTest from '@storybook/experimental-addon-test/vitest-plugin';
+import { enhancedImages } from '@sveltejs/enhanced-img';
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { svelteTesting } from '@testing-library/svelte/vite';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { optimizeCss } from 'carbon-preprocess-svelte';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
+import { coverageConfigDefaults } from 'vitest/config';
 const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
-// More info at: https://storybook.js.org/docs/writing-tests/test-addon
 export default defineConfig({
   plugins: [
+    enhancedImages(),
     tailwindcss(),
     sveltekit(),
     paraglideVitePlugin({
       project: './project.inlang',
       outdir: './src/lib/paraglide',
-      strategy: ['url', 'cookie', 'baseLocale'],
+      strategy: ['cookie', 'baseLocale'],
     }),
+    optimizeCss(),
   ],
   test: {
+    coverage: {
+      exclude: [
+        ...coverageConfigDefaults.exclude,
+        '**/.storybook/**',
+        '**/*.stories.*',
+        '**/storybook-static/**',
+        '**/paraglide/**',
+      ],
+    },
     workspace: [
       {
         extends: './vite.config.ts',
@@ -45,8 +58,6 @@ export default defineConfig({
       {
         extends: true,
         plugins: [
-          // The plugin will run tests for the stories defined in your Storybook config
-          // See options at: https://storybook.js.org/docs/writing-tests/test-addon#storybooktest
           storybookTest({
             configDir: path.join(dirname, '.storybook'),
           }),
@@ -55,15 +66,11 @@ export default defineConfig({
           name: 'storybook',
           browser: {
             enabled: true,
-            headless: true,
+            name: 'chromium',
             provider: 'playwright',
-            instances: [
-              {
-                browser: 'chromium',
-              },
-            ],
+            headless: true,
           },
-          setupFiles: ['.storybook/vitest.setup.ts'],
+          setupFiles: ['./.storybook/vitest.setup.ts'],
         },
       },
     ],

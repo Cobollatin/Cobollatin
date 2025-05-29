@@ -1,0 +1,13 @@
+{
+  "placeholder": "Placeholder en.",
+  "company": "ThinkHow",
+  "platform": "Cobollatin",
+  "navbar": {
+    "home": "Home",
+    "about": "About Me",
+    "services": "Services",
+    "projects": "Projects",
+    "blog": "Blog",
+    "contact": "Contact"
+  }
+}
