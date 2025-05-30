@@ -19,49 +19,37 @@
 </script>
 
 <Story
-  name="Preview"
-  args={{
-    title: 'Getting Started with SvelteKit and Modern Web Development',
-    date: new Date('2024-01-15'),
-    author: 'Sarah Johnson',
-    readTime: 8,
-    tags: ['SvelteKit', 'Web Development', 'JavaScript', 'Tutorial'],
-    imageUrl: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=400&fit=crop',
-  }}
+  name="FullArticle"
   loaders={async () => {
     document.documentElement.setAttribute('theme', 'white');
   }}
-/>
-
-<Story
-  name="PreviewWithoutImage"
-  args={{
-    title: 'Understanding JavaScript Promises and Async/Await',
-    date: new Date('2024-01-20'),
-    author: 'Mike Chen',
-    readTime: 6,
-    tags: ['JavaScript', 'Async', 'Programming'],
-  }}
-  loaders={async () => {
-    document.documentElement.setAttribute('theme', 'white');
-  }}
+  asChild
 >
-  <h1>This is a sample article</h1>
-  <p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna
-    aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-  </p>
+  <BlogPost
+    title="Building Scalable Component Libraries with Storybook"
+    date={new Date('2024-01-10')}
+    author="Alex Rodriguez"
+    readTime={12}
+    tags={['Storybook', 'Component Library', 'Design System', 'Frontend']}
+    imageUrl="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=400&fit=crop"
+  >
+    <h1>This is a sample article</h1>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
+      magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+      consequat.
+    </p>
+  </BlogPost>
 </Story>
 
 <Story
-  name="FullArticle"
+  name="NoImage"
   args={{
     title: 'Building Scalable Component Libraries with Storybook',
     date: new Date('2024-01-10'),
     author: 'Alex Rodriguez',
     readTime: 12,
     tags: ['Storybook', 'Component Library', 'Design System', 'Frontend'],
-    imageUrl: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=400&fit=crop',
   }}
   loaders={async () => {
     document.documentElement.setAttribute('theme', 'white');

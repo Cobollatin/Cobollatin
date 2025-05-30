@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formatDate } from '$lib/utils/date.utils';
+  import { formatDate } from '$lib/utils/date/date.utils';
   import { Tag, Tile } from 'carbon-components-svelte';
   import { Calendar, Clock, User } from 'lucide-svelte';
   import type { Snippet } from 'svelte';

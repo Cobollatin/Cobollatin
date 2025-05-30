@@ -4,7 +4,9 @@ import { optimizeImports } from 'carbon-preprocess-svelte';
 
 const config = {
   preprocess: [vitePreprocess(), optimizeImports()],
-  kit: { adapter: adapter() },
+  kit: {
+    adapter: adapter(),
+  },
 };
 
 export default config;

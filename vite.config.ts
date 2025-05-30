@@ -1,15 +1,16 @@
 import { paraglideVitePlugin } from '@inlang/paraglide-js';
-import storybookTest from '@storybook/experimental-addon-test/vitest-plugin';
+// import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import { enhancedImages } from '@sveltejs/enhanced-img';
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { svelteTesting } from '@testing-library/svelte/vite';
 import { optimizeCss } from 'carbon-preprocess-svelte';
-import path from 'path';
-import { fileURLToPath } from 'url';
+// import path from 'path';
+// import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
 import { coverageConfigDefaults } from 'vitest/config';
-const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+
+// const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [
@@ -23,8 +24,16 @@ export default defineConfig({
     }),
     optimizeCss(),
   ],
+  server: {
+    hmr: false,
+  },
   test: {
     coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html', 'json'],
+      reportsDirectory: './coverage',
+      all: true,
+      include: ['src/**/*.{js,ts,svelte}'],
       exclude: [
         ...coverageConfigDefaults.exclude,
         '**/.storybook/**',
@@ -55,24 +64,26 @@ export default defineConfig({
           exclude: ['src/**/*.svelte.{test,spec}.{js,ts}'],
         },
       },
-      {
-        extends: true,
-        plugins: [
-          storybookTest({
-            configDir: path.join(dirname, '.storybook'),
-          }),
-        ],
-        test: {
-          name: 'storybook',
-          browser: {
-            enabled: true,
-            name: 'chromium',
-            provider: 'playwright',
-            headless: true,
-          },
-          setupFiles: ['./.storybook/vitest.setup.ts'],
-        },
-      },
+      // Note: Storybook Vitest integration is not fully supported yet.
+      // Uncomment the following block when support is available.
+      // {
+      //   extends: './vite.config.ts',
+      //   plugins: [
+      //     storybookTest({
+      //       configDir: path.join(dirname, '.storybook'),
+      //     }),
+      //   ],
+      //   test: {
+      //     name: 'storybook',
+      //     browser: {
+      //       enabled: true,
+      //       provider: 'playwright',
+      //       headless: true,
+      //       instances: [{ browser: 'chromium' }],
+      //     },
+      //     setupFiles: ['./.storybook/vitest.setup.ts'],
+      //   },
+      // },
     ],
   },
 });
