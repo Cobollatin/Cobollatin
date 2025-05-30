@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getLocale } from '$lib/paraglide/runtime';
   import { formatDate } from '$lib/utils/date/date.utils';
   import { Tag, Tile } from 'carbon-components-svelte';
   import { Calendar, Clock, User } from 'lucide-svelte';
@@ -15,7 +16,7 @@
   };
 
   const { title, date, author, readTime, tags = [], imageUrl, children }: Props = $props();
-  const formattedDate = $derived(formatDate(date));
+  const formattedDate = $derived(formatDate(date, getLocale()));
 </script>
 
 <Tile

@@ -24,9 +24,6 @@ export default defineConfig({
     }),
     optimizeCss(),
   ],
-  server: {
-    hmr: false,
-  },
   test: {
     coverage: {
       provider: 'v8',
@@ -41,6 +38,13 @@ export default defineConfig({
         '**/storybook-static/**',
         '**/paraglide/**',
       ],
+      enabled: true,
+      thresholds: {
+        //   statements: 90,
+        //   branches: 90,
+        //   functions: 90,
+        //   lines: 90,
+      },
     },
     workspace: [
       {

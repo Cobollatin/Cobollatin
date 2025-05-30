@@ -1,10 +1,8 @@
-import { getLocale } from '$lib/paraglide/runtime';
-
-export function formatDate(d: Date): string {
-  const locale = getLocale();
-  return d.toLocaleDateString(locale, {
+export function formatDate(d: Date, locale: 'en' | 'es'): string {
+  return new Intl.DateTimeFormat(locale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  });
+    timeZone: 'UTC', // Ensures consistent formatting
+  }).format(d);
 }
