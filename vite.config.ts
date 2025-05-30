@@ -1,25 +1,51 @@
 import { paraglideVitePlugin } from '@inlang/paraglide-js';
-import { storybookTest } from '@storybook/experimental-addon-test/vitest-plugin';
+// import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
+import { enhancedImages } from '@sveltejs/enhanced-img';
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { svelteTesting } from '@testing-library/svelte/vite';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { optimizeCss } from 'carbon-preprocess-svelte';
+// import path from 'path';
+// import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
-const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+import { coverageConfigDefaults } from 'vitest/config';
 
-// More info at: https://storybook.js.org/docs/writing-tests/test-addon
+// const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+
 export default defineConfig({
   plugins: [
+    enhancedImages(),
     tailwindcss(),
     sveltekit(),
     paraglideVitePlugin({
       project: './project.inlang',
       outdir: './src/lib/paraglide',
-      strategy: ['url', 'cookie', 'baseLocale'],
+      strategy: ['cookie', 'baseLocale'],
     }),
+    optimizeCss(),
   ],
   test: {
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html', 'json'],
+      reportsDirectory: './coverage',
+      all: true,
+      include: ['src/**/*.{js,ts,svelte}'],
+      exclude: [
+        ...coverageConfigDefaults.exclude,
+        '**/.storybook/**',
+        '**/*.stories.*',
+        '**/storybook-static/**',
+        '**/paraglide/**',
+      ],
+      enabled: true,
+      thresholds: {
+        //   statements: 90,
+        //   branches: 90,
+        //   functions: 90,
+        //   lines: 90,
+      },
+    },
     workspace: [
       {
         extends: './vite.config.ts',
@@ -42,30 +68,26 @@ export default defineConfig({
           exclude: ['src/**/*.svelte.{test,spec}.{js,ts}'],
         },
       },
-      {
-        extends: true,
-        plugins: [
-          // The plugin will run tests for the stories defined in your Storybook config
-          // See options at: https://storybook.js.org/docs/writing-tests/test-addon#storybooktest
-          storybookTest({
-            configDir: path.join(dirname, '.storybook'),
-          }),
-        ],
-        test: {
-          name: 'storybook',
-          browser: {
-            enabled: true,
-            headless: true,
-            provider: 'playwright',
-            instances: [
-              {
-                browser: 'chromium',
-              },
-            ],
-          },
-          setupFiles: ['.storybook/vitest.setup.ts'],
-        },
-      },
+      // Note: Storybook Vitest integration is not fully supported yet.
+      // Uncomment the following block when support is available.
+      // {
+      //   extends: './vite.config.ts',
+      //   plugins: [
+      //     storybookTest({
+      //       configDir: path.join(dirname, '.storybook'),
+      //     }),
+      //   ],
+      //   test: {
+      //     name: 'storybook',
+      //     browser: {
+      //       enabled: true,
+      //       provider: 'playwright',
+      //       headless: true,
+      //       instances: [{ browser: 'chromium' }],
+      //     },
+      //     setupFiles: ['./.storybook/vitest.setup.ts'],
+      //   },
+      // },
     ],
   },
 });

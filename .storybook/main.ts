@@ -6,12 +6,18 @@ const config: StorybookConfig = {
     '@storybook/addon-essentials',
     '@storybook/addon-svelte-csf',
     '@chromatic-com/storybook',
-    '@storybook/experimental-addon-test',
-    '@storybook/addon-coverage',
+    '@storybook/addon-a11y',
+    '@storybook/addon-docs',
+    // Not working with SvelteKit yet
+    // '@storybook/addon-coverage',
+    // '@storybook/addon-vitest',
   ],
   framework: {
     name: '@storybook/sveltekit',
     options: {},
+  },
+  core: {
+    disableTelemetry: true,
   },
 };
 export default config;
