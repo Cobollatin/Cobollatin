@@ -12,7 +12,7 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "format": "eslint . --fix && prettier --write .",
     "lint": "eslint . && prettier --check .",
-    "test": "vitest run",
+    "test": "vitest run --coverage --reporter=verbose --printConsoleTrace=true --silent=false",
     "e2e": "playwright test",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"

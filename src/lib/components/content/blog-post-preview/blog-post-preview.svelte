@@ -1,7 +1,8 @@
 <script lang="ts">
   import { m } from '$lib/paraglide/messages';
+  import { getLocale } from '$lib/paraglide/runtime';
   import { formatDate } from '$lib/utils/date/date.utils';
-  import { capitalize } from '$lib/utils/string.utils';
+  import { capitalize } from '$lib/utils/string/string.utils';
   import { Button, ClickableTile, Tag, Tile } from 'carbon-components-svelte';
 
   type Props = {
@@ -14,7 +15,7 @@
   };
 
   const { title, excerpt, date, author, href, tags = [] }: Props = $props();
-  const formattedDate = $derived(formatDate(date));
+  const formattedDate = $derived(formatDate(date, getLocale()));
 </script>
 
 <Tile>
