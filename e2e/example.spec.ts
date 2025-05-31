@@ -1,4 +1,4 @@
-import { expect, test } from "@chromatic-com/playwright";
+import { expect, test } from '@chromatic-com/playwright';
 
 test('has title', async ({ page }) => {
   await page.goto('https://playwright.dev/');

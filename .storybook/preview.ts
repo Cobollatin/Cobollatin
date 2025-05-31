@@ -1,6 +1,18 @@
 import type { Preview } from '@storybook/react';
 
+import '../src/styles/global.scss';
+
+import { withThemeByDataAttribute } from "@storybook/addon-themes";
+
 const preview: Preview = {
+  decorators: [withThemeByDataAttribute({
+    attributeName: 'data-theme',
+    defaultTheme: 'light',
+    themes: {
+      dark: 'dark',
+      light: '',
+    },
+  })],
   parameters: {
     a11y: {
       // 'todo' - show a11y violations in the test UI only
@@ -14,7 +26,7 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
-  },
+  }
 };
 
 export default preview;
