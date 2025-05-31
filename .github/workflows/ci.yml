@@ -1,4 +1,5 @@
 name: CI
+run-name: CI for commit ${{ github.sha }}
 on:
   pull_request:
     branches: [main, develop]

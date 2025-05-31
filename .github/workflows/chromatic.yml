@@ -1,7 +1,6 @@
 name: 'Chromatic'
-
+run-name: 'Chromatic for commit ${{ github.sha }}'
 on: push
-
 jobs:
   chromatic-storybook:
     name: Run Chromatic Storybook
