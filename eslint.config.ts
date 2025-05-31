@@ -22,7 +22,7 @@ export default ts.config(
   includeIgnoreFile(gitignorePath),
   ...ts.configs.recommended,
   {
-    ignores: ['package-lock.json', 'dist/', '.astro/', 'node_modules/', '!.storybook'],
+    ignores: ['package-lock.json', 'dist/', '.astro/', 'node_modules/', 'storybook-static/', 'coverage/', 'build/', 'out/', '!.storybook'],
   },
   ...eslintPluginAstro.configs.recommended,
   perfectionist.configs['recommended-natural'],

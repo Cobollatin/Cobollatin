@@ -46,3 +46,6 @@ coverage
 
 # Chromatic
 build-archive.log
+
+# Debug
+debug*
