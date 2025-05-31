@@ -20,11 +20,10 @@ const config: StorybookConfig = {
     options: {},
   },
   stories: ['../src/components/**/*.mdx', '../src/components/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
-  viteFinal: async (config, { }) => {
+  viteFinal: async (config, {}) => {
     return mergeConfig(config, {
       css: {
-        preprocessorOptions: {
-        },
+        preprocessorOptions: {},
       },
       resolve: {
         alias: {

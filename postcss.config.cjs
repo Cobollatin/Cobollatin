@@ -3,7 +3,7 @@ const config = {
     autoprefixer: {},
     cssnano: {},
     tailwindcss: {},
-  }
-}
+  },
+};
 
 module.exports = config;
