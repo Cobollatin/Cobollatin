@@ -1,0 +1,197 @@
+{
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "astro", // Enable .astro
+    "typescript", // Enable .ts
+    "typescriptreact" // Enable .tsx
+  ],
+  "files.exclude": {
+    "node_modules/": true,
+    ".github/instructions/": true
+  },
+  "github.copilot.chat.codeGeneration.instructions": [
+    {
+      "text": "Use TypeScript for all code generation with strict typing"
+    },
+    {
+      "text": "Follow Astro best practices: use .astro files for pages and layouts, React components for interactive elements"
+    },
+    {
+      "text": "Use Tailwind CSS 4 utility classes for styling, leverage the new features like container queries and CSS functions"
+    },
+    {
+      "text": "Prefer functional React components with hooks over class components"
+    },
+    {
+      "text": "Use Astro's built-in optimizations: lazy loading, automatic bundle splitting, and static generation where possible"
+    },
+    {
+      "text": "Follow Astro's island architecture - minimize client-side JavaScript by using client: directives only when necessary"
+    },
+    {
+      "text": "Use TypeScript interfaces and types for props, API responses, and data structures"
+    },
+    {
+      "text": "Implement proper error boundaries and loading states for React components"
+    },
+    {
+      "text": "Use Astro's getStaticPaths for dynamic routes and getStaticProps pattern for data fetching"
+    },
+    {
+      "text": "Follow semantic HTML practices and ensure accessibility with proper ARIA attributes"
+    },
+    {
+      "text": "Use Vercel-specific optimizations like Image component and edge functions when beneficial"
+    },
+    {
+      "text": "Prefer CSS Grid and Flexbox utilities from Tailwind over custom CSS"
+    }
+  ],
+  "github.copilot.chat.testGeneration.instructions": [
+    {
+      "text": "Generate tests using Vitest (Astro's default testing framework) with TypeScript"
+    },
+    {
+      "text": "Create unit tests for React components using @testing-library/react and jest-dom matchers"
+    },
+    {
+      "text": "Test Astro components by testing their rendered output and props handling"
+    },
+    {
+      "text": "Use Storybook 9 for component testing and visual regression testing"
+    },
+    {
+      "text": "Include tests for accessibility using @testing-library/jest-dom accessibility matchers"
+    },
+    {
+      "text": "Test TypeScript interfaces and type safety with proper type assertions"
+    },
+    {
+      "text": "Create integration tests for API routes and data fetching functions"
+    },
+    {
+      "text": "Mock external dependencies and API calls appropriately"
+    },
+    {
+      "text": "Test responsive behavior and Tailwind breakpoint changes"
+    },
+    {
+      "text": "Include error state and edge case testing for all components"
+    },
+    {
+      "text": "Use Playwright or similar for E2E tests when testing full page interactions"
+    },
+    {
+      "text": "Test Storybook stories to ensure components render correctly in isolation"
+    }
+  ],
+  "github.copilot.chat.reviewSelection.instructions": [
+    {
+      "text": "Check for proper TypeScript typing - no 'any' types unless absolutely necessary"
+    },
+    {
+      "text": "Verify Astro island architecture is followed - ensure minimal client-side JavaScript"
+    },
+    {
+      "text": "Review Tailwind 4 usage for modern utilities and proper responsive design patterns"
+    },
+    {
+      "text": "Ensure React components follow hooks rules and proper dependency arrays"
+    },
+    {
+      "text": "Check for accessibility issues: semantic HTML, ARIA labels, keyboard navigation"
+    },
+    {
+      "text": "Verify proper error handling and loading states in async operations"
+    },
+    {
+      "text": "Review performance implications: bundle size, hydration strategy, image optimization"
+    },
+    {
+      "text": "Check for proper SEO meta tags and OpenGraph data in Astro pages"
+    },
+    {
+      "text": "Ensure consistent code formatting and naming conventions across TypeScript files"
+    },
+    {
+      "text": "Verify Storybook stories are comprehensive and showcase all component states"
+    },
+    {
+      "text": "Check for security issues: XSS prevention, input validation, secure API calls"
+    },
+    {
+      "text": "Review Vercel deployment considerations: edge functions usage, build optimization"
+    }
+  ],
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "text": "Use conventional commit format: type(scope): description"
+    },
+    {
+      "text": "Include scope when relevant: feat(components), fix(api), style(tailwind), test(storybook)"
+    },
+    {
+      "text": "Mention Astro-specific changes: island updates, SSG optimizations, hydration changes"
+    },
+    {
+      "text": "Reference React component updates, hook changes, or context modifications"
+    },
+    {
+      "text": "Include TypeScript-related changes: type updates, interface modifications"
+    },
+    {
+      "text": "Mention Tailwind 4 specific updates: new utility usage, responsive changes"
+    },
+    {
+      "text": "Reference Storybook story additions or component documentation updates"
+    },
+    {
+      "text": "Include performance optimizations, bundle size improvements, or Vercel deployment changes"
+    },
+    {
+      "text": "Keep commit messages concise but descriptive of the actual technical changes"
+    },
+    {
+      "text": "Use imperative mood: 'add feature' not 'added feature'"
+    }
+  ],
+  "github.copilot.chat.pullRequestDescriptionGeneration.instructions": [
+    {
+      "text": "Structure PR descriptions with clear sections: Overview, Changes, Testing, Deployment Notes"
+    },
+    {
+      "text": "Highlight Astro-specific changes: new pages, component islands, SSG modifications"
+    },
+    {
+      "text": "Detail React component updates: new hooks, state management, prop changes"
+    },
+    {
+      "text": "Mention TypeScript improvements: new types, interface updates, better type safety"
+    },
+    {
+      "text": "Document Tailwind 4 changes: new utilities used, responsive breakpoint updates"
+    },
+    {
+      "text": "Include Storybook updates: new stories, component documentation, visual changes"
+    },
+    {
+      "text": "Add screenshots for UI changes and component variations"
+    },
+    {
+      "text": "Include performance impact: bundle size changes, lighthouse score improvements"
+    },
+    {
+      "text": "Document any breaking changes and migration steps required"
+    },
+    {
+      "text": "Add testing notes: what was tested, Storybook story coverage, accessibility checks"
+    },
+    {
+      "text": "Include Vercel deployment considerations: environment variables, build settings"
+    },
+    {
+      "text": "Reference related issues and provide context for reviewers"
+    }
+  ]
+}
