@@ -6,6 +6,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "prepare": "husky",
+    "postinstall": "astro sync",
     "astro": "astro",
     "check": "astro check",
     "format": "eslint . --fix && stylelint '**/*.{css,scss}' --fix && prettier --write .",
