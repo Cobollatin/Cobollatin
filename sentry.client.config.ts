@@ -1,7 +1,10 @@
 import * as Sentry from '@sentry/astro';
-import { loadEnv } from 'vite';
+import dotenv from 'dotenv';
 
-const environment = loadEnv('', process.cwd());
+dotenv.config({
+  path: ['.env.production', '.env.preview', '.env.local', '.env'],
+});
+const environment = process.env;
 const vercel_enviroment = environment['VERCEL_ENV'];
 let env = 'development';
 if (vercel_enviroment) {
