@@ -1,3 +1,6 @@
 # Vitest
 coverage
 test-results
+dist
+node_modules
+storybook-static
