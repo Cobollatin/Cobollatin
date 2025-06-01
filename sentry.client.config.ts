@@ -11,10 +11,17 @@ if (vercel_enviroment) {
   env = vercel_enviroment;
 }
 
+const vercel_git_commit_sha = environment['VERCEL_GIT_COMMIT_SHA'];
+let relase = 'local';
+if (vercel_git_commit_sha) {
+  relase = vercel_git_commit_sha;
+}
+
 Sentry.init({
   dsn: 'https://48d91fded7fe61b194b9d40ab5e473ab@o4509420739690496.ingest.us.sentry.io/4509420744343552',
   environment: env,
   integrations: [Sentry.browserTracingIntegration(), Sentry.replayIntegration()],
+  release: `${env}-${relase}`,
   replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
   // Session Replay
   replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
