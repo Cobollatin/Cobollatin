@@ -42,7 +42,7 @@ jobs:
           -m githubOrg="${{ github.repository_owner }}" \
           -m githubRepo="${{ github.event.repository.name }}" \
           -m githubCommitAuthorLogin="${{ github.event.head_commit.author.username }}" \
-          --prebuilt -prod --token=${{ secrets.VERCEL_TOKEN }})
+          --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
           echo "DEPLOYMENT_URL=$DEPLOY_URL" >> $GITHUB_ENV
           echo "deployment_url=$DEPLOY_URL" >> $GITHUB_OUTPUT
       - name: Get Deployment ID
