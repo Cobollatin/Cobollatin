@@ -29,6 +29,8 @@
     "@astrojs/vercel": "^8.1.4",
     "@sentry/astro": "^9.24.0",
     "@sentry/vite-plugin": "^3.5.0",
+    "@vercel/analytics": "^1.5.0",
+    "@vercel/speed-insights": "^1.2.0",
     "astro": "^5.8.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
