@@ -2,6 +2,10 @@
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.scss';
+
+import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
+
 import { SITE_TITLE } from '../consts';
 
 interface Props {
@@ -48,3 +52,7 @@ const { description, image = '/blog-placeholder-1.jpg', title } = Astro.props;
 <meta content={title} property="twitter:title" />
 <meta content={description} property="twitter:description" />
 <meta content={new URL(image, Astro.url)} property="twitter:image" />
+
+<!-- Vercel -->
+<SpeedInsights />
+<Analytics />
