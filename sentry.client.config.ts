@@ -5,10 +5,10 @@ dotenv.config({
   path: ['.env.production', '.env.preview', '.env.local', '.env'],
 });
 const environment = process.env;
-const vercel_enviroment = environment['VERCEL_ENV'];
+const vercel_environment = environment['VERCEL_ENV'];
 let env = 'development';
-if (vercel_enviroment) {
-  env = vercel_enviroment;
+if (vercel_environment) {
+  env = vercel_environment;
 }
 
 const vercel_git_commit_sha = environment['VERCEL_GIT_COMMIT_SHA'];
