@@ -49,3 +49,6 @@ build-archive.log
 
 # Debug
 debug*
+
+# Sentry Config File
+.env.sentry-build-plugin

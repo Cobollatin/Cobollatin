@@ -1,4 +1,3 @@
-/* eslint-disable */
 module.exports = {
   target: (name, semver) => {
     // Only allow minor updates for tailwind packages

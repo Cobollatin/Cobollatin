@@ -8,14 +8,23 @@
     "src/**/*.ts",
     "src/**/*.astro",
     "**/*.cjs",
-    "*.ts",
-    ".ncurc.js"
+    "**/*.ts"
   ],
-  "exclude": ["dist"],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "storybook-static",
+    "test-results",
+    "coverage",
+    "build",
+    "public",
+    "out",
+    ".cache",
+    ".astro",
+    ".vercel",
+    ".next"
+  ],
   "compilerOptions": {
-    "strictNullChecks": true,
-    "jsx": "react-jsx",
-    "jsxImportSource": "react",
     "paths": {
       "@components/*": ["./src/components/*"],
       "@layouts/*": ["./src/layouts/*"],
@@ -27,12 +36,16 @@
       "@websites/*": ["./src/pages/_landingPages/websites/*"]
     },
     "types": ["node"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
     "strict": true,
+    "strictNullChecks": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "noUncheckedIndexedAccess": true,
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "allowJs": true
   }
 }
