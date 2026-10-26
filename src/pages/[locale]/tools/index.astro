@@ -1,0 +1,14 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { locales, messages, localePath, type Locale } from '../../../lib/i18n';
+import { tools } from '../../../lib/tools';
+
+export function getStaticPaths() { return locales.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const t = messages[locale];
+---
+<Base locale={locale} title={t.tools} description={t.toolsIntro}>
+  <div class="page"><p class="eyebrow">Cobollatin / {t.tools}</p><h1>{t.tools}</h1><p class="lead">{t.toolsIntro}</p>
+    <div class="cards">{tools.map((tool) => <a class="card" href={localePath(locale, `tools/${tool.path}/`)}><h3>{t[tool.titleKey]}</h3><p>{t[tool.descriptionKey]}</p></a>)}</div>
+  </div>
+</Base>

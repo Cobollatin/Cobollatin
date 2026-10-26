@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro';
+import { locales, messages, localePath, type Locale } from '../../lib/i18n';
+import { publishedPosts, postSlug } from '../../lib/posts';
+
+export function getStaticPaths() { return locales.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const t = messages[locale];
+const posts = (await publishedPosts(locale)).slice(0, 3);
+---
+<Base locale={locale} title={t.home} description={t.siteDescription}>
+  <section class="hero"><p class="eyebrow">Personal site · Blog · Tools</p><h1>Cobollatin<span class="brand-mark">.</span></h1><p class="lead">{t.intro}</p></section>
+  <section class="section"><div class="section-heading"><h2>{t.latest}</h2><a href={localePath(locale, 'blog/')}>{t.blog} →</a></div>
+    {posts.length ? <div class="cards">{posts.map((post) => <a class="card" href={localePath(locale, `blog/${postSlug(post)}/`)}><h3>{post.data.title}</h3><p>{post.data.description}</p></a>)}</div> : <p class="muted">{t.empty}</p>}
+  </section>
+  <section class="section"><div class="section-heading"><h2>{t.tools}</h2><a href={localePath(locale, 'tools/')}>{t.tools} →</a></div><p class="lead">{t.toolsIntro}</p></section>
+</Base>

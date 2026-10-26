@@ -1,76 +1,11 @@
 ---
-import type { Locale } from '../i18n/locales';
-
-import { CONTACT_EMAIL, SITE_TITLE, SOCIAL_LINKS } from '../consts';
-import { localizePath } from '../i18n/routing';
-import BaseHead from '../components/site/BaseHead.astro';
-import Footer from '../components/site/Footer.astro';
-import Header from '../components/site/Header.astro';
-
-const locale: Locale = 'en';
+import { localePath } from '../lib/i18n';
 ---
-
 <!doctype html>
-<html lang={locale}>
-  <head>
-    <BaseHead description="Personal website and portfolio." locale={locale} title={SITE_TITLE} />
-    <style>
-      .home-links,
-      .social-links {
-        margin: 0 0 1rem;
-        padding-left: 1.2rem;
-      }
-
-      .contact {
-        margin: 0 0 1rem;
-      }
-
-      .muted {
-        color: var(--muted);
-      }
-    </style>
-  </head>
-  <body>
-    <Header locale={locale} />
-    <main id="main-content">
-      <h1>{SITE_TITLE}</h1>
-      <p>Personal website and portfolio.</p>
-
-      <ul class="home-links">
-        <li>
-          <a href={localizePath('/blog', locale)}>Projects & writing (Blog)</a>
-        </li>
-        <li>
-          <a href={localizePath('/about', locale)}>About (for recruiters)</a>
-        </li>
-        <li>
-          <a href={localizePath('/authors', locale)}>Authors</a>
-        </li>
-      </ul>
-
-      <p class="contact">
-        Contact: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
-      </p>
-
-      <details>
-        <summary>Social links</summary>
-        <p class="muted">
-          I keep these accounts to help verify my identity and reduce impersonation risk. I may not be active on all of
-          them.
-        </p>
-        <ul class="social-links">
-          {
-            SOCIAL_LINKS.map((link) => (
-              <li>
-                <a href={link.href} rel="noreferrer noopener" target="_blank">
-                  {link.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </details>
-    </main>
-    <Footer />
+<html lang="en">
+  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>Cobollatin</title></head>
+  <body style="font-family:system-ui;max-width:40rem;margin:12vh auto;padding:1rem">
+    <h1>Cobollatin</h1><p>Choose a language / Elige un idioma</p>
+    <p><a href={localePath('en')}>English</a> · <a href={localePath('es')}>Español</a></p>
   </body>
 </html>

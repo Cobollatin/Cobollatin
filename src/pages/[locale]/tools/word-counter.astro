@@ -1,0 +1,25 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { locales, messages, type Locale } from '../../../lib/i18n';
+
+export function getStaticPaths() { return locales.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const t = messages[locale];
+---
+<Base locale={locale} title={t.wordCounter} description={t.wordCounterDescription}>
+  <div class="page"><p class="eyebrow">{t.tools}</p><h1>{t.wordCounter}</h1><p class="lead">{t.wordCounterDescription}</p>
+    <label for="text-input">{t.text}</label><textarea id="text-input" autocomplete="off"></textarea>
+    <div class="stats" aria-live="polite"><p><strong id="word-count">0</strong>{t.words}</p><p><strong id="character-count">0</strong>{t.characters}</p></div>
+  </div>
+</Base>
+<script>
+  import { countText } from '../../../lib/word-count';
+  const input = document.querySelector<HTMLTextAreaElement>('#text-input');
+  const words = document.querySelector<HTMLElement>('#word-count');
+  const characters = document.querySelector<HTMLElement>('#character-count');
+  input?.addEventListener('input', () => {
+    const result = countText(input.value);
+    if (words) words.textContent = String(result.words);
+    if (characters) characters.textContent = String(result.characters);
+  });
+</script>

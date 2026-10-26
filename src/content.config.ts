@@ -1,38 +1,28 @@
+import { defineCollection, reference } from 'astro:content';
 import { glob } from 'astro/loaders';
-import { defineCollection, z } from 'astro:content';
-
-const blog = defineCollection({
-  // Load Markdown and MDX files in the `src/content/blog/` directory.
-  loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
-  // Type-check frontmatter using a schema
-  schema: z.object({
-    authors: z.array(z.string().min(1)).min(1),
-    description: z.string(),
-    heroImage: z.string().optional(),
-    keywords: z.array(z.string()).default([]),
-    lang: z.enum(['en', 'es', 'zh', 'ja', 'ru']).default('en'),
-    // Transform string to Date object
-    pubDate: z.coerce.date(),
-    title: z.string(),
-    updatedDate: z.coerce.date().optional(),
-  }),
-});
+import { z } from 'astro/zod';
 
 const authors = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.json', base: './src/content/authors' }),
   schema: z.object({
-    avatar: z.string().optional(),
-    links: z
-      .array(
-        z.object({
-          href: z.string().min(1),
-          label: z.string().min(1),
-        }),
-      )
-      .default([]),
-    name: z.string(),
-    role: z.string().optional(),
-    summary: z.string(),
+    name: z.string().min(1),
+    bio: z.string().optional(),
+    website: z.url().optional(),
   }),
 });
 
-export const collections = { authors, blog };
+const posts = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/posts' }),
+  schema: z.object({
+    title: z.string().min(1),
+    description: z.string().min(1),
+    publishedAt: z.coerce.date(),
+    updatedAt: z.coerce.date().optional(),
+    locale: z.enum(['en', 'es']),
+    authors: z.array(reference('authors')).min(1),
+    draft: z.boolean().default(false),
+    translationKey: z.string().optional(),
+  }),
+});
+
+export const collections = { authors, posts };
