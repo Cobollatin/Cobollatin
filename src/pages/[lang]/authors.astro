@@ -1,0 +1,40 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+
+import AuthorsIndex from '../../components/authors/AuthorsIndex.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import { defaultLocale, type Locale, locales } from '../../i18n/locales';
+import { t } from '../../i18n/messages';
+import { getLocaleFromParams } from '../../i18n/routing';
+import BaseHead from '../../components/site/BaseHead.astro';
+import Footer from '../../components/site/Footer.astro';
+import Header from '../../components/site/Header.astro';
+
+export function getStaticPaths() {
+  return locales
+    .filter((l) => l !== defaultLocale)
+    .map((lang) => ({
+      params: { lang },
+    }));
+}
+
+const locale: Locale = getLocaleFromParams(Astro.params.lang);
+
+type AuthorEntry = CollectionEntry<'authors'>;
+const authors = (await getCollection('authors')) as AuthorEntry[];
+authors.sort((a: AuthorEntry, b: AuthorEntry) => a.data.name.localeCompare(b.data.name));
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <BaseHead description={SITE_DESCRIPTION} locale={locale} title={`${t(locale, 'nav.authors')} | ${SITE_TITLE}`} />
+  </head>
+  <body>
+    <Header locale={locale} />
+    <main id="main-content">
+      <AuthorsIndex authors={authors} locale={locale} />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,51 +1,75 @@
 ---
-import { Button } from '../components/test/Button';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import BaseHead from '../test/BaseHead.astro';
-import Footer from '../test/Footer.astro';
-import Header from '../test/Header.astro';
+import type { Locale } from '../i18n/locales';
+
+import { CONTACT_EMAIL, SITE_TITLE, SOCIAL_LINKS } from '../consts';
+import { localizePath } from '../i18n/routing';
+import BaseHead from '../components/site/BaseHead.astro';
+import Footer from '../components/site/Footer.astro';
+import Header from '../components/site/Header.astro';
+
+const locale: Locale = 'en';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
-    <BaseHead description={SITE_DESCRIPTION} title={SITE_TITLE} />
+    <BaseHead description="Personal website and portfolio." locale={locale} title={SITE_TITLE} />
+    <style>
+      .home-links,
+      .social-links {
+        margin: 0 0 1rem;
+        padding-left: 1.2rem;
+      }
+
+      .contact {
+        margin: 0 0 1rem;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+    </style>
   </head>
   <body>
-    <Header />
-    <main>
-      <h1>🧑‍🚀 Hello, Astronaut!</h1>
-      <p>
-        Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template serves as a
-        lightweight, minimally-styled starting point for anyone looking to build a personal website, blog, or portfolio with
-        Astro.
-      </p>
-      <p>
-        This template comes with a few integrations already configured in your
-        <code>astro.config.mjs</code> file. You can customize your setup with
-        <a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind, React, or Vue to your
-        project.
-      </p>
-      <p class="bg-red-500">Here are a few ideas on how to get started with the template:</p>
-      <ul>
-        <li>Edit this page in <code>src/pages/index.astro</code></li>
-        <li>Edit the site header items in <code>src/components/Header.astro</code></li>
-        <li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-        <li>Check out the included blog posts in <code>src/content/blog/</code></li>
-        <li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
+    <Header locale={locale} />
+    <main id="main-content">
+      <h1>{SITE_TITLE}</h1>
+      <p>Personal website and portfolio.</p>
+
+      <ul class="home-links">
+        <li>
+          <a href={localizePath('/blog', locale)}>Projects & writing (Blog)</a>
+        </li>
+        <li>
+          <a href={localizePath('/about', locale)}>About (for recruiters)</a>
+        </li>
+        <li>
+          <a href={localizePath('/authors', locale)}>Authors</a>
+        </li>
       </ul>
 
-      <Button label="Get Started" />
-      <p>
-        Have fun! If you get stuck, remember to
-        <a href="https://docs.astro.build/">read the docs</a>
-        or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
+      <p class="contact">
+        Contact: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
       </p>
-      <p>
-        Looking for a blog template with a bit more personality? Check out
-        <a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-        by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-      </p>
+
+      <details>
+        <summary>Social links</summary>
+        <p class="muted">
+          I keep these accounts to help verify my identity and reduce impersonation risk. I may not be active on all of
+          them.
+        </p>
+        <ul class="social-links">
+          {
+            SOCIAL_LINKS.map((link) => (
+              <li>
+                <a href={link.href} rel="noreferrer noopener" target="_blank">
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </details>
     </main>
     <Footer />
   </body>

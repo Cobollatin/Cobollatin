@@ -1,0 +1,265 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+import type { Locale } from '../../i18n/locales';
+
+import { t } from '../../i18n/messages';
+import { localizePath } from '../../i18n/routing';
+import FormattedDate from '../site/FormattedDate.astro';
+
+type AuthorEntry = CollectionEntry<'authors'>;
+type PostItem = {
+  entry: CollectionEntry<'blog'>;
+  translationKey: string;
+};
+
+interface Props {
+  authors: AuthorEntry[];
+  locale: Locale;
+  posts: PostItem[];
+}
+
+const { authors, locale, posts } = Astro.props as Props;
+
+const authorsById = new Map(authors.map((author) => [author.id, author] as const));
+
+const allKeywords = Array.from(
+  new Set(
+    posts
+      .flatMap(({ entry }) => entry.data.keywords ?? [])
+      .map((k) => k.trim())
+      .filter(Boolean),
+  ),
+).sort((a, b) => a.localeCompare(b));
+
+const allAuthors = Array.from(
+  new Set(
+    posts.flatMap(({ entry }) =>
+      ((entry.data.authors ?? []) as string[]).map((id: string) => id.trim()).filter(Boolean),
+    ),
+  ),
+)
+  .map((id) => ({
+    id,
+    name: authorsById.get(id)?.data.name ?? id,
+  }))
+  .sort((a, b) => a.name.localeCompare(b.name));
+---
+
+<section class="blog-index">
+  <header class="blog-index__header">
+    <h1>{t(locale, 'nav.blog')}</h1>
+
+    <form aria-label={t(locale, 'blog.search')} class="blog-index__filters" role="search">
+      <label class="sr-only" for="blog-search">{t(locale, 'blog.search')}</label>
+      <input id="blog-search" placeholder={t(locale, 'blog.searchPlaceholder')} type="search" />
+
+      <label class="sr-only" for="blog-author">{t(locale, 'blog.filterAuthor')}</label>
+      <select id="blog-author">
+        <option value="">{t(locale, 'blog.allAuthors')}</option>
+        {allAuthors.map((author) => <option value={author.id.toLowerCase()}>{author.name}</option>)}
+      </select>
+
+      <label class="sr-only" for="blog-keyword">{t(locale, 'blog.filterKeyword')}</label>
+      <select id="blog-keyword">
+        <option value="">{t(locale, 'blog.allKeywords')}</option>
+        {allKeywords.map((keyword) => <option value={keyword.toLowerCase()}>{keyword}</option>)}
+      </select>
+
+      <output aria-live="polite" class="blog-index__results" id="blog-results"></output>
+    </form>
+  </header>
+
+  <ol class="blog-index__list" id="blog-posts">
+    {
+      posts.map(({ entry, translationKey }) => {
+        const url = localizePath(`/blog/${translationKey}/`, locale);
+        const keywords = ((entry.data.keywords ?? []) as string[]).map((keyword) => keyword.trim()).filter(Boolean);
+        const keywordToken = keywords.map((keyword) => `|${keyword.toLowerCase()}|`).join('');
+        const authorIds = ((entry.data.authors ?? []) as string[]).map((id) => id.trim()).filter(Boolean);
+        const authorToken = authorIds.map((id) => `|${id.toLowerCase()}|`).join('');
+        const authorNames = authorIds.map((id) => authorsById.get(id)?.data.name ?? id).filter(Boolean);
+        const haystack = [entry.data.title, entry.data.description, ...keywords, ...authorNames]
+          .join(' ')
+          .toLowerCase();
+
+        return (
+          <li class="blog-index__item" data-authors={authorToken} data-haystack={haystack} data-keywords={keywordToken}>
+            <div class="blog-index__row">
+              <a class="blog-index__title" href={url}>
+                {entry.data.title}
+              </a>
+              <span class="blog-index__date">
+                <FormattedDate date={entry.data.pubDate} />
+              </span>
+            </div>
+
+            {authorNames.length > 0 && (
+              <p class="blog-index__authors">
+                {t(locale, 'blog.by')} {authorNames.join(', ')}
+              </p>
+            )}
+
+            <p class="blog-index__desc">{entry.data.description}</p>
+
+            {keywords.length > 0 && (
+              <p class="blog-index__keywords">
+                {keywords.map((keyword) => (
+                  <span class="blog-index__keyword">{keyword}</span>
+                ))}
+              </p>
+            )}
+          </li>
+        );
+      })
+    }
+  </ol>
+
+  <script is:inline>
+    (() => {
+      const root = document.currentScript?.closest('section.blog-index') ?? document;
+
+      const search = root.querySelector('#blog-search');
+      const author = root.querySelector('#blog-author');
+      const keyword = root.querySelector('#blog-keyword');
+      const results = root.querySelector('#blog-results');
+      const items = Array.from(root.querySelectorAll('#blog-posts .blog-index__item'));
+
+      if (!(search instanceof HTMLInputElement)) return;
+      if (!(author instanceof HTMLSelectElement)) return;
+      if (!(keyword instanceof HTMLSelectElement)) return;
+      if (!(results instanceof HTMLOutputElement)) return;
+      if (items.length === 0) return;
+
+      const apply = () => {
+        const query = search.value.trim().toLowerCase();
+        const tokens = query.split(/\s+/).filter(Boolean);
+        const authorId = author.value;
+        const kw = keyword.value;
+
+        let visible = 0;
+        for (const item of items) {
+          if (!(item instanceof HTMLElement)) continue;
+          const haystack = item.dataset.haystack ?? '';
+          const authorToken = item.dataset.authors ?? '';
+          const keywordToken = item.dataset.keywords ?? '';
+
+          const matchesText = tokens.length === 0 ? true : tokens.every((t) => haystack.includes(t));
+          const matchesAuthor = !authorId ? true : authorToken.includes(`|${authorId}|`);
+          const matchesKeyword = !kw ? true : keywordToken.includes(`|${kw}|`);
+
+          const show = matchesText && matchesAuthor && matchesKeyword;
+          item.hidden = !show;
+          if (show) visible += 1;
+        }
+
+        results.textContent = `${visible} / ${items.length}`;
+      };
+
+      search.addEventListener('input', apply);
+      author.addEventListener('change', apply);
+      keyword.addEventListener('change', apply);
+      apply();
+    })();
+  </script>
+</section>
+
+<style>
+  .blog-index__header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .blog-index__filters {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .blog-index__results {
+    color: var(--muted);
+    font-size: 0.9rem;
+    min-width: 6rem;
+    text-align: right;
+  }
+
+  .blog-index__list {
+    list-style: decimal;
+    padding-left: 1.25rem;
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .blog-index__item {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .blog-index__row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .blog-index__title {
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--text);
+  }
+
+  .blog-index__title:hover {
+    text-decoration: underline;
+    color: var(--link-hover);
+  }
+
+  .blog-index__date {
+    color: var(--muted);
+    white-space: nowrap;
+    font-size: 0.9rem;
+  }
+
+  .blog-index__desc {
+    margin: 0.25rem 0 0;
+    color: var(--muted);
+  }
+
+  .blog-index__authors {
+    margin: 0.35rem 0 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .blog-index__keywords {
+    margin: 0.5rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .blog-index__keyword {
+    font-size: 0.85rem;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 0.1rem 0.35rem;
+  }
+
+  @media (max-width: 720px) {
+    .blog-index__row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+    }
+
+    .blog-index__results {
+      text-align: left;
+    }
+  }
+</style>

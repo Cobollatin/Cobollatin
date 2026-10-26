@@ -1,15 +1,6 @@
 import * as Sentry from '@sentry/astro';
-import dotenv from 'dotenv';
 
-dotenv.config({
-  path: ['.env.production', '.env.preview', '.env.local', '.env'],
-});
-const environment = process.env;
-const vercel_enviroment = environment['VERCEL_ENV'];
-let env = 'development';
-if (vercel_enviroment) {
-  env = vercel_enviroment;
-}
+const env = import.meta.env.VERCEL_ENV ?? import.meta.env.MODE ?? 'development';
 
 Sentry.init({
   dsn: 'https://48d91fded7fe61b194b9d40ab5e473ab@o4509420739690496.ingest.us.sentry.io/4509420744343552',

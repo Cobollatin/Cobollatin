@@ -1,0 +1,77 @@
+---
+title: 'Cómo añadirse como autor'
+description: 'Añade un perfil de autor a este sitio y muéstralo en la página de Autores.'
+pubDate: '2026-02-02'
+updatedDate: '2026-02-02'
+authors: ['cobollatin']
+keywords: ['autores', 'content collections', 'astro', 'perfil']
+heroImage: '/blog-placeholder-2.jpg'
+lang: 'es'
+---
+
+La página de Autores de este sitio se genera con una **Content Collection** de Astro llamada `authors`.
+
+Si quieres añadirse a ti (o a tu equipo) como autor, basta con crear un archivo Markdown en `src/content/authors/`.
+
+## 1) Crea un archivo de autor
+
+Crea un archivo nuevo usando un id estable como nombre (por ejemplo tu handle):
+
+- `src/content/authors/<id>.md`
+
+Ejemplo:
+
+- `src/content/authors/jane-doe.md`
+
+## 2) Completa el frontmatter (y elige el “título” que quieras)
+
+El esquema está en `src/content.config.ts` dentro de la colección `authors`. Los campos obligatorios son:
+
+- `name`
+- `summary`
+
+Campos opcionales:
+
+- `role` (puede ser lo que quieras, o puedes omitirlo)
+- `avatar`
+- `links` (0 o más)
+
+Ejemplo:
+
+```yaml
+---
+name: 'Jane Doe'
+role: 'Developer Advocate'
+summary: 'Escribe sobre Astro, accesibilidad y documentación.'
+avatar: '/avatars/jane.jpg'
+links:
+  - label: 'Website'
+    href: 'https://example.com'
+  - label: 'GitHub'
+    href: 'https://github.com/janedoe'
+  - label: 'About'
+    href: '/about'
+---
+```
+
+Notas:
+
+- Si `links[].href` empieza por `/`, se trata como link interno y se localiza (p. ej. `/about` → `/es/about`).
+- Si es una URL externa, se abre en una nueva pestaña y se añade `rel="noreferrer noopener"`.
+
+## 3) Añade el avatar (opcional)
+
+Si usas `avatar`, coloca la imagen en `public/` (por ejemplo `public/avatars/jane.jpg`) y refiérela como `/avatars/jane.jpg`.
+
+## 4) Verifícalo en local
+
+Arranca el servidor y abre la página de autores:
+
+```bash
+bun run dev
+```
+
+- Locale por defecto: `/authors/`
+- Rutas localizadas: `/es/authors/`, `/zh/authors/`, `/ja/authors/`, `/ru/authors/`
+
+Listo: la página carga todas las entradas de la colección `authors` y las ordena por nombre.

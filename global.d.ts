@@ -1,6 +1,10 @@
 import 'astro/astro-jsx';
 
 declare global {
+  interface ImportMetaEnv {
+    readonly VERCEL_ENV?: string;
+  }
+
   namespace JSX {
     /* Required by ESLint to work well with Astro. This is fixing elements returned in map loops inside components. */
     // type Element = astroHTML.JSX.Element // We want to use this, but it is defined as any.

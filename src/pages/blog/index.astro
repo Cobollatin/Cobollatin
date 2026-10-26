@@ -1,117 +1,39 @@
 ---
 import { getCollection } from 'astro:content';
 
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
-import BaseHead from '../../test/BaseHead.astro';
-import Footer from '../../test/Footer.astro';
-import FormattedDate from '../../test/FormattedDate.astro';
-import Header from '../../test/Header.astro';
+import type { Locale } from '../../i18n/locales';
 
-const posts = (await getCollection('blog')).sort(
-  (a: { data: { pubDate: number } }, b: { data: { pubDate: number } }) =>
-    b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+import BlogIndex from '../../components/blog/BlogIndex.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import { groupBlogEntries } from '../../content/blog';
+import { defaultLocale } from '../../i18n/locales';
+import BaseHead from '../../components/site/BaseHead.astro';
+import Footer from '../../components/site/Footer.astro';
+import Header from '../../components/site/Header.astro';
+
+const locale: Locale = defaultLocale;
+const entries = await getCollection('blog');
+const authors = await getCollection('authors');
+const grouped = groupBlogEntries(entries);
+
+const posts = Array.from(grouped.entries())
+  .map(([translationKey, perLocale]) => ({
+    entry: perLocale.get(locale) ?? perLocale.get(defaultLocale),
+    translationKey,
+  }))
+  .filter((post): post is { entry: NonNullable<typeof post.entry>; translationKey: string } => Boolean(post.entry))
+  .sort((a, b) => b.entry.data.pubDate.valueOf() - a.entry.data.pubDate.valueOf());
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
-    <BaseHead description={SITE_DESCRIPTION} title={SITE_TITLE} />
-    <style>
-      main {
-        width: 960px;
-      }
-      ul {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2rem;
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-      }
-      ul li {
-        width: calc(50% - 1rem);
-      }
-      ul li * {
-        text-decoration: none;
-        transition: 0.2s ease;
-      }
-      ul li:first-child {
-        width: 100%;
-        margin-bottom: 1rem;
-        text-align: center;
-      }
-      ul li:first-child img {
-        width: 100%;
-      }
-      ul li:first-child .title {
-        font-size: 2.369rem;
-      }
-      ul li img {
-        margin-bottom: 0.5rem;
-        border-radius: 12px;
-      }
-      ul li a {
-        display: block;
-      }
-      .title {
-        margin: 0;
-        color: rgb(var(--black));
-        line-height: 1;
-      }
-      .date {
-        margin: 0;
-        color: rgb(var(--gray));
-      }
-      ul li a:hover h4,
-      ul li a:hover .date {
-        color: rgb(var(--accent));
-      }
-      ul a:hover img {
-        box-shadow: var(--box-shadow);
-      }
-      @media (max-width: 720px) {
-        ul {
-          gap: 0.5em;
-        }
-        ul li {
-          width: 100%;
-          text-align: center;
-        }
-        ul li:first-child {
-          margin-bottom: 0;
-        }
-        ul li:first-child .title {
-          font-size: 1.563em;
-        }
-      }
-    </style>
+    <BaseHead description={SITE_DESCRIPTION} locale={locale} title={SITE_TITLE} />
   </head>
   <body>
-    <Header />
-    <main>
-      <section>
-        <ul>
-          {
-            posts.map(
-              (post: {
-                data: { heroImage: null | string | undefined; pubDate: Date; title: unknown };
-                id: unknown;
-              }) => (
-                <li>
-                  <a href={`/blog/${post.id}/`}>
-                    <img alt="" height={360} src={post.data.heroImage} width={720} />
-                    <h4 class="title">{post.data.title}</h4>
-                    <p class="date">
-                      <FormattedDate date={post.data.pubDate} />
-                    </p>
-                  </a>
-                </li>
-              ),
-            )
-          }
-        </ul>
-      </section>
+    <Header locale={locale} />
+    <main id="main-content">
+      <BlogIndex authors={authors} locale={locale} posts={posts} />
     </main>
     <Footer />
   </body>

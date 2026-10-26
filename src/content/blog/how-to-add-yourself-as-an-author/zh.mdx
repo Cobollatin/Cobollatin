@@ -1,0 +1,77 @@
+---
+title: '如何把自己添加为作者'
+description: '为此站点添加作者资料，并在 Authors 页面展示。'
+pubDate: '2026-02-02'
+updatedDate: '2026-02-02'
+authors: ['cobollatin']
+keywords: ['作者', 'content collections', 'astro', '资料']
+heroImage: '/blog-placeholder-2.jpg'
+lang: 'zh'
+---
+
+本项目的 Authors 页面由 Astro 的 **Content Collection**（`authors`）生成。
+
+如果你想把自己（或团队成员）添加为作者，只需要在 `src/content/authors/` 下创建一个 Markdown 文件。
+
+## 1) 创建作者文件
+
+使用稳定的 id 作为文件名（例如你的 handle）：
+
+- `src/content/authors/<id>.md`
+
+示例：
+
+- `src/content/authors/jane-doe.md`
+
+## 2) 填写 frontmatter（头衔随意）
+
+Schema 位于 `src/content.config.ts` 的 `authors` collection。必填字段：
+
+- `name`
+- `summary`
+
+可选字段：
+
+- `role`（可以是任何你想写的内容，也可以省略）
+- `avatar`
+- `links`（0 个或更多）
+
+示例：
+
+```yaml
+---
+name: 'Jane Doe'
+role: 'Developer Advocate'
+summary: '写作方向：Astro、可访问性与文档。'
+avatar: '/avatars/jane.jpg'
+links:
+  - label: 'Website'
+    href: 'https://example.com'
+  - label: 'GitHub'
+    href: 'https://github.com/janedoe'
+  - label: 'About'
+    href: '/about'
+---
+```
+
+说明：
+
+- 如果 `links[].href` 以 `/` 开头，它会被当作站内链接，并自动本地化（例如 `/about` → `/zh/about`）。
+- 如果是外部 URL，会在新标签页打开，并设置 `rel="noreferrer noopener"`。
+
+## 3) 添加头像资源（可选）
+
+如果使用 `avatar`，把图片放在 `public/` 下（例如 `public/avatars/jane.jpg`），并用 `/avatars/jane.jpg` 引用。
+
+## 4) 本地验证
+
+启动开发服务器并打开 Authors 页面：
+
+```bash
+bun run dev
+```
+
+- 默认语言：`/authors/`
+- 本地化路由：`/es/authors/`, `/zh/authors/`, `/ja/authors/`, `/ru/authors/`
+
+完成：页面会加载 `authors` collection 的所有条目，并按名字排序展示。

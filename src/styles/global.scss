@@ -3,14 +3,34 @@
 @tailwind utilities;
 
 :root {
-  --accent: #2337ff;
-  --accent-dark: #000d8a;
-  --black: 15, 18, 25;
-  --gray: 96, 115, 159;
-  --gray-light: 229, 233, 240;
-  --gray-dark: 34, 41, 57;
-  --gray-gradient: rgb(var(--gray-light), 50%), #fff;
-  --box-shadow: 0 2px 6px rgb(var(--gray), 25%), 0 8px 24px rgb(var(--gray), 33%), 0 16px 32px rgb(var(--gray), 33%);
+  color-scheme: light;
+
+  /* Forum-inspired (HN-ish) palette */
+  --bg: #f6f6ef;
+  --panel: #fff;
+  --text: #111827;
+  --muted: #4b5563;
+  --border: #e5e7eb;
+  --link: #1d4ed8;
+  --link-hover: #1e40af;
+  --link-visited: #6d28d9;
+  --focus: #f60;
+  --code-bg: #f3f4f6;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: #0b0f14;
+  --panel: #0f172a;
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+  --border: #334155;
+  --link: #93c5fd;
+  --link-hover: #bfdbfe;
+  --link-visited: #c4b5fd;
+  --focus: #f60;
+  --code-bg: #111827;
 }
 
 @font-face {
@@ -30,24 +50,31 @@
 }
 
 body {
-  font-family: Atkinson, sans-serif;
+  font-family:
+    Atkinson,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Arial,
+    sans-serif;
   margin: 0;
   padding: 0;
   text-align: left;
-  background: linear-gradient(var(--gray-gradient)) no-repeat;
-  background-size: 100% 600px;
-  word-wrap: break-word;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.55;
   overflow-wrap: break-word;
-  color: rgb(var(--gray-dark));
-  font-size: 20px;
-  line-height: 1.7;
 }
 
 main {
-  width: 720px;
-  max-width: calc(100% - 2em);
-  margin: auto;
-  padding: 3em 1em;
+  max-width: 960px;
+  width: calc(100% - 2rem);
+  margin: 1rem auto;
+  padding: 1.25rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
 }
 
 h1,
@@ -57,28 +84,24 @@ h4,
 h5,
 h6 {
   margin: 0 0 0.5rem;
-  color: rgb(var(--black));
-  line-height: 1.2;
+  line-height: 1.25;
+  color: var(--text);
 }
 
 h1 {
-  font-size: 3.052em;
+  font-size: 1.5rem;
 }
 
 h2 {
-  font-size: 2.441em;
+  font-size: 1.25rem;
 }
 
 h3 {
-  font-size: 1.953em;
+  font-size: 1.1rem;
 }
 
-h4 {
-  font-size: 1.563em;
-}
-
-h5 {
-  font-size: 1.25em;
+p {
+  margin: 0 0 1rem;
 }
 
 strong,
@@ -87,49 +110,29 @@ b {
 }
 
 a {
-  color: var(--accent);
+  color: var(--link);
+  text-decoration: underline;
 }
 
 a:hover {
-  color: var(--accent);
+  color: var(--link-hover);
 }
 
-p {
-  margin-bottom: 1em;
-}
-
-.prose p {
-  margin-bottom: 2em;
-}
-
-textarea {
-  width: 100%;
-  font-size: 16px;
-}
-
-input {
-  font-size: 16px;
-}
-
-table {
-  width: 100%;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
+a:visited {
+  color: var(--link-visited);
 }
 
 code {
   padding: 2px 5px;
-  background-color: rgb(var(--gray-light));
-  border-radius: 2px;
+  background-color: var(--code-bg);
+  border-radius: 3px;
 }
 
 pre {
-  padding: 1.5em;
-  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  background: var(--code-bg);
+  overflow: auto;
 }
 
 pre > code {
@@ -137,23 +140,50 @@ pre > code {
 }
 
 blockquote {
-  border-left: 4px solid var(--accent);
-  padding: 0 0 0 20px;
-  margin: 0;
-  font-size: 1.333em;
+  border-left: 4px solid var(--focus);
+  padding: 0 0 0 1rem;
+  margin: 0 0 1rem;
+  color: var(--muted);
 }
 
 hr {
-  border-top: 1px solid rgb(var(--gray-light));
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 1rem 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+table {
+  width: 100%;
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.5rem;
+}
+
+textarea {
+  width: 100%;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
 
 @media (width <=720px) {
-  body {
-    font-size: 18px;
-  }
-
   main {
-    padding: 1em;
+    width: calc(100% - 1.5rem);
+    padding: 1rem;
   }
 }
 
@@ -166,14 +196,9 @@ hr {
   width: 1px;
   overflow: hidden;
 
-  /* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
-
-  /* maybe deprecated but we need to support legacy browsers */
-  clip: rect(1px, 1px, 1px, 1px);
-
   /* modern browsers, clip-path works inwards from each corner */
   clip-path: inset(50%);
 
-  /* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
+  /* stop words getting smushed together for screen readers */
   white-space: nowrap;
 }

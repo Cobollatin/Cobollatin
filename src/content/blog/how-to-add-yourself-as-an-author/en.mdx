@@ -1,0 +1,77 @@
+---
+title: 'How to add yourself as an author'
+description: 'Add an author profile to this site and show it on the Authors page.'
+pubDate: '2026-02-02'
+updatedDate: '2026-02-02'
+authors: ['cobollatin']
+keywords: ['authors', 'content collections', 'astro', 'profile']
+heroImage: '/blog-placeholder-2.jpg'
+lang: 'en'
+---
+
+This site’s Authors page is powered by an Astro **Content Collection** named `authors`.
+
+If you want to add yourself (or your team) as an author, you do it by creating a Markdown file under `src/content/authors/`.
+
+## 1) Create an author file
+
+Create a new file, using a stable id for the filename (for example your handle):
+
+- `src/content/authors/<id>.md`
+
+Example:
+
+- `src/content/authors/jane-doe.md`
+
+## 2) Fill in frontmatter (and pick any title you want)
+
+The schema lives in `src/content.config.ts` under the `authors` collection. The required fields are:
+
+- `name`
+- `summary`
+
+Optional fields:
+
+- `role` (this can be anything you want, or omit it)
+- `avatar`
+- `links` (0 or more)
+
+Example:
+
+```yaml
+---
+name: 'Jane Doe'
+role: 'Developer Advocate'
+summary: 'Writes about Astro, accessibility, and docs.'
+avatar: '/avatars/jane.jpg'
+links:
+  - label: 'Website'
+    href: 'https://example.com'
+  - label: 'GitHub'
+    href: 'https://github.com/janedoe'
+  - label: 'About'
+    href: '/about'
+---
+```
+
+Notes:
+
+- If a `links[].href` starts with `/`, it’s treated as an internal link and will be localized (e.g. `/about` → `/es/about`).
+- If it’s an external URL, it opens in a new tab and gets `rel="noreferrer noopener"`.
+
+## 3) Add avatar assets (optional)
+
+If you use `avatar`, put the image in `public/` so it can be served as a static asset (for example `public/avatars/jane.jpg`), then reference it as `/avatars/jane.jpg`.
+
+## 4) Check it locally
+
+Run the dev server and open the Authors page:
+
+```bash
+bun run dev
+```
+
+- Default locale: `/authors/`
+- Localized routes: `/es/authors/`, `/zh/authors/`, `/ja/authors/`, `/ru/authors/`
+
+That’s it — the page loads all entries from the `authors` collection and sorts them by name.

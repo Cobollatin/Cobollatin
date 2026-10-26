@@ -1,14 +1,15 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 
-import path from 'path';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { mergeConfig } from 'vite';
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const config: StorybookConfig = {
   addons: [
-    '@storybook/addon-essentials',
     '@storybook/addon-onboarding',
     '@chromatic-com/storybook',
-    '@storybook/experimental-addon-test',
     '@storybook/addon-a11y',
     '@storybook/addon-themes',
   ],
@@ -27,7 +28,7 @@ const config: StorybookConfig = {
       },
       resolve: {
         alias: {
-          '@': path.resolve(__dirname, '../src'),
+          '@': path.resolve(dirname, '../src'),
         },
       },
     });

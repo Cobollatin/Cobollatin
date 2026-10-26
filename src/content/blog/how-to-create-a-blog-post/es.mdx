@@ -1,0 +1,113 @@
+---
+title: 'Cómo crear una entrada de blog (con i18n)'
+description: 'Guía práctica para crear una nueva publicación en este sitio Astro, incluyendo cómo funcionan las traducciones.'
+pubDate: '2026-02-02'
+updatedDate: '2026-02-02'
+authors: ['cobollatin']
+keywords: ['guía', 'blog', 'astro', 'i18n', 'contenido']
+heroImage: '/blog-placeholder-1.jpg'
+lang: 'es'
+---
+
+Este sitio usa **Astro Content Collections** para gestionar el blog. Las entradas viven en `src/content/blog/` y se renderizan con las rutas en `src/pages/blog/` (idioma por defecto) y `src/pages/[lang]/blog/` (rutas localizadas).
+
+## 1) Crea una nueva entrada (recomendado: usa el script de scaffolding)
+
+Para crear una carpeta de post con un archivo para cada idioma soportado, ejecuta:
+
+```bash
+bun run new:post <slug> "Título opcional"
+```
+
+Esto crea un directorio en `src/content/blog/<slug>/` con un archivo `.mdx` por locale (ver `src/i18n/locales.ts`).
+
+Si prefieres hacerlo manualmente, crea una carpeta con el slug (ese nombre se convierte en la URL), y luego añade un `es.mdx` dentro (y el resto de idiomas que quieras):
+
+- Archivo: `src/content/blog/mi-nueva-entrada/es.mdx`
+- URL (español): `/es/blog/mi-nueva-entrada/`
+
+## 2) Añade frontmatter (campos obligatorios)
+
+Cada entrada debe incluir frontmatter que cumpla el esquema de la colección `blog` en `src/content.config.ts`.
+
+Frontmatter mínimo requerido:
+
+```yaml
+---
+title: 'Mi nueva entrada'
+description: 'Una frase de resumen usada en listas, previews y SEO.'
+pubDate: '2026-02-02'
+lang: 'es'
+---
+```
+
+Campos opcionales (recomendados):
+
+- `heroImage`: ruta de imagen (normalmente desde `public/`)
+- `keywords`: lista de strings usada para filtros y búsqueda
+- `updatedDate`: muestra una línea de “Última actualización …”
+
+Ejemplo con todos los campos:
+
+```yaml
+---
+title: 'Mi nueva entrada'
+description: 'Una frase de resumen usada en listas, previews y SEO.'
+pubDate: '2026-02-02'
+updatedDate: '2026-02-10'
+heroImage: '/blog-placeholder-1.jpg'
+keywords: ['astro', 'content collections', 'escritura']
+lang: 'es'
+---
+```
+
+## 3) Escribe el contenido
+
+Usa Markdown (o MDX). Los encabezados generan anchors con enlace automáticamente gracias a los plugins rehype configurados en `astro.config.ts`.
+
+## 4) i18n: añade traducciones del mismo post
+
+Este proyecto soporta los locales definidos en `src/i18n/locales.ts`:
+
+- `en` (por defecto)
+- `es`, `zh`, `ja`, `ru`
+
+### Cómo se agrupan las traducciones del blog
+
+Las traducciones se agrupan por una **translation key**, derivada del primer segmento de ruta dentro de `src/content/blog/`.
+
+Por eso, estos archivos se tratan como traducciones del mismo post porque comparten el mismo nombre de carpeta:
+
+- `src/content/blog/mi-nueva-entrada/en.mdx` (con `lang: 'en'`)
+- `src/content/blog/mi-nueva-entrada/es.mdx` (con `lang: 'es'`)
+
+Con esos archivos, las URLs serán:
+
+- Inglés: `/blog/mi-nueva-entrada/`
+- Español: `/es/blog/mi-nueva-entrada/`
+
+Si falta una traducción para un locale, el sitio hace fallback al contenido del idioma por defecto.
+
+### Forzar que existan “todos los locales”
+
+Si quieres forzar que cada post tenga un archivo para cada locale, ejecuta:
+
+```bash
+bun run check:i18n
+```
+
+## 5) Rutas localizadas (cómo se generan las páginas)
+
+- Páginas del locale por defecto (sin prefijo): `src/pages/blog/index.astro` y `src/pages/blog/[...slug].astro`
+- Páginas de locales no-default (con prefijo): `src/pages/[lang]/blog/index.astro` y `src/pages/[lang]/blog/[...slug].astro`
+
+El selector de idioma del header usa `src/i18n/routing.ts` para reescribir la ruta actual al locale seleccionado.
+
+## 6) Checklist rápido
+
+- Archivo(s) creados en `src/content/blog/<slug>/<locale>.mdx`
+- Frontmatter con `title`, `description`, `pubDate`, `lang`
+- Opcional: `keywords`, `heroImage`, `updatedDate`
+- Ejecuta en local:
+  - `bun run dev`
+  - `bun run check`

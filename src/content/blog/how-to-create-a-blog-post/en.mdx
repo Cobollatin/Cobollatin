@@ -1,0 +1,113 @@
+---
+title: 'How to create a blog post (with i18n)'
+description: 'A practical guide to writing a new post in this Astro site, including how translations work.'
+pubDate: '2026-02-02'
+updatedDate: '2026-02-02'
+authors: ['cobollatin']
+keywords: ['guide', 'blog', 'astro', 'i18n', 'content collections']
+heroImage: '/blog-placeholder-1.jpg'
+lang: 'en'
+---
+
+This site uses **Astro Content Collections** to power the blog. Posts live in `src/content/blog/` and are rendered by the routes under `src/pages/blog/` (default language) and `src/pages/[lang]/blog/` (localized routes).
+
+## 1) Create a new post (recommended: use the scaffold script)
+
+To create a new post directory with a file for every supported locale, run:
+
+```bash
+bun run new:post <slug> "Optional title"
+```
+
+This creates a folder under `src/content/blog/<slug>/` with one `.mdx` file per locale (see `src/i18n/locales.ts`).
+
+If you prefer to create files manually, create a folder named after your post slug (this folder name becomes the URL slug), then add an `en.mdx` file inside it:
+
+- File: `src/content/blog/my-new-post/en.mdx`
+- URL (default locale): `/blog/my-new-post/`
+
+## 2) Add frontmatter (required fields)
+
+Each post must include frontmatter that matches the blog collection schema in `src/content.config.ts`.
+
+Minimum required frontmatter:
+
+```yaml
+---
+title: 'My new post'
+description: 'One sentence summary used in lists, previews, and SEO.'
+pubDate: '2026-02-02'
+lang: 'en'
+---
+```
+
+Optional (recommended) fields:
+
+- `heroImage`: image path (typically from `public/`)
+- `keywords`: array of strings used for filtering and search
+- `updatedDate`: show a “Last updated on …” line
+
+Example with all fields:
+
+```yaml
+---
+title: 'My new post'
+description: 'One sentence summary used in lists, previews, and SEO.'
+pubDate: '2026-02-02'
+updatedDate: '2026-02-10'
+heroImage: '/blog-placeholder-1.jpg'
+keywords: ['astro', 'content collections', 'writing']
+lang: 'en'
+---
+```
+
+## 3) Write your content
+
+Use Markdown (or MDX). Headings automatically get linkable anchors via the configured rehype plugins in `astro.config.ts`.
+
+## 4) i18n: Add translations of the same post
+
+This project supports multiple locales defined in `src/i18n/locales.ts`:
+
+- `en` (default)
+- `es`, `zh`, `ja`, `ru`
+
+### How blog translations are grouped
+
+Blog translations are grouped by a **translation key**, derived from the first path segment inside `src/content/blog/`.
+
+That means these files are treated as translations of the same post because they share the same folder name:
+
+- `src/content/blog/my-new-post/en.mdx` (set `lang: 'en'`)
+- `src/content/blog/my-new-post/es.mdx` (set `lang: 'es'`)
+
+With those files in place, the URLs will be:
+
+- English: `/blog/my-new-post/`
+- Spanish: `/es/blog/my-new-post/`
+
+If a translation is missing for a locale, the site falls back to the default locale content.
+
+### Enforcing “all locales exist”
+
+If you want to enforce that every post has a file for every locale, run:
+
+```bash
+bun run check:i18n
+```
+
+## 5) Localized routes (how pages are generated)
+
+- Default locale pages (no locale prefix): `src/pages/blog/index.astro` and `src/pages/blog/[...slug].astro`
+- Non-default locale pages (with locale prefix): `src/pages/[lang]/blog/index.astro` and `src/pages/[lang]/blog/[...slug].astro`
+
+The language switcher in the header uses `src/i18n/routing.ts` to rewrite the current path into the selected locale.
+
+## 6) Quick checklist
+
+- Post file(s) created under `src/content/blog/<slug>/<locale>.mdx`
+- Frontmatter includes `title`, `description`, `pubDate`, `lang`
+- Optional: `keywords`, `heroImage`, `updatedDate`
+- Run locally:
+  - `bun run dev`
+  - `bun run check`

@@ -1,56 +1,93 @@
 ---
+import type { Locale } from '../i18n/locales';
+
+import { CONTACT_EMAIL, SITE_TITLE, SOCIAL_LINKS } from '../consts';
+import { localizePath } from '../i18n/routing';
 import Layout from '../layouts/BlogPost.astro';
+
+const locale: Locale = 'en';
 ---
 
 <Layout
-  description="Lorem ipsum dolor sit amet"
+  description="About Cobollatin — portfolio, projects, and contact details."
   heroImage="/blog-placeholder-about.jpg"
-  pubDate={new Date('August 08 2021')}
-  title="About Me"
+  locale={locale}
+  pubDate={new Date('2026-02-02')}
+  title={`About ${SITE_TITLE}`}
+  updatedDate={new Date('2026-02-02')}
 >
-  <p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-    aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo viverra. Adipiscing enim eu turpis egestas
-    pretium. Euismod elementum nisi quis eleifend quam adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis
-    purus sit amet volutpat. Netus et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam
-    phasellus vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque sagittis.
-    Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
-  </p>
+  <section aria-label="Overview">
+    <p>
+      This is my personal website and portfolio. I publish my projects as blog entries, typically including context,
+      screenshots, decisions, and links to code.
+    </p>
 
-  <p>
-    Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non tellus. Habitasse platea
-    dictumst quisque sagittis purus sit amet. Tellus molestie nunc non blandit massa. Cursus vitae congue mauris
-    rhoncus. Accumsan tortor posuere ac ut. Fringilla urna porttitor rhoncus dolor. Elit ullamcorper dignissim cras
-    tincidunt lobortis. In cursus turpis massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi
-    enim nunc. Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis bibendum.
-    Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra massa massa ultricies mi.
-  </p>
+    <p>
+      If you’re an employer or recruiter, this page is the “shareable” version — a quick overview plus ways to verify my
+      identity and contact me.
+    </p>
+  </section>
 
-  <p>
-    Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl suscipit. Lacus viverra
-    vitae congue eu consequat ac felis donec. Egestas integer eget aliquet nibh praesent tristique magna sit amet. Eget
-    magna fermentum iaculis eu non diam. In vitae turpis massa sed elementum. Tristique et egestas quis ipsum
-    suspendisse ultrices. Eget lorem dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac
-    ut consequat semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus
-    vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum facilisis. Ultrices
-    tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam vulputate. Viverra suspendisse potenti
-    nullam ac tortor vitae purus faucibus ornare. Fringilla urna porttitor rhoncus dolor purus non. Amet dictum sit amet
-    justo donec enim.
-  </p>
+  <section aria-label="Quick links">
+    <h2>Quick links</h2>
+    <ul>
+      <li>
+        Portfolio (projects): <a href={localizePath('/blog', locale)}>{localizePath('/blog', locale)}</a>
+      </li>
+      <li>
+        Authors: <a href={localizePath('/authors', locale)}>{localizePath('/authors', locale)}</a>
+      </li>
+    </ul>
+  </section>
 
-  <p>
-    Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper viverra. Tellus
-    mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc scelerisque viverra mauris in. Arcu
-    ac tortor dignissim convallis aenean et tortor at. Curabitur gravida arcu ac tortor dignissim convallis aenean et
-    tortor. Egestas tellus rutrum tellus pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit
-    amet. Ut enim blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id cursus
-    metus aliquam eleifend mi.
-  </p>
+  <section aria-label="Recruiter summary">
+    <h2>For employers / recruiters</h2>
+    <p>
+      If you’d like to reach out, email is best:{' '}
+      <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
+    </p>
+    <ul>
+      <li>What I share: a portfolio of projects and write-ups (see the blog).</li>
+      <li>What I value: clarity, maintainability, accessibility, and good developer experience.</li>
+      <li>What I can provide on request: resume, references, and project/code samples.</li>
+    </ul>
+  </section>
 
-  <p>
-    Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta nibh venenatis cras
-    sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam tempor orci eu lobortis elementum. Tincidunt
-    dui ut ornare lectus sit. Quisque non tellus orci ac. Blandit libero volutpat sed cras. Nec tincidunt praesent
-    semper feugiat nibh sed pulvinar proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
-  </p>
+  <section aria-label="Verification links">
+    <h2>Verification links</h2>
+    <p>
+      I keep these accounts to reduce impersonation risk. I may not be active on all of them, but they should point back
+      to the same identity.
+    </p>
+    <ul>
+      {
+        SOCIAL_LINKS.map((link) => (
+          <li>
+            <a href={link.href} rel="noreferrer noopener" target="_blank">
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section aria-label="Template">
+    <h2>Template (copy/paste)</h2>
+    <p class="muted">If you want a ready-to-send message, this is a simple template you can reuse.</p>
+    <blockquote>
+      <p>
+        Hi — I’m {SITE_TITLE}. Here’s my portfolio: {localizePath('/blog', locale)}
+      </p>
+      <p>
+        The best way to contact me is {CONTACT_EMAIL}. Thanks for your time!
+      </p>
+    </blockquote>
+  </section>
+
+  <style>
+    .muted {
+      color: var(--muted);
+    }
+  </style>
 </Layout>

@@ -1,0 +1,177 @@
+---
+// Import the global.css file here so that it is included on
+// all pages through the use of the <BaseHead /> component.
+import '../../styles/global.scss';
+import type { Locale } from '../../i18n/locales';
+
+import { CONTACT_EMAIL, ROBOTS_POLICY, SEO, SITE_AUTHOR, SITE_DESCRIPTION, SITE_TITLE, SOCIAL_LINKS } from '../../consts';
+import { defaultLocale, locales } from '../../i18n/locales';
+import { localizePath, stripLocaleFromPath } from '../../i18n/routing';
+
+interface Props {
+  description: string;
+  image?: string;
+  imageAlt?: string;
+  locale?: Locale;
+  noindex?: boolean;
+  ogType?: 'article' | 'website';
+  title: string;
+}
+
+const { locale: inferredLocale, pathname } = stripLocaleFromPath(Astro.url.pathname);
+const {
+  description,
+  image = '/blog-placeholder-1.jpg',
+  imageAlt,
+  locale = inferredLocale,
+  noindex = false,
+  ogType = 'website',
+  title,
+} = Astro.props as Props;
+
+const site = Astro.site ?? new URL('http://localhost:4321');
+const canonicalPath = localizePath(pathname, locale);
+const canonicalURL = new URL(canonicalPath, site);
+
+const absoluteImageURL = new URL(image, site);
+const resolvedImageAlt = imageAlt ?? title;
+
+const robotsIndexing = ROBOTS_POLICY.allowIndexing && !noindex;
+const robotsDirectives = [
+  robotsIndexing ? 'index' : 'noindex',
+  robotsIndexing ? 'follow' : 'nofollow',
+  'max-snippet:-1',
+  'max-image-preview:large',
+  'max-video-preview:-1',
+].join(', ');
+
+const ogLocaleByLocale = (value: Locale): string => {
+  switch (value) {
+    case 'en':
+      return 'en_US';
+    case 'es':
+      return 'es_ES';
+    case 'ja':
+      return 'ja_JP';
+    case 'ru':
+      return 'ru_RU';
+    case 'zh':
+      return 'zh_CN';
+    default:
+      return 'en_US';
+  }
+};
+
+const alternateLinks = locales.map((targetLocale) => ({
+  locale: targetLocale,
+  href: new URL(localizePath(pathname, targetLocale), site),
+}));
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@id': new URL('#person', site).toString(),
+      '@type': 'Person',
+      email: `mailto:${CONTACT_EMAIL}`,
+      name: SITE_AUTHOR.name,
+      sameAs: SOCIAL_LINKS.map((link) => link.href),
+      url: site.toString(),
+    },
+    {
+      '@id': new URL('#website', site).toString(),
+      '@type': 'WebSite',
+      description: SITE_DESCRIPTION,
+      inLanguage: locale,
+      name: SITE_TITLE,
+      publisher: { '@id': new URL('#person', site).toString() },
+      url: site.toString(),
+    },
+  ],
+};
+
+const schemaJson = JSON.stringify(schema);
+---
+
+<script is:inline>
+  (() => {
+    const storageKey = 'cobollatin-theme';
+
+    try {
+      const stored = localStorage.getItem(storageKey);
+      const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+      const theme = stored === 'dark' || stored === 'light' ? stored : prefersDark ? 'dark' : 'light';
+      document.documentElement.dataset.theme = theme;
+    } catch {
+      // Ignore storage access failures
+    }
+  })();
+</script>
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta content="width=device-width,initial-scale=1" name="viewport" />
+<link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+<link href="/sitemap-index.xml" rel="sitemap" />
+<link href="/llms.txt" rel="alternate" title="LLM instructions" type="text/plain" />
+<link href="/ai.txt" rel="alternate" title="AI policy" type="text/plain" />
+<link
+  href={new URL(localizePath('/rss.xml', locale), site)}
+  rel="alternate"
+  title={SITE_TITLE}
+  type="application/rss+xml"
+/>
+<meta content={Astro.generator} name="generator" />
+
+<!-- Font preloads -->
+<link as="font" crossorigin href="/fonts/atkinson-regular.woff" rel="preload" type="font/woff" />
+<link as="font" crossorigin href="/fonts/atkinson-bold.woff" rel="preload" type="font/woff" />
+
+<!-- Canonical URL -->
+<link href={canonicalURL} rel="canonical" />
+
+<!-- Crawlers -->
+<meta content={robotsDirectives} name="robots" />
+<meta content={robotsDirectives} name="googlebot" />
+<meta content={robotsDirectives} name="bingbot" />
+
+<!-- Language alternates -->
+<link href={new URL(localizePath(pathname, defaultLocale), site)} hreflang="x-default" rel="alternate" />
+{
+  alternateLinks.map((link) => (
+    <link href={link.href} hreflang={link.locale} rel="alternate" />
+  ))
+}
+
+<!-- Identity / ownership -->
+{SOCIAL_LINKS.map((link) => <link href={link.href} rel="me" />)}
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta content={title} name="title" />
+<meta content={description} name="description" />
+<meta content={SITE_AUTHOR.name} name="author" />
+
+<!-- Open Graph / Facebook -->
+<meta content={ogType} property="og:type" />
+<meta content={canonicalURL} property="og:url" />
+<meta content={SITE_TITLE} property="og:site_name" />
+<meta content={title} property="og:title" />
+<meta content={description} property="og:description" />
+<meta content={ogLocaleByLocale(locale)} property="og:locale" />
+{alternateLinks.filter((link) => link.locale !== locale).map((link) => <meta content={ogLocaleByLocale(link.locale)} property="og:locale:alternate" />)}
+<meta content={absoluteImageURL} property="og:image" />
+<meta content={resolvedImageAlt} property="og:image:alt" />
+
+<!-- Twitter -->
+<meta content="summary_large_image" property="twitter:card" />
+<meta content={canonicalURL} property="twitter:url" />
+<meta content={title} property="twitter:title" />
+<meta content={description} property="twitter:description" />
+<meta content={absoluteImageURL} property="twitter:image" />
+<meta content={resolvedImageAlt} property="twitter:image:alt" />
+{SEO.twitterHandle && <meta content={SEO.twitterHandle} name="twitter:site" />}
+{SEO.twitterHandle && <meta content={SEO.twitterHandle} name="twitter:creator" />}
+
+<!-- Structured data -->
+<script is:inline set:html={schemaJson} type="application/ld+json"></script>

@@ -1,0 +1,41 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import { render } from 'astro:content';
+
+import { mdxComponents } from '../../../components/mdx/mdxComponents';
+import { groupBlogEntries, pickBlogEntry } from '../../../content/blog';
+import { defaultLocale, type Locale, locales } from '../../../i18n/locales';
+import BlogPost from '../../../layouts/BlogPost.astro';
+
+type Props = {
+  entry: CollectionEntry<'blog'>;
+  locale: Locale;
+};
+
+export async function getStaticPaths() {
+  const entries = await getCollection('blog');
+  const grouped = groupBlogEntries(entries);
+
+  return locales
+    .filter((l) => l !== defaultLocale)
+    .flatMap((lang) =>
+      Array.from(grouped.keys())
+        .map((translationKey) => {
+          const entry = pickBlogEntry(grouped, translationKey, lang);
+          if (!entry) return undefined;
+          return {
+            params: { lang, slug: translationKey },
+            props: { entry, locale: lang as Locale },
+          };
+        })
+        .filter((v): v is NonNullable<typeof v> => Boolean(v)),
+    );
+}
+
+const { entry, locale } = Astro.props as Props;
+const { Content } = await render(entry);
+---
+
+<BlogPost {...entry.data} locale={locale}>
+  <Content components={mdxComponents} />
+</BlogPost>

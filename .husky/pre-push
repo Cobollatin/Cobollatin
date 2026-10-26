@@ -1,5 +1,6 @@
-npm run lint
-npm run check
-npm run test
-npm run e2e
-npm run build
+bun run lint
+bun run check
+bun run check:i18n
+bun run test
+bun run e2e
+bun run build

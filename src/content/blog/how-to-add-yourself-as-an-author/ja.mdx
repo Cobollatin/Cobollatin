@@ -1,0 +1,77 @@
+---
+title: '自分を著者として追加する方法'
+description: 'このサイトに著者プロフィールを追加し、Authors ページに表示します。'
+pubDate: '2026-02-02'
+updatedDate: '2026-02-02'
+authors: ['cobollatin']
+keywords: ['著者', 'content collections', 'astro', 'プロフィール']
+heroImage: '/blog-placeholder-2.jpg'
+lang: 'ja'
+---
+
+このサイトの Authors ページは、Astro の **Content Collection**（`authors`）から生成されています。
+
+自分（またはチーム）を著者として追加したい場合は、`src/content/authors/` に Markdown ファイルを 1 つ追加するだけです。
+
+## 1) 著者ファイルを作成する
+
+ファイル名には安定した id（例: ハンドル名）を使います:
+
+- `src/content/authors/<id>.md`
+
+例:
+
+- `src/content/authors/jane-doe.md`
+
+## 2) frontmatter を埋める（肩書きは自由）
+
+スキーマは `src/content.config.ts` の `authors` コレクションにあります。必須フィールドは次の 2 つです:
+
+- `name`
+- `summary`
+
+任意フィールド:
+
+- `role`（好きなものを入れる / 省略も可）
+- `avatar`
+- `links`（0 件以上）
+
+例:
+
+```yaml
+---
+name: 'Jane Doe'
+role: 'Developer Advocate'
+summary: 'Astro、アクセシビリティ、ドキュメントについて書いています。'
+avatar: '/avatars/jane.jpg'
+links:
+  - label: 'Website'
+    href: 'https://example.com'
+  - label: 'GitHub'
+    href: 'https://github.com/janedoe'
+  - label: 'About'
+    href: '/about'
+---
+```
+
+メモ:
+
+- `links[].href` が `/` で始まる場合は内部リンクとして扱われ、ロケールに合わせて書き換えられます（例: `/about` → `/ja/about`）。
+- 外部 URL の場合は新しいタブで開き、`rel="noreferrer noopener"` が付きます。
+
+## 3) アバター画像を追加する（任意）
+
+`avatar` を使う場合は、画像を `public/` 配下に置き（例: `public/avatars/jane.jpg`）、`/avatars/jane.jpg` として参照します。
+
+## 4) ローカルで確認する
+
+開発サーバーを起動して Authors ページを開きます:
+
+```bash
+bun run dev
+```
+
+- デフォルト: `/authors/`
+- ローカライズ: `/es/authors/`, `/zh/authors/`, `/ja/authors/`, `/ru/authors/`
+
+これで完了です。ページは `authors` コレクションの全エントリを読み込み、名前順に並べます。

@@ -1,0 +1,46 @@
+---
+interface Props {
+  title?: string;
+  variant?: Variant;
+}
+
+type Variant = 'danger' | 'info' | 'note' | 'warning';
+
+const { title, variant = 'note' } = Astro.props;
+
+const role = variant === 'danger' || variant === 'warning' ? 'alert' : 'note';
+---
+
+<aside aria-label={title} class:list={['callout', `callout--${variant}`]} role={role}>
+  {title && <strong class="callout__title">{title}</strong>}
+  <div class="callout__body">
+    <slot />
+  </div>
+</aside>
+
+<style>
+  .callout {
+    border: 1px solid var(--border);
+    border-left-width: 6px;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1.25rem 0;
+    background: var(--panel);
+  }
+  .callout__title {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  .callout--note {
+    border-left-color: var(--muted);
+  }
+  .callout--info {
+    border-left-color: var(--link);
+  }
+  .callout--warning {
+    border-left-color: #f59e0b;
+  }
+  .callout--danger {
+    border-left-color: #ef4444;
+  }
+</style>

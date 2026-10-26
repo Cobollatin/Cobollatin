@@ -1,0 +1,113 @@
+---
+title: 'Как создать пост в блоге (с i18n)'
+description: 'Практическое руководство по созданию новой записи в этом Astro-сайте, включая работу переводов.'
+pubDate: '2026-02-02'
+updatedDate: '2026-02-02'
+authors: ['cobollatin']
+keywords: ['гайд', 'блог', 'astro', 'i18n', 'контент']
+heroImage: '/blog-placeholder-1.jpg'
+lang: 'ru'
+---
+
+Этот сайт использует **Astro Content Collections** для блога. Посты лежат в `src/content/blog/` и рендерятся маршрутами `src/pages/blog/` (язык по умолчанию) и `src/pages/[lang]/blog/` (локализованные маршруты).
+
+## 1) Создайте новый пост (рекомендуется: используйте скрипт)
+
+Чтобы создать директорию поста с файлом для каждого поддерживаемого языка, выполните:
+
+```bash
+bun run new:post <slug> "Необязательный заголовок"
+```
+
+Скрипт создаст папку `src/content/blog/<slug>/` и по одному `.mdx` файлу на каждый locale (см. `src/i18n/locales.ts`).
+
+Если хотите сделать это вручную, создайте папку с именем slug (это имя станет URL slug), затем добавьте в неё файл `ru.mdx` (и другие языки при необходимости):
+
+- Файл: `src/content/blog/my-new-post/ru.mdx`
+- URL (русский): `/ru/blog/my-new-post/`
+
+## 2) Frontmatter (обязательные поля)
+
+Каждый пост должен иметь frontmatter, соответствующий схеме коллекции blog в `src/content.config.ts`.
+
+Минимально необходимый frontmatter:
+
+```yaml
+---
+title: 'Мой новый пост'
+description: 'Одно предложение-описание для списков, превью и SEO.'
+pubDate: '2026-02-02'
+lang: 'ru'
+---
+```
+
+Необязательные (рекомендуемые) поля:
+
+- `heroImage`: путь к картинке (обычно из `public/`)
+- `keywords`: массив строк для фильтрации и поиска
+- `updatedDate`: показывает строку “Последнее обновление …”
+
+Пример со всеми полями:
+
+```yaml
+---
+title: 'Мой новый пост'
+description: 'Одно предложение-описание для списков, превью и SEO.'
+pubDate: '2026-02-02'
+updatedDate: '2026-02-10'
+heroImage: '/blog-placeholder-1.jpg'
+keywords: ['astro', 'content collections', 'writing']
+lang: 'ru'
+---
+```
+
+## 3) Напишите контент
+
+Используйте Markdown (или MDX). Заголовки автоматически получают якоря/ссылки благодаря rehype-плагинам, настроенным в `astro.config.ts`.
+
+## 4) i18n: добавьте переводы этого же поста
+
+Поддерживаемые locales определены в `src/i18n/locales.ts`:
+
+- `en` (по умолчанию)
+- `es`, `zh`, `ja`, `ru`
+
+### Как группируются переводы
+
+Переводы группируются по **translation key**, который берётся из первого сегмента пути внутри `src/content/blog/`.
+
+Поэтому эти файлы считаются переводами одного и того же поста, потому что у них одинаковое имя папки:
+
+- `src/content/blog/my-new-post/en.mdx` (с `lang: 'en'`)
+- `src/content/blog/my-new-post/ru.mdx` (с `lang: 'ru'`)
+
+URL будут такими:
+
+- Английский: `/blog/my-new-post/`
+- Русский: `/ru/blog/my-new-post/`
+
+Если перевода для locale нет, сайт делает fallback на контент дефолтного языка.
+
+### Как проверять “все locales существуют”
+
+Если вы хотите требовать, чтобы у каждого поста был файл для каждого locale, запустите:
+
+```bash
+bun run check:i18n
+```
+
+## 5) Локализованные маршруты (как генерируются страницы)
+
+- Маршруты дефолтного locale (без префикса): `src/pages/blog/index.astro` и `src/pages/blog/[...slug].astro`
+- Маршруты не-дефолтных locale (с префиксом): `src/pages/[lang]/blog/index.astro` и `src/pages/[lang]/blog/[...slug].astro`
+
+Переключатель языка в хедере использует `src/i18n/routing.ts`, чтобы переписать текущий путь на выбранный locale.
+
+## 6) Быстрый чеклист
+
+- Файл(ы) поста созданы в `src/content/blog/<slug>/<locale>.mdx`
+- Frontmatter содержит `title`, `description`, `pubDate`, `lang`
+- Опционально: `keywords`, `heroImage`, `updatedDate`
+- Запуск локально:
+  - `bun run dev`
+  - `bun run check`

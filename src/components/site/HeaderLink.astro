@@ -1,0 +1,38 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+import { isLocale } from '../../i18n/locales';
+
+type Props = HTMLAttributes<'a'>;
+
+const { class: className, href, ...properties } = Astro.props;
+const normalize = (value: string) => (value.endsWith('/') && value !== '/' ? value.slice(0, -1) : value);
+
+const pathname = normalize(Astro.url.pathname.replace(import.meta.env.BASE_URL, ''));
+const hrefString = typeof href === 'string' ? href : href?.toString();
+const hrefNormalized = hrefString ? normalize(hrefString) : hrefString;
+const subpath = pathname.match(/[^/]+/g) ?? [];
+
+const rootSection = (() => {
+  const first = subpath[0];
+  if (!first) return '/';
+  if (isLocale(first)) return normalize(`/${first}/${subpath[1] ?? ''}`.replace(/\/$/, '/'));
+  return `/${first}`;
+})();
+
+const isActive = hrefNormalized === pathname || hrefNormalized === rootSection;
+---
+
+<a class:list={[className, { active: isActive }]} href={href} {...properties}>
+  <slot />
+</a>
+<style>
+  a {
+    display: inline-block;
+    text-decoration: none;
+  }
+  a.active {
+    font-weight: bolder;
+    text-decoration: underline;
+  }
+</style>
