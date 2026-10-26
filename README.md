@@ -20,6 +20,6 @@ Set `PUBLIC_SITE_URL` to the final production origin before building for deploym
 
 ## Manual Vercel deployment preparation
 
-Keep Git auto-deployment disconnected; `vercel.json` also disables Git-triggered deployments if a repository is connected later. This checkout retains an ignored `.vercel/` directory from the prior site; inspect its project and scope before using it, and relink only after choosing the intended Vercel project. Explicitly run `vercel deploy --prod` only for an approved release, then verify the assigned domain and deployment. No deployment has been done for this rebuild. `.vercel/` and local env files are ignored.
+Keep Git auto-deployment disconnected; `vercel.json` also disables Git-triggered deployments if a repository is connected later. This checkout retains ignored `.vercel/output` build files from the prior site, but no `.vercel/project.json` link. Choose the intended Vercel project, run `vercel link`, and verify its project and scope before a release. Explicitly run `vercel deploy --prod` only for an approved release, then verify the assigned domain and deployment. No deployment has been done for this rebuild. `.vercel/` and local env files are ignored.
 
 The current root path offers a language choice. Content lives under `/en/` and `/es/`. Decide the default language and final domain before launch.
