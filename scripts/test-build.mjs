@@ -1,0 +1,59 @@
+import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { spawnSync } from 'node:child_process';
+import assert from 'node:assert/strict';
+
+const root = process.cwd();
+const fixtures = new Map([
+  ['src/content/posts/en/route-fixture.mdx', `---\ntitle: Route fixture\ndescription: Synthetic route test.\npublishedAt: 2026-01-01\nlocale: en\nauthors: [sample]\ntranslationKey: route-fixture\n---\n\nPublished **MDX** fixture.\n`],
+  ['src/content/posts/es/ruta-fixture.mdx', `---\ntitle: Prueba de ruta\ndescription: Prueba sintética.\npublishedAt: 2026-01-01\nlocale: es\nauthors: [sample]\ntranslationKey: route-fixture\n---\n\nContenido **MDX** publicado.\n`],
+  ['src/content/pages/en/page-fixture.mdx', `---\ntitle: Page fixture\ndescription: Synthetic page test.\nlocale: en\nauthors: [sample]\n---\n\nPublished **page** fixture.\n`],
+  ['src/content/posts/en/draft-fixture.mdx', `---\ntitle: Draft fixture\ndescription: Exclusion test.\npublishedAt: 2026-01-01\nlocale: en\nauthors: [sample]\ndraft: true\n---\n\nThis must stay unpublished.\n`],
+]);
+
+function build() {
+  return spawnSync(process.execPath, ['node_modules/astro/bin/astro.mjs', 'build'], {
+    cwd: root, encoding: 'utf8', timeout: 120_000,
+  });
+}
+function page(path) { return readFileSync(join(root, 'dist', path, 'index.html'), 'utf8'); }
+
+try {
+  for (const [path, body] of fixtures) {
+    const target = join(root, path);
+    assert(!existsSync(target), `Refusing to replace ${path}`);
+    mkdirSync(join(target, '..'), { recursive: true });
+    writeFileSync(target, body, { flag: 'wx' });
+  }
+  const result = build();
+  assert.equal(result.status, 0, `fixture build failed:\n${result.stdout}\n${result.stderr}`);
+  assert.match(page('en/blog/route-fixture'), /Published <strong>MDX<\/strong> fixture/);
+  assert.match(page('es/blog/ruta-fixture'), /Contenido <strong>MDX<\/strong> publicado/);
+  assert.match(page('en/blog/route-fixture'), /value="\/es\/blog\/ruta-fixture\/"/);
+  assert.match(page('en/pages/page-fixture'), /value="\/es\/"/);
+  assert.match(page('en/pages/page-fixture'), /No translation; opens the home page/);
+  assert.match(page('en/blog'), /Route fixture/);
+  assert.match(page('en/pages'), /Page fixture/);
+  assert.match(page('en'), /Route fixture/);
+  assert.match(page('en'), /Page fixture/);
+  assert.doesNotMatch(page('en'), /Curious work|Find your way in|first piece is still/);
+  assert.doesNotMatch(page('en/tools'), /word-counter|Word counter/);
+  assert(!existsSync(join(root, 'dist/en/tools/word-counter/index.html')));
+  assert(!existsSync(join(root, 'dist/en/blog/draft-fixture/index.html')));
+  assert.doesNotMatch(page('en/blog'), /Draft fixture/);
+  assert.doesNotMatch(page('en'), /Draft fixture/);
+  console.log('Static fixture build: published MDX post/page, counterpart, home fallback, and draft exclusion passed.');
+  const invalid = join(root, 'src/content/posts/en/invalid-author-fixture.mdx');
+  assert(!existsSync(invalid), 'Refusing to replace invalid author fixture');
+  fixtures.set('src/content/posts/en/invalid-author-fixture.mdx', '---\ntitle: Invalid author fixture\ndescription: Validation test.\npublishedAt: 2026-01-01\nlocale: en\nauthors: [missing-fixture-author]\n---\n\nInvalid reference.\n');
+  writeFileSync(invalid, fixtures.get('src/content/posts/en/invalid-author-fixture.mdx'), { flag: 'wx' });
+  const rejected = build();
+  assert.notEqual(rejected.status, 0, 'Build accepted a missing author reference');
+  assert.match(`${rejected.stdout}\n${rejected.stderr}`, /missing-fixture-author|unknown author/);
+  console.log('Static fixture build: missing author reference rejected.');
+} finally {
+  for (const path of fixtures.keys()) {
+    const target = join(root, path);
+    if (existsSync(target)) unlinkSync(target);
+  }
+}

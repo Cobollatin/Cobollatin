@@ -3,23 +3,32 @@ export type Locale = (typeof locales)[number];
 
 export const messages = {
   en: {
-    home: 'Home', blog: 'Blog', tools: 'Tools', intro: 'Writing and useful little tools.',
-    latest: 'Latest writing', empty: 'No published posts yet.', toolsIntro: 'Small tools for everyday work.',
-    wordCounter: 'Word counter', wordCounterDescription: 'Count words and characters in your browser.',
-    text: 'Text', words: 'Words', characters: 'Characters', read: 'Read post', by: 'By',
-    siteDescription: 'A personal site for writing and useful tools.',
+    home: 'Home', blog: 'Writing', pages: 'Pages', tools: 'Tools',
+    noPosts: 'No published writing.', noPages: 'No published pages.', noTools: 'No published tools.',
+    by: 'By', siteDescription: 'Cobollatin',
+    localeLabel: 'Language', themeLabel: 'Switch theme', dark: 'Dark', light: 'Light',
+    unavailable: 'No translation; opens the home page',
   },
   es: {
-    home: 'Inicio', blog: 'Blog', tools: 'Herramientas', intro: 'Artículos y pequeñas herramientas útiles.',
-    latest: 'Publicaciones recientes', empty: 'Todavía no hay publicaciones.', toolsIntro: 'Herramientas sencillas para el día a día.',
-    wordCounter: 'Contador de palabras', wordCounterDescription: 'Cuenta palabras y caracteres en tu navegador.',
-    text: 'Texto', words: 'Palabras', characters: 'Caracteres', read: 'Leer artículo', by: 'Por',
-    siteDescription: 'Un sitio personal para artículos y herramientas útiles.',
+    home: 'Inicio', blog: 'Escritos', pages: 'Páginas', tools: 'Herramientas',
+    noPosts: 'No hay escritos publicados.', noPages: 'No hay páginas publicadas.', noTools: 'No hay herramientas publicadas.',
+    by: 'Por', siteDescription: 'Cobollatin',
+    localeLabel: 'Idioma', themeLabel: 'Cambiar tema', dark: 'Oscuro', light: 'Claro',
+    unavailable: 'Sin traducción; abre la página de inicio',
   },
 } as const;
 
 export function isLocale(value: string): value is Locale {
   return (locales as readonly string[]).includes(value);
+}
+
+export function preferredLocale(browserLanguages: readonly string[], saved: string | null): Locale {
+  if (saved && isLocale(saved)) return saved;
+  for (const language of browserLanguages) {
+    const primary = language.toLowerCase().split('-')[0];
+    if (isLocale(primary)) return primary;
+  }
+  return 'en';
 }
 
 export function localePath(locale: Locale, path = ''): string {

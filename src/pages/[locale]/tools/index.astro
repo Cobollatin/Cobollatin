@@ -7,8 +7,8 @@ export function getStaticPaths() { return locales.map((locale) => ({ params: { l
 const locale = Astro.params.locale as Locale;
 const t = messages[locale];
 ---
-<Base locale={locale} title={t.tools} description={t.toolsIntro}>
-  <div class="page"><p class="eyebrow">Cobollatin / {t.tools}</p><h1>{t.tools}</h1><p class="lead">{t.toolsIntro}</p>
-    <div class="cards">{tools.map((tool) => <a class="card" href={localePath(locale, `tools/${tool.path}/`)}><h3>{t[tool.titleKey]}</h3><p>{t[tool.descriptionKey]}</p></a>)}</div>
+<Base locale={locale} title={t.tools} description={t.tools}>
+  <div class="page"><h1>{t.tools}</h1>
+    {tools.length ? <div class="cards">{tools.map((tool) => <a class="card" href={localePath(locale, `tools/${tool.path}/`)}><h2>{tool.title[locale]}</h2></a>)}</div> : <p class="empty-state">{t.noTools}</p>}
   </div>
 </Base>

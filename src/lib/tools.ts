@@ -1,3 +1,2 @@
-export const tools = [
-  { id: 'word-counter', path: 'word-counter', titleKey: 'wordCounter', descriptionKey: 'wordCounterDescription' },
-] as const;
+// Register a tool only after its public route and name have been approved.
+export const tools: readonly { id: string; path: string; title: Record<'en' | 'es', string> }[] = [];

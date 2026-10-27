@@ -2,10 +2,26 @@
 import { localePath } from '../lib/i18n';
 ---
 <!doctype html>
-<html lang="en">
-  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>Cobollatin</title></head>
-  <body style="font-family:system-ui;max-width:40rem;margin:12vh auto;padding:1rem">
-    <h1>Cobollatin</h1><p>Choose a language / Elige un idioma</p>
-    <p><a href={localePath('en')}>English</a> · <a href={localePath('es')}>Español</a></p>
-  </body>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101819" />
+    <title>Cobollatin</title>
+    <script is:inline>try { if (localStorage.getItem('cobollatin-theme') === 'light') document.documentElement.dataset.theme = 'light'; } catch {}</script>
+    <script is:inline>
+      let selected = 'en';
+      let saved = null;
+      try { saved = localStorage.getItem('cobollatin-locale'); } catch {}
+      if (saved === 'en' || saved === 'es') selected = saved;
+      else {
+        try {
+          const languages = navigator.languages?.length ? navigator.languages : [navigator.language || ''];
+          selected = languages.map((value) => value.toLowerCase().split('-')[0]).find((value) => value === 'en' || value === 'es') || 'en';
+        } catch {}
+      }
+      window.location.replace(`/${selected}/`);
+    </script>
+    <style>html{background:#101819;color:#eef1e9;font-family:system-ui}html[data-theme=light]{background:#f4f2eb;color:#182424}body{min-height:80vh;display:grid;place-content:center;margin:0;padding:2rem}a{color:#c4ec83}html[data-theme=light] a{color:#52752b}</style>
+  </head>
+  <body><a href={localePath('en')}>Cobollatin</a></body>
 </html>

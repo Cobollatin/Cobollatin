@@ -1,10 +1,8 @@
-# Cobollatin, fresh Astro foundation
+# Cobollatin
 
-This is the rebuild branch of the existing Cobollatin repository. The previous in-progress site is preserved at `preserve/pre-astro-rebuild-20261026` (`fc3f618`). Nothing has been pushed or deployed.
+Static Astro site with English (`/en/`) and Spanish (`/es/`) routes. The root `/` selects a language in the browser: a saved explicit choice, then the first supported browser language, then English. Direct locale URLs always keep their requested language. The site starts in dark mode; visitors can save a light preference with the header button.
 
-The site is static Astro with English and Spanish routes, schema-checked posts and authors, a tool registry, and a local word counter. No biography or article has been attributed to the site owner. The `sample` author and post are clearly labeled examples; the post has `draft: true` and is not published. Replace them with real author records and posts when ready. Each post names one or more author IDs, a locale, and optionally a shared `translationKey` for translated versions. Draft posts are omitted from the site. Locale switching returns to the other language's home page so it never links to an untranslated article.
-
-## Develop and verify
+## Local work
 
 Requires Node.js 22.12 or newer.
 
@@ -16,10 +14,14 @@ npm run build
 npm run dev
 ```
 
-Set `PUBLIC_SITE_URL` to the final production origin before building for deployment. It enables canonical URLs; leave it unset for local work. The app does not need a Vercel adapter while it remains fully static.
+`npm test` includes a temporary content fixture build. It creates synthetic published posts and a page, verifies generated routes and the language switch, checks that a draft is absent, then removes the temporary source files. Run `npm run build` afterward to restore the ordinary `dist/` output. `dist/` is ignored by Git.
 
-## Manual Vercel deployment preparation
+Set `PUBLIC_SITE_URL` to the final origin before a production build to emit canonical URLs. No adapter is needed for static output.
 
-Keep Git auto-deployment disconnected; `vercel.json` also disables Git-triggered deployments if a repository is connected later. This checkout retains ignored `.vercel/output` build files from the prior site, but no `.vercel/project.json` link. Choose the intended Vercel project, run `vercel link`, and verify its project and scope before a release. Explicitly run `vercel deploy --prod` only for an approved release, then verify the assigned domain and deployment. No deployment has been done for this rebuild. `.vercel/` and local env files are ignored.
+## Publishing through a reviewed PR
 
-The current root path offers a language choice. Content lives under `/en/` and `/es/`. Decide the default language and final domain before launch.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for frontmatter examples and review rules. A reviewed MDX document merged into `src/content/posts/<locale>/` or `src/content/pages/<locale>/` becomes a public route at the **next manual build and deployment**. Merging a PR alone does not deploy the site. Drafts (`draft: true`) remain unpublished.
+
+## Deployment
+
+Deployment is manual only. `vercel.json` disables Git triggered deployment. Confirm the intended Vercel project and scope before linking this checkout, then build and deploy only for an approved release. This work has not linked, pushed, or deployed the site.

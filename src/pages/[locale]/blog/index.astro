@@ -1,7 +1,7 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import { locales, messages, localePath, type Locale } from '../../../lib/i18n';
-import { publishedPosts, postSlug } from '../../../lib/posts';
+import { publishedPosts, entrySlug } from '../../../lib/posts';
 
 export function getStaticPaths() { return locales.map((locale) => ({ params: { locale } })); }
 const locale = Astro.params.locale as Locale;
@@ -9,7 +9,7 @@ const t = messages[locale];
 const posts = await publishedPosts(locale);
 ---
 <Base locale={locale} title={t.blog} description={t.siteDescription}>
-  <div class="page"><p class="eyebrow">Cobollatin / {t.blog}</p><h1>{t.blog}</h1>
-    {posts.length ? <div class="cards">{posts.map((post) => <a class="card" href={localePath(locale, `blog/${postSlug(post)}/`)}><h3>{post.data.title}</h3><p>{post.data.description}</p><p class="meta"><time datetime={post.data.publishedAt.toISOString()}>{new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(post.data.publishedAt)}</time></p></a>)}</div> : <p class="lead">{t.empty}</p>}
+  <div class="page"><h1>{t.blog}</h1>
+    {posts.length ? <div class="cards">{posts.map((post) => <a class="card" href={localePath(locale, `blog/${entrySlug(post)}/`)}><h2>{post.data.title}</h2><p>{post.data.description}</p><p class="meta"><time datetime={post.data.publishedAt.toISOString()}>{new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(post.data.publishedAt)}</time></p></a>)}</div> : <p class="empty-state">{t.noPosts}</p>}
   </div>
 </Base>

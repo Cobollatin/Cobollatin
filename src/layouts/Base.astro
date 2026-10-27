@@ -1,43 +1,80 @@
 ---
-import { localePath, locales, messages, type Locale } from '../lib/i18n';
+import { localePath, locales, messages, switchLocale, type Locale } from '../lib/i18n';
 import '../styles/global.css';
 
 interface Props {
   locale: Locale;
   title: string;
   description: string;
+  alternatePaths?: Partial<Record<Locale, string>>;
 }
-const { locale, title, description } = Astro.props;
+const { locale, title, description, alternatePaths = {} } = Astro.props;
 const t = messages[locale];
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : undefined;
+const targets = locales.map((choice) => ({
+  locale: choice,
+  path: alternatePaths[choice] ?? (Object.keys(alternatePaths).length ? localePath(choice) : switchLocale(Astro.url.pathname, choice)),
+  fallback: choice !== locale && !alternatePaths[choice] && Boolean(Object.keys(alternatePaths).length),
+}));
 ---
-
 <!doctype html>
-<html lang={locale}>
+<html lang={locale} data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f6f4ef" />
+    <meta name="theme-color" content="#101819" />
     <meta name="description" content={description} />
     {canonical && <link rel="canonical" href={canonical} />}
-    <title>{title} · Cobollatin</title>
+    <title>{title === t.home ? 'Cobollatin' : `${title} · Cobollatin`}</title>
+    <script is:inline>
+      try { if (localStorage.getItem('cobollatin-theme') === 'light') document.documentElement.dataset.theme = 'light'; } catch {}
+    </script>
   </head>
   <body>
     <a class="skip" href="#main">{locale === 'es' ? 'Ir al contenido' : 'Skip to content'}</a>
     <div class="shell">
       <header class="site-header">
-        <a class="brand" href={localePath(locale)} aria-label="Cobollatin home">Cobollatin<span class="brand-mark">.</span></a>
+        <a class="brand" href={localePath(locale)} aria-label={locale === 'es' ? 'Inicio de Cobollatin' : 'Cobollatin home'}><span class="brand-symbol" aria-hidden="true">✳</span><span>Cobollatin</span></a>
         <nav aria-label={locale === 'es' ? 'Navegación principal' : 'Main navigation'}>
-          <a href={localePath(locale)}>{t.home}</a>
-          <a href={localePath(locale, 'blog/')}>{t.blog}</a>
-          <a href={localePath(locale, 'tools/')}>{t.tools}</a>
+          <a href={localePath(locale)} aria-current={Astro.url.pathname === localePath(locale) ? 'page' : undefined}>{t.home}</a>
+          <a href={localePath(locale, 'blog/')} aria-current={Astro.url.pathname.startsWith(localePath(locale, 'blog/')) ? 'page' : undefined}>{t.blog}</a>
+          <a href={localePath(locale, 'pages/')} aria-current={Astro.url.pathname.startsWith(localePath(locale, 'pages/')) ? 'page' : undefined}>{t.pages}</a>
+          <a href={localePath(locale, 'tools/')} aria-current={Astro.url.pathname.startsWith(localePath(locale, 'tools/')) ? 'page' : undefined}>{t.tools}</a>
         </nav>
-        <div class="languages" aria-label={locale === 'es' ? 'Idioma' : 'Language'}>
-          {locales.map((choice) => <a href={localePath(choice)} aria-current={choice === locale ? 'true' : undefined}>{choice.toUpperCase()}</a>)}
+        <div class="header-controls">
+          <label class="locale-control"><span class="sr-only">{t.localeLabel}</span><select id="locale-switch" aria-describedby={targets.some((target) => target.fallback) ? 'locale-note' : undefined}>
+            {targets.map((target) => <option value={target.path} data-locale={target.locale} selected={target.locale === locale}>{target.locale.toUpperCase()}{target.fallback ? ' ↗' : ''}</option>)}
+          </select></label>
+          {targets.some((target) => target.fallback) && <span id="locale-note" class="sr-only">{t.unavailable}</span>}
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label={t.themeLabel} aria-pressed="true" data-dark={t.dark} data-light={t.light}><span class="theme-glyph" aria-hidden="true">◐</span><span class="theme-label">{t.dark}</span></button>
         </div>
       </header>
       <main id="main"><slot /></main>
-      <footer class="site-footer"><span>Cobollatin</span><span>{locale === 'es' ? 'Hecho con Astro' : 'Built with Astro'}</span></footer>
+      <footer class="site-footer"><a class="footer-brand" href={localePath(locale)}>✳ Cobollatin</a><a href="#main">↑ {locale === 'es' ? 'Arriba' : 'Back to top'}</a></footer>
     </div>
+    <script is:inline>
+      const themeButton = document.getElementById('theme-toggle');
+      const updateThemeLabel = () => {
+        const dark = document.documentElement.dataset.theme !== 'light';
+        themeButton?.setAttribute('aria-pressed', String(dark));
+        const label = themeButton?.querySelector('.theme-label');
+        if (label) label.textContent = dark ? themeButton.dataset.dark : themeButton.dataset.light;
+      };
+      updateThemeLabel();
+      themeButton?.addEventListener('click', () => {
+        const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+        document.documentElement.dataset.theme = next;
+        try { localStorage.setItem('cobollatin-theme', next); } catch {}
+        updateThemeLabel();
+      });
+      document.getElementById('locale-switch')?.addEventListener('change', (event) => {
+        const select = event.currentTarget;
+        const choice = select.options[select.selectedIndex]?.dataset.locale;
+        if (choice === 'en' || choice === 'es') {
+          try { localStorage.setItem('cobollatin-locale', choice); } catch {}
+        }
+        window.location.assign(select.value);
+      });
+    </script>
   </body>
 </html>
