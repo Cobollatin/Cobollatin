@@ -7,20 +7,20 @@ export function getStaticPaths() { return locales.map((locale) => ({ params: { l
 const locale = Astro.params.locale as Locale;
 const t = messages[locale];
 ---
-<Base locale={locale} title={t.about} description={locale === 'en' ? "Adrian Marquina's personal site, writing, and tools." : 'El sitio personal, los escritos y las herramientas de Adrian Marquina.'}>
+<Base locale={locale} title={t.about} description={locale === 'en' ? "Cobollatin's personal site, writing, and tools." : 'El sitio personal, los escritos y las herramientas de Cobollatin.'}>
   <div class="page">
     <h1>{t.about}</h1>
     <div class="prose">
       {locale === 'en' ? (
-        <p>I'm Adrian Marquina (Cobollatin). I do maths and software. This is my personal site, where I share my <a href={localePath(locale, 'blog/')}>writing</a> and <a href={localePath(locale, 'tools/')}>tools</a>.</p>
+        <p>I'm Cobollatin. I do maths and software. This is my personal site, where I share my <a href={localePath(locale, 'blog/')}>writing</a> and <a href={localePath(locale, 'tools/')}>tools</a>.</p>
       ) : (
-        <p>Soy Adrian Marquina (Cobollatin). Me dedico a las matemáticas y al software. Este es mi sitio personal, donde comparto mis <a href={localePath(locale, 'blog/')}>escritos</a> y <a href={localePath(locale, 'tools/')}>herramientas</a>.</p>
+        <p>Soy Cobollatin. Me dedico a las matemáticas y al software. Este es mi sitio personal, donde comparto mis <a href={localePath(locale, 'blog/')}>escritos</a> y <a href={localePath(locale, 'tools/')}>herramientas</a>.</p>
       )}
       <h2>{locale === 'en' ? 'Find me online' : 'Mis redes'}</h2>
       <ul>
         {adrian.links.map((link) => <li><a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a></li>)}
       </ul>
-      <p>{locale === 'en' ? 'Email:' : 'Correo:'} <a href="mailto:contact@cobollatin.com">contact@cobollatin.com</a></p>
+      <p>{locale === 'en' ? 'Email:' : 'Correo:'} <a href="mailto:inbox@cobollatin.com">inbox@cobollatin.com</a></p>
     </div>
   </div>
 </Base>

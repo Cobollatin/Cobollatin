@@ -42,8 +42,8 @@ try {
   assert.match(page('en'), /href="\/en\/authors\/"[^>]*><span>Authors<\/span>/);
   assert.match(page('es'), /href="\/es\/authors\/"[^>]*><span>Autores<\/span>/);
   for (const [locale, labels, aboutText] of [
-    ['en', ['Home', 'Writing', 'Authors', 'Tools', 'About'], "I'm Adrian Marquina (Cobollatin). I do maths and software."],
-    ['es', ['Inicio', 'Escritos', 'Autores', 'Herramientas', 'Acerca de'], 'Soy Adrian Marquina (Cobollatin). Me dedico a las matemáticas y al software.'],
+    ['en', ['Home', 'Writing', 'Authors', 'Tools', 'About'], "I'm Cobollatin. I do maths and software."],
+    ['es', ['Inicio', 'Escritos', 'Autores', 'Herramientas', 'Acerca de'], 'Soy Cobollatin. Me dedico a las matemáticas y al software.'],
   ]) {
     const home = page(locale);
     const about = page(`${locale}/about`);
@@ -57,13 +57,15 @@ try {
       ['blog/','authors/','tools/','about/'].map((path, i) => [`/${locale}/${path}`, labels[i + 1]]));
     assert.doesNotMatch(home, new RegExp(`href="/${locale}/pages/`));
     assert(about.includes(aboutText));
+    assert.doesNotMatch(about, /Adrian Marquina/);
     assert.match(about, new RegExp(`value="/${locale === 'en' ? 'es' : 'en'}/about/"`));
     for (const section of ['blog', 'tools']) {
       assert(about.includes(`href="/${locale}/${section}/"`));
     }
     assert(about.includes('href="https://github.com/Cobollatin" target="_blank" rel="noopener noreferrer"'));
     assert(about.includes('href="https://www.linkedin.com/in/cobollatin" target="_blank" rel="noopener noreferrer"'));
-    assert(about.includes('href="mailto:contact@cobollatin.com"'));
+    assert(about.includes('href="https://www.reddit.com/user/Cobollatin_/" target="_blank" rel="noopener noreferrer"'));
+    assert(about.includes('href="mailto:inbox@cobollatin.com">inbox@cobollatin.com</a>'));
     assert.doesNotMatch(about, /publishing space|project directory|espacio de publicación|directorio de proyectos/i);
     assert.match(about, new RegExp(`href="/${locale}/about/" aria-current="page"`));
   }
