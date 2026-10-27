@@ -16,6 +16,24 @@ export const tools: readonly Tool[] = [
     },
     authors: ['adrian-marquina'],
   },
+  {
+    id: 'nash-calculator',
+    title: { en: 'Nash Calculator', es: 'Calculadora de Nash' },
+    externalUrl: {
+      en: 'https://github.com/Cobollatin/Nash-Calculator',
+      es: 'https://github.com/Cobollatin/Nash-Calculator',
+    },
+    authors: ['adrian-marquina'],
+  },
+  {
+    id: 'python-to-mips-compiler',
+    title: { en: 'Python to MIPS Compiler', es: 'Compilador de Python a MIPS' },
+    externalUrl: {
+      en: 'https://github.com/Cobollatin/python-to-mips-compiler',
+      es: 'https://github.com/Cobollatin/python-to-mips-compiler',
+    },
+    authors: ['adrian-marquina'],
+  },
 ];
 
 export function toolHref(tool: Tool, locale: Locale): string {

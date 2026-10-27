@@ -1,0 +1,21 @@
+---
+title: "Calculadora de Nash: juegos de pagos entre dos jugadores"
+description: Una aplicación de escritorio con wxWidgets para estrategias puras y mixtas en juegos bimatriciales.
+publishedAt: 2026-10-27
+locale: es
+authors: [adrian-marquina]
+draft: false
+translationKey: nash-calculator
+---
+
+[Nash Calculator](https://github.com/Cobollatin/Nash-Calculator) es un programa de escritorio en C++ para calcular equilibrios de Nash en juegos bimatriciales de dos jugadores. La interfaz utiliza wxWidgets y ofrece una matriz de pagos para cada jugador. El cuadro de configuración permite elegir el número de estrategias, y la acción de cálculo selecciona estrategias puras o mixtas.
+
+## De las matrices de pagos al resultado
+
+Cada celda representa los pagos de ambos jugadores para un par de estrategias. El [código de la ventana](https://github.com/Cobollatin/Nash-Calculator/blob/master/mMain.cpp) lee las dos matrices y pasa los valores a las funciones correspondientes de `nashResolver.cpp`. El resultado se añade al área de texto; la acción de limpiar vacía las matrices y el resultado.
+
+Para las estrategias puras, el [resolutor](https://github.com/Cobollatin/Nash-Calculator/blob/master/nashResolver.cpp) marca las mejores elecciones de pago de cada jugador frente a una estrategia fija del otro. Si una celda queda marcada para ambos, muestra los índices de estrategia y los dos pagos. Si no encuentra ninguna, indica que no hay equilibrio en estrategias puras.
+
+El mismo archivo contiene el cálculo de estrategias mixtas. Durante ese cálculo elimina filas o columnas dominadas e imprime una probabilidad para cada estrategia restante, con dos decimales. El [README](https://github.com/Cobollatin/Nash-Calculator/blob/master/README.md) señala dos artículos como base del programa.
+
+El repositorio incluye una solución y archivos de proyecto de Visual Studio. Consulta el [código fuente](https://github.com/Cobollatin/Nash-Calculator) para ver la interfaz y los cálculos.

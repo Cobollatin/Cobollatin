@@ -1,0 +1,21 @@
+---
+title: "Nash Calculator: exploring two-player payoff games"
+description: A wxWidgets desktop calculator for pure and mixed strategies in bi-matrix games.
+publishedAt: 2026-10-27
+locale: en
+authors: [adrian-marquina]
+draft: false
+translationKey: nash-calculator
+---
+
+[Nash Calculator](https://github.com/Cobollatin/Nash-Calculator) is a C++ desktop program for calculating Nash equilibria in two-player bi-matrix games. Its interface uses wxWidgets and provides a payoff grid for each player. The matrix configuration dialog lets you set the number of strategies, while the Calculate action selects either the pure or mixed strategy calculation.
+
+## From payoff grids to a result
+
+Each cell represents the two players' payoffs for one pair of strategies. The [window code](https://github.com/Cobollatin/Nash-Calculator/blob/master/mMain.cpp) reads both grids into payoff arrays and passes them to the corresponding functions in `nashResolver.cpp`. The result is appended to the window's text output; a Clear action clears the grids and output.
+
+For pure strategies, the [resolver](https://github.com/Cobollatin/Nash-Calculator/blob/master/nashResolver.cpp) marks each player's best payoff choices against the other player's fixed strategy. A cell marked for both players is reported with its strategy indices and payoff pair. If there is no such cell, the output says there is no equilibrium in pure strategies.
+
+The same resolver also has a mixed strategy path. It removes dominated rows or columns in its calculation and prints a probability for each remaining strategy, formatted to two decimal places. The repository's [README](https://github.com/Cobollatin/Nash-Calculator/blob/master/README.md) describes the program as based on two linked papers.
+
+The repository contains a Visual Studio solution and C++ project files. Explore the [source code](https://github.com/Cobollatin/Nash-Calculator) for the interface and calculations.

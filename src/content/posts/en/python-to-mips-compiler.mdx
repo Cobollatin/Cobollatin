@@ -1,0 +1,23 @@
+---
+title: "Python to MIPS Compiler: a defined language subset"
+description: How a Flex and Bison based course project turns selected Python syntax into MIPS assembly.
+publishedAt: 2026-10-27
+locale: en
+authors: [adrian-marquina]
+draft: false
+translationKey: python-to-mips-compiler
+---
+
+[Python to MIPS compiler](https://github.com/Cobollatin/python-to-mips-compiler) is a course project that translates a documented subset of Python syntax into assembly for the MARS and SPIM simulators. The [README](https://github.com/Cobollatin/python-to-mips-compiler/blob/main/README.md) describes its supported syntax and limits; it does not claim to implement all of Python.
+
+## Parsing and code generation
+
+The [build script](https://github.com/Cobollatin/python-to-mips-compiler/blob/main/build.sh) invokes Bison on `parser.y`, Flex on `lexer.l`, then a C compiler on the generated files and the project's `ast.c` and `symbol_table.c`. The [parser](https://github.com/Cobollatin/python-to-mips-compiler/blob/main/parser.y) builds an abstract syntax tree and checks types, function arguments, and some invalid operations. The [AST implementation](https://github.com/Cobollatin/python-to-mips-compiler/blob/main/ast.c) emits MIPS data, instructions, and simulator syscalls.
+
+The subset includes arithmetic and comparisons, Boolean expressions, typed assignments, strings and concatenation, `if`/`else`, `while`, a restricted `for __index__ in range(start, end)` form, numeric functions, fixed-size numeric lists, and printing. The README specifies single-precision floating-point arithmetic and lists further limits on indentation, functions, and list indexing.
+
+## Running the project
+
+The documented commands are `./build.sh`, followed by `./compiler <input_file> <output_file>.asm`. The repository also provides `./run_tests.sh` and Python regression tests. Those tests check generated assembly and, when SPIM is installed, execute it; runtime checks are skipped when the simulator is unavailable.
+
+Read the [source and setup instructions](https://github.com/Cobollatin/python-to-mips-compiler) before compiling a program for this subset.

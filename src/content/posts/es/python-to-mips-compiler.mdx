@@ -1,0 +1,23 @@
+---
+title: "Compilador de Python a MIPS: un subconjunto definido"
+description: Un proyecto con Flex y Bison que traduce una parte de la sintaxis de Python a ensamblador MIPS.
+publishedAt: 2026-10-27
+locale: es
+authors: [adrian-marquina]
+draft: false
+translationKey: python-to-mips-compiler
+---
+
+El [compilador de Python a MIPS](https://github.com/Cobollatin/python-to-mips-compiler) es un proyecto académico que traduce un subconjunto documentado de la sintaxis de Python a ensamblador para los simuladores MARS y SPIM. El [README](https://github.com/Cobollatin/python-to-mips-compiler/blob/main/README.md) explica la sintaxis admitida y sus límites; no presenta el proyecto como una implementación completa de Python.
+
+## Análisis y generación de código
+
+El [script de compilación](https://github.com/Cobollatin/python-to-mips-compiler/blob/main/build.sh) ejecuta Bison sobre `parser.y`, Flex sobre `lexer.l` y después un compilador de C sobre los archivos generados, `ast.c` y `symbol_table.c`. El [analizador](https://github.com/Cobollatin/python-to-mips-compiler/blob/main/parser.y) construye un árbol de sintaxis abstracta y comprueba tipos, argumentos de funciones y algunas operaciones no válidas. La [implementación del árbol](https://github.com/Cobollatin/python-to-mips-compiler/blob/main/ast.c) emite datos e instrucciones MIPS y llamadas al sistema del simulador.
+
+El subconjunto incluye aritmética y comparaciones, expresiones booleanas, asignaciones tipadas, cadenas y concatenación, `if`/`else`, `while`, una forma restringida de `for __index__ in range(start, end)`, funciones numéricas, listas numéricas de tamaño fijo e impresión. El README especifica aritmética de punto flotante de precisión simple y detalla otras restricciones de indentación, funciones e índices de listas.
+
+## Uso del proyecto
+
+Los comandos documentados son `./build.sh` y luego `./compiler <input_file> <output_file>.asm`. El repositorio también incluye `./run_tests.sh` y pruebas de regresión en Python. Estas comprueban el ensamblador generado y, si SPIM está instalado, lo ejecutan; sin el simulador, se omiten las comprobaciones de ejecución.
+
+Consulta el [código y las instrucciones](https://github.com/Cobollatin/python-to-mips-compiler) antes de compilar un programa de este subconjunto.

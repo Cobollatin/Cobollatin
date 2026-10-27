@@ -37,7 +37,8 @@ try {
   assert.match(page('en/pages/page-fixture'), /No translation; opens the home page/);
   assert.match(page('en/blog'), /Route fixture/);
   assert.match(page('en/pages'), /Page fixture/);
-  assert.match(page('en'), /Route fixture/);
+  assert.match(page('en'), /Nash Calculator: exploring two-player payoff games/);
+  assert.match(page('en'), /Python to MIPS Compiler: a defined language subset/);
   assert.match(page('en'), /Page fixture/);
   assert.match(page('en'), /href="\/en\/authors\/"[^>]*><span>Authors<\/span>/);
   assert.match(page('es'), /href="\/es\/authors\/"[^>]*><span>Autores<\/span>/);
@@ -65,6 +66,22 @@ try {
   assert.match(page('es/authors/adrian-marquina'), /href="\/es\/blog\/corpuslens\/"/);
   assert.match(page('en/authors/adrian-marquina'), /href="https:\/\/corpuslens\.cobollatin\.com\/en"/);
   assert.match(page('es/authors/adrian-marquina'), /href="https:\/\/corpuslens\.cobollatin\.com\/es"/);
+  for (const [slug, enTitle, esTitle, repository] of [
+    ['nash-calculator', 'Nash Calculator: exploring two-player payoff games', 'Calculadora de Nash: juegos de pagos entre dos jugadores', 'Nash-Calculator'],
+    ['python-to-mips-compiler', 'Python to MIPS Compiler: a defined language subset', 'Compilador de Python a MIPS: un subconjunto definido', 'python-to-mips-compiler'],
+  ]) {
+    const url = `https://github.com/Cobollatin/${repository}`;
+    assert.match(page(`en/blog/${slug}`), new RegExp(enTitle));
+    assert.match(page(`es/blog/${slug}`), new RegExp(esTitle));
+    assert.match(page(`en/blog/${slug}`), new RegExp(`value="/es/blog/${slug}/"`));
+    assert.match(page(`es/blog/${slug}`), new RegExp(`value="/en/blog/${slug}/"`));
+    for (const locale of ['en', 'es']) {
+      assert(page(`${locale}/tools`).includes(`href="${url}"`));
+      assert(page(locale).includes(url));
+      assert(page(`${locale}/authors/adrian-marquina`).includes(`href="/${locale}/blog/${slug}/"`));
+      assert(page(`${locale}/authors/adrian-marquina`).includes(`href="${url}"`));
+    }
+  }
   assert.doesNotMatch(page('en/authors/adrian-marquina'), /class="author-avatar/);
   assert(!existsSync(join(root, 'dist/en/authors/sample/index.html')));
   assert.match(page('en/authors/fixture-author'), /href="\/en\/blog\/route-fixture\/"/);
