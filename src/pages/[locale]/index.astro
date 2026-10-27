@@ -12,10 +12,7 @@ const pages = (await publishedPages(locale)).slice(0, 3);
 ---
 <Base locale={locale} title={t.home} description={t.siteDescription}>
   <div class="home">
-    <div class="home-masthead">
-      <span class="home-mark" aria-hidden="true">✳</span>
-      <h1>Cobollatin</h1>
-    </div>
+    <div class="home-masthead"><h1>Cobollatin</h1></div>
     <nav class="home-directory" aria-label={locale === 'es' ? 'Secciones' : 'Sections'}>
       <a href={localePath(locale, 'blog/')}><span>{t.blog}</span><span aria-hidden="true">↗</span></a>
       <a href={localePath(locale, 'pages/')}><span>{t.pages}</span><span aria-hidden="true">↗</span></a>

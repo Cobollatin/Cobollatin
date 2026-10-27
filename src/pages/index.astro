@@ -5,9 +5,9 @@ import { localePath } from '../lib/i18n';
 <html lang="en" data-theme="dark">
   <head>
     <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#101819" />
+    <meta name="theme-color" content="#161616" />
     <title>Cobollatin</title>
-    <script is:inline>try { if (localStorage.getItem('cobollatin-theme') === 'light') document.documentElement.dataset.theme = 'light'; } catch {}</script>
+    <script is:inline>try { if (localStorage.getItem('cobollatin-theme') === 'light') document.documentElement.dataset.theme = 'light'; } catch {} document.querySelector('meta[name="theme-color"]')?.setAttribute('content', document.documentElement.dataset.theme === 'light' ? '#ffffff' : '#161616');</script>
     <script is:inline>
       let selected = 'en';
       let saved = null;
@@ -21,7 +21,7 @@ import { localePath } from '../lib/i18n';
       }
       window.location.replace(`/${selected}/`);
     </script>
-    <style>html{background:#101819;color:#eef1e9;font-family:system-ui}html[data-theme=light]{background:#f4f2eb;color:#182424}body{min-height:80vh;display:grid;place-content:center;margin:0;padding:2rem}a{color:#c4ec83}html[data-theme=light] a{color:#52752b}</style>
+    <style>html{background:#161616;color:#f4f4f4;font-family:system-ui}html[data-theme=light]{background:#ffffff;color:#161616}body{min-height:80vh;display:grid;place-content:center;margin:0;padding:2rem}a{color:#78a9ff}a:focus-visible{outline:2px solid #ffffff;outline-offset:4px}html[data-theme=light] a{color:#0f62fe}html[data-theme=light] a:focus-visible{outline-color:#0f62fe}</style>
   </head>
   <body><a href={localePath('en')}>Cobollatin</a></body>
 </html>

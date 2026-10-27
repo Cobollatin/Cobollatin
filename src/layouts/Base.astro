@@ -22,19 +22,20 @@ const targets = locales.map((choice) => ({
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#101819" />
+    <meta name="theme-color" content="#161616" />
     <meta name="description" content={description} />
     {canonical && <link rel="canonical" href={canonical} />}
     <title>{title === t.home ? 'Cobollatin' : `${title} · Cobollatin`}</title>
     <script is:inline>
       try { if (localStorage.getItem('cobollatin-theme') === 'light') document.documentElement.dataset.theme = 'light'; } catch {}
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', document.documentElement.dataset.theme === 'light' ? '#ffffff' : '#161616');
     </script>
   </head>
   <body>
     <a class="skip" href="#main">{locale === 'es' ? 'Ir al contenido' : 'Skip to content'}</a>
     <div class="shell">
       <header class="site-header">
-        <a class="brand" href={localePath(locale)} aria-label={locale === 'es' ? 'Inicio de Cobollatin' : 'Cobollatin home'}><span class="brand-symbol" aria-hidden="true">✳</span><span>Cobollatin</span></a>
+        <a class="brand" href={localePath(locale)} aria-label={locale === 'es' ? 'Inicio de Cobollatin' : 'Cobollatin home'}>Cobollatin</a>
         <nav aria-label={locale === 'es' ? 'Navegación principal' : 'Main navigation'}>
           <a href={localePath(locale)} aria-current={Astro.url.pathname === localePath(locale) ? 'page' : undefined}>{t.home}</a>
           <a href={localePath(locale, 'blog/')} aria-current={Astro.url.pathname.startsWith(localePath(locale, 'blog/')) ? 'page' : undefined}>{t.blog}</a>
@@ -50,7 +51,7 @@ const targets = locales.map((choice) => ({
         </div>
       </header>
       <main id="main"><slot /></main>
-      <footer class="site-footer"><a class="footer-brand" href={localePath(locale)}>✳ Cobollatin</a><a href="#main">↑ {locale === 'es' ? 'Arriba' : 'Back to top'}</a></footer>
+      <footer class="site-footer"><a class="footer-brand" href={localePath(locale)}>Cobollatin</a><a href="#main">↑ {locale === 'es' ? 'Arriba' : 'Back to top'}</a></footer>
     </div>
     <script is:inline>
       const themeButton = document.getElementById('theme-toggle');
@@ -64,6 +65,7 @@ const targets = locales.map((choice) => ({
       themeButton?.addEventListener('click', () => {
         const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
         document.documentElement.dataset.theme = next;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', next === 'light' ? '#ffffff' : '#161616');
         try { localStorage.setItem('cobollatin-theme', next); } catch {}
         updateThemeLabel();
       });
