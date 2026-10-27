@@ -8,18 +8,17 @@ export type AuthoredPage = CollectionEntry<'pages'>;
 export type AuthoredEntry = Post | AuthoredPage;
 
 export async function publishedAuthors(): Promise<CollectionEntry<'authors'>[]> {
-  const [posts, pages, authors] = await Promise.all([
-    publishedPosts(), publishedPages(), getCollection('authors'),
-  ]);
-  const publishedIds = new Set([...posts, ...pages].flatMap((entry) => entry.data.authors.map((author) => author.id)));
-  return authors.filter((author) => publishedIds.has(author.id))
+  const authors = await getCollection('authors');
+  return authors.filter((author) => !author.data.draft)
     .sort((a, b) => a.data.name.localeCompare(b.data.name));
 }
 
 export function authorContent<T extends AuthoredEntry>(entries: T[], authorId: string, locale: Locale): T[] {
   const authored = entries.filter((entry) => entry.data.authors.some((author) => author.id === authorId));
   const localized = authored.filter((entry) => entry.data.locale === locale);
-  return localized.length ? localized : authored.filter((entry) => entry.data.locale === 'en');
+  if (locale === 'en') return localized;
+  const translatedKeys = new Set(localized.map((entry) => entry.data.translationKey).filter(Boolean));
+  return [...localized, ...authored.filter((entry) => entry.data.locale === 'en' && (!entry.data.translationKey || !translatedKeys.has(entry.data.translationKey)))];
 }
 
 export async function validateAuthors(entries: AuthoredEntry[], kind: 'posts' | 'pages'): Promise<void> {

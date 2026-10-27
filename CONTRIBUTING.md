@@ -10,13 +10,16 @@ Create `src/content/authors/<id>.json` with a stable lowercase hyphenated ID:
 {
   "name": "Example Contributor",
   "bio": "Optional short description.",
-  "website": "https://example.org"
+  "picture": "/authors/example-contributor.jpg",
+  "links": [
+    { "label": "Personal site", "url": "https://example.org" }
+  ]
 }
 ```
 
-The existing `sample` author is synthetic and belongs only to draft examples and tests. Replace it with a real contributor ID for real content. Every `authors` ID in a document must resolve to an author record; the build validates this.
+`bio`, `picture`, and `links` are optional. Put a local picture in `public/authors/` and reference it as `/authors/<filename>`, or use an HTTPS image URL. The older `website` field is also supported. Set `draft: true` to keep an author profile unpublished. The existing `sample` author is synthetic and marked as a draft. Replace it with a real contributor ID for real content. Every `authors` ID in a document must resolve to an author record; the build validates this.
 
-Authors referenced by published posts or pages appear at `/<locale>/authors/` and `/<locale>/authors/<id>/` in both supported locales. A profile lists work in that locale, or English work when no translation is published for that section. Unreferenced records, including `sample`, are not published as profiles.
+Registered authors appear at `/<locale>/authors/` and `/<locale>/authors/<id>/` in both supported locales, even before they publish. A profile lists attributed published posts and pages in the selected locale, plus English entries without a translation in that locale. Published tools may also provide an `authors` ID list in `src/lib/tools.ts` to appear on profiles.
 
 ## Posts and pages
 

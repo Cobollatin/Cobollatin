@@ -8,6 +8,9 @@ const authors = defineCollection({
     name: z.string().min(1),
     bio: z.string().optional(),
     website: z.url().optional(),
+    picture: z.string().refine((value) => /^https?:\/\/[^\s]+$/.test(value) || /^\/authors\/[a-zA-Z0-9/_-]+\.(?:avif|gif|jpe?g|png|webp|svg)$/.test(value), 'Use an https:// URL or a path under /authors/').optional(),
+    links: z.array(z.object({ label: z.string().min(1), url: z.url() })).optional(),
+    draft: z.boolean().default(false),
   }),
 });
 

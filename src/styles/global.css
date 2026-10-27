@@ -79,6 +79,18 @@ p { line-height: 1.65; }
 .card h2 { margin: 0 0 .7rem; font-size: 1.45rem; }
 .card p { margin: 0; color: var(--muted); }
 .card .meta { margin-top: 1.2rem; font-size: .83rem; }
+.author-card { padding: 0; overflow: hidden; }
+.author-card-main { display: block; padding: 1.5rem; text-decoration: none; }
+.author-card-main:hover { color: var(--ink); }
+.author-card-main h2 { margin-top: 1rem; }
+.author-card-main h2:first-child { margin-top: 0; }
+.author-avatar { display: block; width: 80px; height: 80px; object-fit: cover; border-radius: 50%; border: 1px solid var(--line); background: var(--bg); }
+.author-avatar-large { width: 144px; height: 144px; }
+.author-profile-heading { display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem; }
+.author-profile-heading h1 { margin: 0; }
+.author-links { display: flex; flex-wrap: wrap; gap: .6rem 1.4rem; margin: 1.2rem 0; }
+.author-links a { color: var(--accent); font-size: .9rem; font-weight: 600; }
+.author-card .author-links { margin: 0; padding: 0 1.5rem 1.5rem; }
 .empty-state { margin-top: 0; color: var(--muted); }
 .prose { margin-top: 3rem; font-size: 1.1rem; line-height: 1.8; }
 .prose img { max-width: 100%; height: auto; }

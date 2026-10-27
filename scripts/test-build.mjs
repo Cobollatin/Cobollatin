@@ -5,9 +5,11 @@ import assert from 'node:assert/strict';
 
 const root = process.cwd();
 const fixtures = new Map([
-  ['src/content/authors/fixture-author.json', '{"name":"Fixture Author"}\n'],
+  ['src/content/authors/fixture-author.json', '{"name":"Fixture Author","picture":"/authors/fixture.svg","links":[{"label":"Portfolio","url":"https://example.org"}]}\n'],
+  ['public/authors/fixture.svg', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><circle cx="40" cy="40" r="40" fill="#525252"/></svg>\n'],
   ['src/content/posts/en/route-fixture.mdx', `---\ntitle: Route fixture\ndescription: Synthetic route test.\npublishedAt: 2026-01-01\nlocale: en\nauthors: [fixture-author]\ntranslationKey: route-fixture\n---\n\nPublished **MDX** fixture.\n`],
   ['src/content/posts/es/ruta-fixture.mdx', `---\ntitle: Prueba de ruta\ndescription: Prueba sintética.\npublishedAt: 2026-01-01\nlocale: es\nauthors: [fixture-author]\ntranslationKey: route-fixture\n---\n\nContenido **MDX** publicado.\n`],
+  ['src/content/posts/en/english-only-fixture.mdx', `---\ntitle: English only fixture\ndescription: Fallback test.\npublishedAt: 2026-01-02\nlocale: en\nauthors: [fixture-author]\n---\n\nEnglish fallback fixture.\n`],
   ['src/content/pages/en/page-fixture.mdx', `---\ntitle: Page fixture\ndescription: Synthetic page test.\nlocale: en\nauthors: [fixture-author]\n---\n\nPublished **page** fixture.\n`],
   ['src/content/posts/en/draft-fixture.mdx', `---\ntitle: Draft fixture\ndescription: Exclusion test.\npublishedAt: 2026-01-01\nlocale: en\nauthors: [sample]\ndraft: true\n---\n\nThis must stay unpublished.\n`],
 ]);
@@ -41,9 +43,21 @@ try {
   assert.match(page('es'), /href="\/es\/authors\/"[^>]*><span>Autores<\/span>/);
   assert.match(page('en/authors'), /Fixture Author/);
   assert.match(page('es/authors'), /Fixture Author/);
+  assert.match(page('en/authors'), /src="\/authors\/fixture\.svg"/);
+  assert.match(page('en/authors'), /href="https:\/\/example\.org"[^>]*>Portfolio<\/a>/);
+  assert.match(page('en/authors'), /Adrian Marquina/);
+  assert.match(page('es/authors'), /Adrian Marquina/);
   assert.doesNotMatch(page('en/authors'), /Example Author \(sample\)/);
+  assert.match(page('en/authors/adrian-marquina'), /Adrian Marquina/);
+  assert.match(page('es/authors/adrian-marquina'), /Adrian Marquina/);
+  assert.doesNotMatch(page('en/authors/adrian-marquina'), /class="author-avatar/);
+  assert(!existsSync(join(root, 'dist/en/authors/sample/index.html')));
   assert.match(page('en/authors/fixture-author'), /href="\/en\/blog\/route-fixture\/"/);
+  assert.match(page('en/authors/fixture-author'), /src="\/authors\/fixture\.svg"/);
+  assert.match(page('en/authors/fixture-author'), /href="https:\/\/example\.org"[^>]*>Portfolio<\/a>/);
   assert.match(page('es/authors/fixture-author'), /href="\/es\/blog\/ruta-fixture\/"/);
+  assert.match(page('es/authors/fixture-author'), /href="\/en\/blog\/english-only-fixture\/"/);
+  assert.doesNotMatch(page('es/authors/fixture-author'), /href="\/en\/blog\/route-fixture\/"/);
   assert.match(page('es/authors/fixture-author'), /href="\/en\/pages\/page-fixture\/"/);
   assert.match(page('en/authors/fixture-author'), /value="\/es\/authors\/fixture-author\/"/);
   assert.match(page('en/blog/route-fixture'), /href="\/en\/authors\/"[^>]*>Authors<\/a>/);
