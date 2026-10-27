@@ -1,0 +1,25 @@
+---
+title: "CorpusLens: finding a passage when you remember the idea"
+description: Bilingual Bible search built around complete text coverage, contextual chunks, and hybrid retrieval.
+publishedAt: 2026-10-27
+locale: en
+authors: [adrian-marquina]
+draft: false
+translationKey: corpuslens
+---
+
+Sometimes I remember what a passage says but not its wording. A word search can miss it, especially across translations. Searching one verse at a time can miss it too: an argument or story may take several verses to make its point. CorpusLens is my English and Spanish search project for those cases.
+
+## Index the text at several sizes
+
+The first source is the New World Translation EPUB in each language. An adapter extracts books, chapters, verses, and section outlines into a versioned snapshot. Before indexing, a coverage audit checks that the text spans are represented in search chunks, with no character gaps. The recorded snapshot covers 66 books and 1,189 chapters in each language; verses absent or present only as notes in the source are recorded explicitly rather than filled in.
+
+Each chapter becomes four search layers: individual verses, overlapping windows of three verses, overlapping windows of five verses, and sections from the source outline. A section's heading and location are added as embedding context, while the verse text remains separate. The verse layer helps locate a precise match; the larger layers carry the context needed for a longer thought.
+
+## Bring different kinds of matches together
+
+An exact citation such as `John 3:16` takes a direct route to the referenced verse. For other queries, the search service can retrieve both lexical matches and vector matches. Its weighted reciprocal-rank fusion combines their positions in the two result lists, rather than comparing their raw scores. Overlapping chunks are then grouped into passage results so a verse found in several layers does not appear as several unrelated answers.
+
+The vector pipeline uses 1,024-dimensional `text-embedding-3-large` embeddings and Oracle's vector storage; Oracle Text supplies the lexical side. The service can continue with lexical results when an embedding is unavailable. That fallback matters because a useful search result should not depend on every external step succeeding.
+
+Try the <a href="https://corpuslens.cobollatin.com/en" target="_blank" rel="noopener">English app</a> or <a href="https://corpuslens.cobollatin.com/es" target="_blank" rel="noopener">Spanish app</a>. The implementation is on <a href="https://github.com/Cobollatin/CorpusLens" target="_blank" rel="noopener">GitHub</a>.

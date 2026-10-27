@@ -1,0 +1,36 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import { locales, messages, localePath, type Locale } from '../../../lib/i18n';
+import { authorContent, entrySlug, publishedAuthors, publishedPages, publishedPosts, type AuthoredPage, type Post } from '../../../lib/posts';
+import { tools, toolHref } from '../../../lib/tools';
+
+export async function getStaticPaths() {
+  const authors = await publishedAuthors();
+  return locales.flatMap((locale) => authors.map((author) => ({ params: { locale, slug: author.id }, props: { author } })));
+}
+interface Props { author: CollectionEntry<'authors'> }
+const { author } = Astro.props;
+const locale = Astro.params.locale as Locale;
+const t = messages[locale];
+const posts = authorContent(await publishedPosts(), author.id, locale);
+const pages = authorContent(await publishedPages(), author.id, locale);
+const authoredTools = tools.filter((tool) => tool.authors?.includes(author.id));
+---
+<Base locale={locale} title={author.data.name} description={author.data.bio ?? author.data.name}>
+  <article class="page">
+    <p class="eyebrow"><a href={localePath(locale, 'authors/')}>{t.authors}</a></p>
+    <div class="author-profile-heading">
+      {author.data.picture && <img class="author-avatar author-avatar-large" src={author.data.picture} alt="" width="144" height="144" />}
+      <h1>{author.data.name}</h1>
+    </div>
+    {author.data.bio && <p class="lead">{author.data.bio}</p>}
+    {(author.data.links?.length || author.data.website) && <div class="author-links">
+      {author.data.website && <a href={author.data.website}>Website</a>}
+      {author.data.links?.map((link) => <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>)}
+    </div>}
+    {posts.length > 0 && <section class="home-content"><h2>{t.blog}</h2><div class="entry-list">{posts.map((post: Post) => <a href={localePath(post.data.locale, `blog/${entrySlug(post)}/`)}><span>{post.data.title}</span><time datetime={post.data.publishedAt.toISOString()}>{new Intl.DateTimeFormat(post.data.locale, { dateStyle: 'medium' }).format(post.data.publishedAt)}</time></a>)}</div></section>}
+    {pages.length > 0 && <section class="home-content"><h2>{t.pages}</h2><div class="entry-list">{pages.map((page: AuthoredPage) => <a href={localePath(page.data.locale, `pages/${entrySlug(page)}/`)}><span>{page.data.title}</span><span aria-hidden="true">↗</span></a>)}</div></section>}
+    {authoredTools.length > 0 && <section class="home-content"><h2>{t.tools}</h2><div class="entry-list">{authoredTools.map((tool) => <a href={toolHref(tool, locale)} target="_blank" rel="noopener"><span>{tool.title[locale]}</span><span aria-hidden="true">↗</span></a>)}</div></section>}
+  </article>
+</Base>

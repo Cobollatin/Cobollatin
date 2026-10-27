@@ -1,0 +1,27 @@
+---
+import { getEntries, render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import { localePath, type Locale, messages } from '../../../lib/i18n';
+import { entrySlug, publishedPages, translatedPath, type AuthoredPage } from '../../../lib/posts';
+
+export async function getStaticPaths() {
+  const pages = await publishedPages();
+  return pages.map((page) => ({ params: { locale: page.data.locale, slug: entrySlug(page) }, props: { page, pages } }));
+}
+interface Props { page: AuthoredPage; pages: AuthoredPage[] }
+const { page, pages } = Astro.props;
+const locale = page.data.locale as Locale;
+const { Content } = await render(page);
+const authors = await getEntries(page.data.authors);
+const alternatePaths = {
+  en: locale === 'en' ? Astro.url.pathname : translatedPath(page, pages, 'pages', 'en'),
+  es: locale === 'es' ? Astro.url.pathname : translatedPath(page, pages, 'pages', 'es'),
+};
+---
+<Base locale={locale} title={page.data.title} description={page.data.description} alternatePaths={alternatePaths}>
+  <article class="page"><p class="eyebrow"><a href={localePath(locale, 'pages/')}>{messages[locale].pages}</a></p><h1>{page.data.title}</h1>
+    <p class="lead">{page.data.description}</p>
+    <p class="meta">{messages[locale].by} {authors.map((author) => author.data.name).join(', ')}</p>
+    <div class="prose"><Content /></div>
+  </article>
+</Base>

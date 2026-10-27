@@ -1,0 +1,25 @@
+---
+title: "Calculadora de Nash: mejores respuestas en una matriz de pagos"
+description: Una calculadora de juegos de dos jugadores con búsqueda de equilibrios puros y una estimación de estrategias mixtas.
+publishedAt: 2026-10-27
+locale: es
+authors: [adrian-marquina]
+draft: false
+translationKey: nash-calculator
+---
+
+En una matriz de pagos, cada par de decisiones tiene un resultado para cada jugador. La pregunta es si alguno querría cambiar su decisión mientras la del otro permanece fija. Hice Nash Calculator para explorar esos juegos desde una interfaz de escritorio con wxWidgets: se introducen las dos matrices, se elige cuántas estrategias tiene cada jugador y se calcula un resultado puro o mixto.
+
+## Estrategias puras
+
+Para cada decisión del jugador 2, la calculadora busca el mayor pago del jugador 1. Después hace la comparación inversa para el jugador 2. Si hay empates, conserva todas las mejores respuestas. Una casilla que es la mejor respuesta de ambos jugadores corresponde a un equilibrio de Nash en estrategias puras; el resultado muestra las estrategias y los pagos de esa casilla. Si ninguna cumple la condición, lo indica.
+
+Esta forma de marcar las mejores respuestas sigue la idea de *[A note on determining pure-strategy equilibrium points of bimatrix games](https://www.sciencedirect.com/science/article/pii/0898122196001538)*.
+
+## El cálculo mixto
+
+La otra ruta elimina de forma iterativa las filas o columnas que su comparación estricta de pagos considera dominadas. Después usa los totales de pagos marcados como mejores respuestas para asignar probabilidades según las dimensiones reducidas. Si el total de un jugador es cero, reparte la probabilidad por igual. La interfaz muestra dos decimales.
+
+El cálculo toma como referencia *[An Efficient Algorithm for Finding Mixed Nash Equilibria in 2-Player Games](http://article.sapub.org/10.5923.j.jgt.20150403.01.html)*, pero la implementación actual no verifica las probabilidades con todas las condiciones de un equilibrio mixto. Por eso interpreto esa salida como una estimación para explorar el juego, no como una demostración general del equilibrio.
+
+El proyecto en C++ está en <a href="https://github.com/Cobollatin/Nash-Calculator" target="_blank" rel="noopener">GitHub</a>.

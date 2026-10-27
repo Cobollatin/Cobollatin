@@ -1,0 +1,25 @@
+---
+title: "Python to MIPS Compiler: from a small language to assembly"
+description: Lexing, parsing, checking, and generating MIPS for a defined subset of Python syntax.
+publishedAt: 2026-10-27
+locale: en
+authors: [adrian-marquina]
+draft: false
+translationKey: python-to-mips-compiler
+---
+
+Translating a high-level program into assembly forces every implicit choice into the open: what a variable can hold, where a value lives, and how a control-flow statement becomes jumps. I built this compiler around a deliberately small subset of Python syntax so those decisions stay visible.
+
+## From text to a checked program
+
+Flex recognizes names, numbers, strings, operators, and indentation changes. Bison uses those tokens to build an abstract syntax tree for expressions and statements. The grammar covers arithmetic and comparisons, Boolean expressions, assignments, printing, `if`/`else`, `while`, and a restricted `for __index__ in range(start, end)` form.
+
+The parser also enforces rules that ordinary Python does not: a variable keeps its type, conditions must be Boolean, list indices are nonnegative integer literals, and functions must be defined before use. Functions take numeric arguments and must return a numeric value on every path. A later definite-assignment pass rejects reads that might happen before a variable receives a value. These checks make code generation predictable and give source errors a clear diagnostic.
+
+## From the tree to MIPS
+
+Once the program passes those checks, the generator walks the tree and emits data, MIPS instructions, labels, branches, and simulator syscalls. Numeric operations use single-precision floating point. Strings can be concatenated at runtime; lists have a fixed numeric length. Generated assembly targets MARS and SPIM.
+
+The narrow language matters. Blocks use spaces for indentation, the `for` bounds are integer literals, functions cannot recurse, and list indexing is static. This is a compiler for that defined language, not a claim to run arbitrary Python.
+
+Build it with `./build.sh`, then run `./compiler input.py output.asm`. The source, examples, and regression tests are on <a href="https://github.com/Cobollatin/python-to-mips-compiler" target="_blank" rel="noopener">GitHub</a>.

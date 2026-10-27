@@ -1,0 +1,25 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { locales, messages, localePath, type Locale } from '../../../lib/i18n';
+import { publishedAuthors } from '../../../lib/posts';
+
+export function getStaticPaths() { return locales.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const t = messages[locale];
+const authors = await publishedAuthors();
+---
+<Base locale={locale} title={t.authors} description={t.authors}>
+  <div class="page"><h1>{t.authors}</h1>
+    {authors.length ? <div class="cards">{authors.map((author) => <article class="card author-card">
+      <a class="author-card-main" href={localePath(locale, `authors/${author.id}/`)}>
+        {author.data.picture && <img class="author-avatar" src={author.data.picture} alt="" width="80" height="80" loading="lazy" />}
+        <h2>{author.data.name}</h2>
+        {author.data.bio && <p>{author.data.bio}</p>}
+      </a>
+      {(author.data.links?.length || author.data.website) && <div class="author-links">
+        {author.data.website && <a href={author.data.website}>Website</a>}
+        {author.data.links?.map((link) => <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>)}
+      </div>}
+    </article>)}</div> : <p class="empty-state">{t.noAuthors}</p>}
+  </div>
+</Base>

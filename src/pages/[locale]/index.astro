@@ -1,0 +1,30 @@
+---
+import Base from '../../layouts/Base.astro';
+import { locales, messages, localePath, type Locale } from '../../lib/i18n';
+import { publishedPosts, entrySlug } from '../../lib/posts';
+import { tools, toolHref } from '../../lib/tools';
+
+export function getStaticPaths() { return locales.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const t = messages[locale];
+const posts = (await publishedPosts(locale)).slice(0, 3);
+---
+<Base locale={locale} title={t.home} description={t.siteDescription}>
+  <div class="home">
+    <div class="home-masthead"><h1>Cobollatin</h1></div>
+    <nav class="home-directory" aria-label={locale === 'es' ? 'Secciones' : 'Sections'}>
+      <a href={localePath(locale, 'blog/')}><span>{t.blog}</span><span aria-hidden="true">↗</span></a>
+      <a href={localePath(locale, 'authors/')}><span>{t.authors}</span><span aria-hidden="true">↗</span></a>
+      <a href={localePath(locale, 'tools/')}><span>{t.tools}</span><span aria-hidden="true">↗</span></a>
+      <a href={localePath(locale, 'about/')}><span>{t.about}</span><span aria-hidden="true">↗</span></a>
+    </nav>
+    {posts.length > 0 && <section class="home-content" aria-labelledby="home-writing">
+      <div class="section-heading"><h2 id="home-writing">{t.blog}</h2><a class="text-link" href={localePath(locale, 'blog/')}>{t.blog} <span aria-hidden="true">↗</span></a></div>
+      <div class="entry-list">{posts.map((post) => <a href={localePath(locale, `blog/${entrySlug(post)}/`)}><span>{post.data.title}</span><time datetime={post.data.publishedAt.toISOString()}>{new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(post.data.publishedAt)}</time></a>)}</div>
+    </section>}
+    {tools.length > 0 && <section class="home-content" aria-labelledby="home-tools">
+      <div class="section-heading"><h2 id="home-tools">{t.tools}</h2><a class="text-link" href={localePath(locale, 'tools/')}>{t.tools} <span aria-hidden="true">↗</span></a></div>
+      <div class="entry-list">{tools.map((tool) => <a href={toolHref(tool, locale)} target="_blank" rel="noopener"><span>{tool.title[locale]}</span><span aria-hidden="true">↗</span></a>)}</div>
+    </section>}
+  </div>
+</Base>

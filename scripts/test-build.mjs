@@ -1,0 +1,172 @@
+import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { spawnSync } from 'node:child_process';
+import assert from 'node:assert/strict';
+
+const root = process.cwd();
+const fixtures = new Map([
+  ['src/content/authors/fixture-author.json', '{"name":"Fixture Author","picture":"/authors/fixture.svg","links":[{"label":"Portfolio","url":"https://example.org"}]}\n'],
+  ['public/authors/fixture.svg', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><circle cx="40" cy="40" r="40" fill="#525252"/></svg>\n'],
+  ['src/content/posts/en/route-fixture.mdx', `---\ntitle: Route fixture\ndescription: Synthetic route test.\npublishedAt: 2026-01-01\nlocale: en\nauthors: [fixture-author]\ntranslationKey: route-fixture\n---\n\nPublished **MDX** fixture.\n`],
+  ['src/content/posts/es/ruta-fixture.mdx', `---\ntitle: Prueba de ruta\ndescription: Prueba sintética.\npublishedAt: 2026-01-01\nlocale: es\nauthors: [fixture-author]\ntranslationKey: route-fixture\n---\n\nContenido **MDX** publicado.\n`],
+  ['src/content/posts/en/english-only-fixture.mdx', `---\ntitle: English only fixture\ndescription: Fallback test.\npublishedAt: 2026-01-02\nlocale: en\nauthors: [fixture-author]\n---\n\nEnglish fallback fixture.\n`],
+  ['src/content/pages/en/page-fixture.mdx', `---\ntitle: Page fixture\ndescription: Synthetic page test.\nlocale: en\nauthors: [fixture-author]\n---\n\nPublished **page** fixture.\n`],
+  ['src/content/posts/en/draft-fixture.mdx', `---\ntitle: Draft fixture\ndescription: Exclusion test.\npublishedAt: 2026-01-01\nlocale: en\nauthors: [sample]\ndraft: true\n---\n\nThis must stay unpublished.\n`],
+]);
+
+function build() {
+  return spawnSync(process.execPath, ['node_modules/astro/bin/astro.mjs', 'build'], {
+    cwd: root, encoding: 'utf8', timeout: 120_000,
+  });
+}
+function page(path) { return readFileSync(join(root, 'dist', path, 'index.html'), 'utf8'); }
+
+try {
+  for (const [path, body] of fixtures) {
+    const target = join(root, path);
+    assert(!existsSync(target), `Refusing to replace ${path}`);
+    mkdirSync(join(target, '..'), { recursive: true });
+    writeFileSync(target, body, { flag: 'wx' });
+  }
+  const result = build();
+  assert.equal(result.status, 0, `fixture build failed:\n${result.stdout}\n${result.stderr}`);
+  assert.match(page('en/blog/route-fixture'), /Published <strong>MDX<\/strong> fixture/);
+  assert.match(page('es/blog/ruta-fixture'), /Contenido <strong>MDX<\/strong> publicado/);
+  assert.match(page('en/blog/route-fixture'), /value="\/es\/blog\/ruta-fixture\/"/);
+  assert.match(page('en/pages/page-fixture'), /value="\/es\/"/);
+  assert.match(page('en/pages/page-fixture'), /No translation; opens the home page/);
+  assert.match(page('en/blog'), /Route fixture/);
+  assert.match(page('en/pages'), /Page fixture/);
+  assert.match(page('en'), /Nash Calculator: finding best responses in a payoff matrix/);
+  assert.match(page('en/blog'), /Python to MIPS Compiler: from a small language to assembly/);
+  assert.match(page('en'), /href="\/en\/authors\/"[^>]*><span>Authors<\/span>/);
+  assert.match(page('es'), /href="\/es\/authors\/"[^>]*><span>Autores<\/span>/);
+  for (const [locale, labels, aboutText] of [
+    ['en', ['Home', 'Writing', 'Authors', 'Tools', 'About'], "I'm Cobollatin. I do maths and software."],
+    ['es', ['Inicio', 'Escritos', 'Autores', 'Herramientas', 'Acerca de'], 'Soy Cobollatin. Me dedico a las matemáticas y al software.'],
+  ]) {
+    const home = page(locale);
+    const about = page(`${locale}/about`);
+    const nav = home.match(/<nav aria-label="[^"]+">([\s\S]*?)<\/nav>/)?.[1];
+    const directory = home.match(/<nav class="home-directory"[^>]*>([\s\S]*?)<\/nav>/)?.[1];
+    assert(nav, `${locale} header navigation missing`);
+    assert(directory, `${locale} home directory missing`);
+    assert.deepEqual([...nav.matchAll(/<a href="([^"]+)"[^>]*>([^<]+)<\/a>/g)].map((match) => [match[1], match[2]]),
+      ['','blog/','authors/','tools/','about/'].map((path, i) => [`/${locale}/${path}`, labels[i]]));
+    assert.deepEqual([...directory.matchAll(/<a href="([^"]+)"[^>]*><span>([^<]+)<\/span>/g)].map((match) => [match[1], match[2]]),
+      ['blog/','authors/','tools/','about/'].map((path, i) => [`/${locale}/${path}`, labels[i + 1]]));
+    assert.doesNotMatch(home, new RegExp(`href="/${locale}/pages/`));
+    assert(about.includes(aboutText));
+    assert.doesNotMatch(about, /Adrian Marquina/);
+    assert.match(about, new RegExp(`value="/${locale === 'en' ? 'es' : 'en'}/about/"`));
+    for (const section of ['blog', 'tools']) {
+      assert(about.includes(`href="/${locale}/${section}/"`));
+    }
+    assert(about.includes('href="https://github.com/Cobollatin" target="_blank" rel="noopener noreferrer"'));
+    assert(about.includes('href="https://www.linkedin.com/in/cobollatin" target="_blank" rel="noopener noreferrer"'));
+    assert(about.includes('href="https://www.reddit.com/user/Cobollatin_/" target="_blank" rel="noopener noreferrer"'));
+    assert(about.includes('href="mailto:inbox@cobollatin.com">inbox@cobollatin.com</a>'));
+    assert.doesNotMatch(about, /publishing space|project directory|espacio de publicación|directorio de proyectos/i);
+    assert.match(about, new RegExp(`href="/${locale}/about/" aria-current="page"`));
+  }
+  assert.match(page('en/authors'), /Fixture Author/);
+  assert.match(page('es/authors'), /Fixture Author/);
+  assert.match(page('en/authors'), /src="\/authors\/fixture\.svg"/);
+  assert.match(page('en/authors'), /href="https:\/\/example\.org"[^>]*>Portfolio<\/a>/);
+  assert.match(page('en/authors'), /Adrian Marquina/);
+  assert.match(page('es/authors'), /Adrian Marquina/);
+  assert.doesNotMatch(page('en/authors'), /Example Author \(sample\)/);
+  assert.match(page('en/authors/adrian-marquina'), /Adrian Marquina/);
+  assert.match(page('es/authors/adrian-marquina'), /Adrian Marquina/);
+  assert.match(page('en/blog/corpuslens'), /CorpusLens: finding a passage when you remember the idea/);
+  assert.match(page('es/blog/corpuslens'), /CorpusLens: encontrar un pasaje a partir de una idea/);
+  assert.match(page('en/blog/corpuslens'), /value="\/es\/blog\/corpuslens\/"/);
+  assert.match(page('es/blog/corpuslens'), /value="\/en\/blog\/corpuslens\/"/);
+  assert.match(page('en/blog/corpuslens'), /https:\/\/corpuslens\.cobollatin\.com\/en/);
+  assert.match(page('es/blog/corpuslens'), /https:\/\/corpuslens\.cobollatin\.com\/es/);
+  assert.match(page('en/blog/corpuslens'), /https:\/\/github\.com\/Cobollatin\/CorpusLens/);
+  assert.match(page('en/blog'), /CorpusLens: finding a passage when you remember the idea/);
+  assert.match(page('es/blog'), /CorpusLens: encontrar un pasaje a partir de una idea/);
+  for (const [locale, title, counterpart] of [
+    ['en', 'Some open source contributions I did a while ago', 'es'],
+    ['es', 'Algunas contribuciones open source que hice hace un tiempo', 'en'],
+  ]) {
+    const post = page(`${locale}/blog/open-source-contributions`);
+    assert(post.includes(title));
+    assert(page(`${locale}/blog`).includes(title));
+    assert(page(`${locale}/authors/adrian-marquina`).includes(`href="/${locale}/blog/open-source-contributions/"`));
+    assert(post.includes(`value="/${counterpart}/blog/open-source-contributions/"`));
+    for (const repository of ['cieslarmichal/faker-cxx', 'stoneharry/WoW-Spell-Editor']) {
+      assert(post.includes(`href="https://github.com/${repository}"`));
+    }
+    for (const [repository, numbers] of [
+      ['cieslarmichal/faker-cxx', [1003, 1004]],
+      ['stoneharry/WoW-Spell-Editor', [211, 212]],
+    ]) {
+      for (const number of numbers) {
+        assert(post.includes(`href="https://github.com/${repository}/pull/${number}"`));
+      }
+    }
+  }
+  assert.match(page('en/tools'), /href="https:\/\/corpuslens\.cobollatin\.com\/en" target="_blank" rel="noopener"/);
+  assert.match(page('es/tools'), /href="https:\/\/corpuslens\.cobollatin\.com\/es" target="_blank" rel="noopener"/);
+  assert.match(page('en/authors/adrian-marquina'), /href="\/en\/blog\/corpuslens\/"/);
+  assert.match(page('es/authors/adrian-marquina'), /href="\/es\/blog\/corpuslens\/"/);
+  assert.match(page('en/authors/adrian-marquina'), /href="https:\/\/corpuslens\.cobollatin\.com\/en"/);
+  assert.match(page('es/authors/adrian-marquina'), /href="https:\/\/corpuslens\.cobollatin\.com\/es"/);
+  for (const locale of ['en', 'es']) {
+    const corpusLink = `href="https://corpuslens.cobollatin.com/${locale}" target="_blank" rel="noopener"`;
+    assert(page(locale).includes(corpusLink));
+    assert(page(`${locale}/authors/adrian-marquina`).includes(corpusLink));
+  }
+  for (const [slug, enTitle, esTitle, repository] of [
+    ['nash-calculator', 'Nash Calculator: finding best responses in a payoff matrix', 'Calculadora de Nash: mejores respuestas en una matriz de pagos', 'Nash-Calculator'],
+    ['python-to-mips-compiler', 'Python to MIPS Compiler: from a small language to assembly', 'Compilador de Python a MIPS: del código a las instrucciones', 'python-to-mips-compiler'],
+  ]) {
+    const url = `https://github.com/Cobollatin/${repository}`;
+    assert.match(page(`en/blog/${slug}`), new RegExp(enTitle));
+    assert.match(page(`es/blog/${slug}`), new RegExp(esTitle));
+    assert.match(page(`en/blog/${slug}`), new RegExp(`value="/es/blog/${slug}/"`));
+    assert.match(page(`es/blog/${slug}`), new RegExp(`value="/en/blog/${slug}/"`));
+    for (const locale of ['en', 'es']) {
+      const externalLink = `href="${url}" target="_blank" rel="noopener"`;
+      assert(page(`${locale}/tools`).includes(externalLink));
+      assert(page(locale).includes(externalLink));
+      assert(page(`${locale}/authors/adrian-marquina`).includes(`href="/${locale}/blog/${slug}/"`));
+      assert(page(`${locale}/authors/adrian-marquina`).includes(externalLink));
+    }
+  }
+  assert.match(page('en/authors/adrian-marquina'), /class="author-avatar author-avatar-large"/);
+  assert.match(page('en/authors/adrian-marquina'), /src="https:\/\/avatars\.githubusercontent\.com\/u\/40482066\?v=4"/);
+  assert.match(page('en/authors/adrian-marquina'), /href="https:\/\/www\.linkedin\.com\/in\/cobollatin" target="_blank" rel="noopener noreferrer"/);
+  assert(!existsSync(join(root, 'dist/en/authors/sample/index.html')));
+  assert.match(page('en/authors/fixture-author'), /href="\/en\/blog\/route-fixture\/"/);
+  assert.match(page('en/authors/fixture-author'), /src="\/authors\/fixture\.svg"/);
+  assert.match(page('en/authors/fixture-author'), /href="https:\/\/example\.org"[^>]*>Portfolio<\/a>/);
+  assert.match(page('es/authors/fixture-author'), /href="\/es\/blog\/ruta-fixture\/"/);
+  assert.match(page('es/authors/fixture-author'), /href="\/en\/blog\/english-only-fixture\/"/);
+  assert.doesNotMatch(page('es/authors/fixture-author'), /href="\/en\/blog\/route-fixture\/"/);
+  assert.match(page('es/authors/fixture-author'), /href="\/en\/pages\/page-fixture\/"/);
+  assert.match(page('en/authors/fixture-author'), /value="\/es\/authors\/fixture-author\/"/);
+  assert.match(page('en/blog/route-fixture'), /href="\/en\/authors\/"[^>]*>Authors<\/a>/);
+  assert.doesNotMatch(page('en'), /Curious work|Find your way in|first piece is still/);
+  assert.doesNotMatch(page('en/tools'), /word-counter|Word counter/);
+  assert(!existsSync(join(root, 'dist/en/tools/word-counter/index.html')));
+  assert(!existsSync(join(root, 'dist/en/blog/draft-fixture/index.html')));
+  assert.doesNotMatch(page('en/blog'), /Draft fixture/);
+  assert.doesNotMatch(page('en'), /Draft fixture/);
+  console.log('Static fixture build: published MDX post/page, author and About routes, navigation, counterpart, home fallback, and draft exclusion passed.');
+  const invalid = join(root, 'src/content/posts/en/invalid-author-fixture.mdx');
+  assert(!existsSync(invalid), 'Refusing to replace invalid author fixture');
+  fixtures.set('src/content/posts/en/invalid-author-fixture.mdx', '---\ntitle: Invalid author fixture\ndescription: Validation test.\npublishedAt: 2026-01-01\nlocale: en\nauthors: [missing-fixture-author]\n---\n\nInvalid reference.\n');
+  writeFileSync(invalid, fixtures.get('src/content/posts/en/invalid-author-fixture.mdx'), { flag: 'wx' });
+  const rejected = build();
+  assert.notEqual(rejected.status, 0, 'Build accepted a missing author reference');
+  assert.match(`${rejected.stdout}\n${rejected.stderr}`, /missing-fixture-author|unknown author/);
+  console.log('Static fixture build: missing author reference rejected.');
+} finally {
+  for (const path of fixtures.keys()) {
+    const target = join(root, path);
+    if (existsSync(target)) unlinkSync(target);
+  }
+}

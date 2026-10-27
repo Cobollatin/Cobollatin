@@ -1,0 +1,25 @@
+---
+title: "Nash Calculator: finding best responses in a payoff matrix"
+description: A two-player game calculator with pure-strategy matching and a mixed-strategy estimate.
+publishedAt: 2026-10-27
+locale: en
+authors: [adrian-marquina]
+draft: false
+translationKey: nash-calculator
+---
+
+A payoff matrix gives each player a score for every pair of choices. The useful question is whether either player would change their choice if the other held still. I built Nash Calculator as a wxWidgets desktop tool for exploring that question in two-player games. You enter one payoff grid per player, choose the number of strategies, and calculate a pure or mixed result.
+
+## Pure strategies
+
+For each of player 2's choices, the calculator finds player 1's highest payoff. It then does the reverse: for each of player 1's choices, it finds player 2's highest payoff. Ties remain in contention. A cell that is a best response for both players is a pure-strategy Nash equilibrium, so the result shows its strategy indices and payoff pair. If no cell qualifies, the calculator says so.
+
+This best-response marking follows the idea in *[A note on determining pure-strategy equilibrium points of bimatrix games](https://www.sciencedirect.com/science/article/pii/0898122196001538)*.
+
+## The mixed calculation
+
+The mixed path repeatedly removes rows or columns that its strict payoff comparison marks as dominated. It then uses best-response payoff totals to produce a probability for each strategy in the reduced dimensions. When a player's total is zero, it assigns equal probabilities instead. The displayed probabilities have two decimal places.
+
+This path was informed by *[An Efficient Algorithm for Finding Mixed Nash Equilibria in 2-Player Games](http://article.sapub.org/10.5923.j.jgt.20150403.01.html)*, but the current implementation does not check the resulting probabilities against the full mixed-equilibrium conditions. I treat that output as an estimate for exploring a game, not a general proof of equilibrium.
+
+The C++ project is on <a href="https://github.com/Cobollatin/Nash-Calculator" target="_blank" rel="noopener">GitHub</a>.

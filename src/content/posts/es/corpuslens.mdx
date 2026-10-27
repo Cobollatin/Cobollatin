@@ -1,0 +1,25 @@
+---
+title: "CorpusLens: encontrar un pasaje a partir de una idea"
+description: Búsqueda bíblica en inglés y español con cobertura auditada, fragmentos contextuales y recuperación híbrida.
+publishedAt: 2026-10-27
+locale: es
+authors: [adrian-marquina]
+draft: false
+translationKey: corpuslens
+---
+
+A veces recuerdo la idea de un pasaje, pero no sus palabras. Una búsqueda literal puede perderlo, sobre todo si la consulta y el texto usan expresiones distintas. Buscar versículo por versículo tampoco siempre basta: un relato o un argumento puede desarrollarse a lo largo de varios. Para eso hice CorpusLens, un buscador en inglés y español.
+
+## Indexar sin perder el contexto
+
+La primera fuente es el EPUB de la Traducción del Nuevo Mundo en cada idioma. Un adaptador extrae libros, capítulos, versículos y secciones y los guarda en una instantánea versionada. Antes de indexarla, una auditoría comprueba que los fragmentos de búsqueda cubran los intervalos del texto sin dejar huecos. La instantánea registrada abarca 66 libros y 1.189 capítulos por idioma. Los versículos ausentes o presentes solo como notas en la fuente quedan identificados; no se inventa texto para completar la numeración.
+
+Cada capítulo se indexa de cuatro maneras: versículos individuales, ventanas superpuestas de tres versículos, ventanas de cinco y secciones tomadas del esquema de la fuente. El título y la ubicación de una sección aportan contexto al embedding, pero se conservan separados del texto de los versículos. La capa individual ayuda a señalar una coincidencia concreta; las otras permiten recuperar ideas que ocupan más espacio.
+
+## Combinar resultados y mostrar pasajes
+
+Una cita exacta como `Mateo 6:25-34` va directamente a los versículos indicados. Para otras consultas, el servicio puede recuperar coincidencias léxicas y vectoriales. Combina las posiciones de ambas listas mediante Reciprocal Rank Fusion ponderado, sin comparar sus puntuaciones originales como si fueran equivalentes. Después agrupa los fragmentos superpuestos para presentar pasajes, en vez de repetir el mismo versículo por cada capa donde apareció.
+
+La parte vectorial usa embeddings `text-embedding-3-large` de 1.024 dimensiones almacenados en Oracle; Oracle Text aporta la búsqueda léxica. Si no se puede obtener el embedding de una consulta, el servicio puede seguir buscando por texto.
+
+Prueba la <a href="https://corpuslens.cobollatin.com/es" target="_blank" rel="noopener">aplicación en español</a> o <a href="https://corpuslens.cobollatin.com/en" target="_blank" rel="noopener">en inglés</a>. El código está en <a href="https://github.com/Cobollatin/CorpusLens" target="_blank" rel="noopener">GitHub</a>.
