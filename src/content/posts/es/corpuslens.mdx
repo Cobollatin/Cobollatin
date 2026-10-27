@@ -1,0 +1,46 @@
+---
+title: "CorpusLens: buscar pasajes por su significado"
+description: Cómo una herramienta bilingüe de búsqueda semántica combina cobertura completa, indexación contextual y recuperación híbrida.
+publishedAt: 2026-10-27
+locale: es
+authors: [adrian-marquina]
+draft: false
+translationKey: corpuslens
+---
+
+Buscar en la Biblia es sencillo cuando se recuerdan las palabras exactas de una traducción. Es más difícil cuando se recuerda una idea en lenguaje cotidiano, como «cómo lidiar con la ansiedad por el dinero», pero el pasaje buscado es Mateo 6:25-34. Un solo versículo también puede ser una unidad demasiado pequeña: las parábolas, los relatos y los argumentos suelen desarrollarse a lo largo de varios versículos consecutivos.
+
+[CorpusLens](https://corpuslens.cobollatin.com/es) es una aplicación web y API REST de búsqueda semántica, disponible en inglés y español, creada para ese problema. Unifica y reemplaza mis proyectos anteriores [JW semantic searcher](https://github.com/Cobollatin/jw-semantic-searcher) y [Bible semantic searcher](https://github.com/Cobollatin/bible-semantic-searcher). Su [código fuente es público](https://github.com/Cobollatin/CorpusLens).
+
+## Un modelo de corpus antes del índice de búsqueda
+
+El motor de recuperación representa el texto estructurado como `CorpusSource → SourceRevision → Document → DocumentNode → TextSpan → SearchChunk → ChunkSegment`. Los adaptadores de fuentes implementan `ICorpusSourceAdapter`, de modo que el análisis de una fuente concreta queda separado de la indexación y la recuperación. El adaptador actual, `NwtEpubCorpusAdapter`, procesa el EPUB oficial descargable de la Traducción del Nuevo Mundo y produce una instantánea verificada. Así, la estructura específica de la Biblia no queda codificada en el núcleo de recuperación.
+
+Antes de activar una revisión, `CoverageAuditor` comprueba sus intervalos de caracteres frente a `[0, length)` carácter por carácter. La auditoría verifica una **cobertura del 100 % sin omisiones silenciosas** en los 66 libros y 1.189 capítulos. Un índice de búsqueda solo sirve si contiene todo el texto de origen; esta comprobación impide activar una revisión con huecos inadvertidos.
+
+## Cuatro capas de indexación complementarias
+
+Cada idioma dispone de cuatro vistas del mismo texto:
+
+| Capa | Unidad de búsqueda |
+| --- | --- |
+| SingleVerse | Cada versículo canónico |
+| SlidingWindow3Step1 | Tres versículos superpuestos, con avance de uno dentro del capítulo |
+| SlidingWindow5Step2 | Cinco versículos superpuestos, con avance de dos dentro del capítulo |
+| PericopeSection | Sección del esquema o discurso, con `[Book | Chapter | Section | Verses]` antes de generar el embedding |
+
+La capa de versículos conserva la precisión. Las ventanas superpuestas y las secciones aportan contexto cuando la respuesta abarca varios versículos. En conjunto hay 76.960 fragmentos en inglés y 76.925 en español: 153.885 vectores.
+
+## De la consulta al pasaje
+
+Un analizador bilingüe de citas exactas reconoce referencias como `John 3:16` y `Mateo 6:25-34` y las sitúa en primer lugar mediante una ruta rápida. Para las demás consultas, CorpusLens combina resultados vectoriales y léxicos mediante Reciprocal Rank Fusion ponderado (`k = 60`, peso vectorial `0,80`, peso léxico `0,20`). `PassageDeduplicator` reúne resultados superpuestos de las distintas capas en tarjetas de pasajes y destaca el versículo principal.
+
+La búsqueda vectorial utiliza embeddings de OpenAI `text-embedding-3-large` truncados a 1.024 dimensiones mediante representación Matryoshka. Oracle Autonomous Database 23ai los almacena en columnas nativas `VECTOR(1024, FLOAT32)` con un índice IVF cuya precisión objetivo es del 95 %. Oracle Text aporta la búsqueda léxica mediante un índice `CONTEXT` con `WORLD_LEXER`. Una caché de vectores de consulta SHA-256 de dos niveles (LRU en memoria y `query_embedding_cache` en Oracle) evita repetir el trabajo de las consultas almacenadas. Los límites por IP y los topes estrictos de gasto diario y mensual en OpenAI permiten continuar con resultados léxicos y en caché cuando se agota el presupuesto de embeddings.
+
+## Aplicación y enlaces al texto
+
+La interfaz es una aplicación Angular independiente alojada en Vercel. Sus rutas en [inglés](https://corpuslens.cobollatin.com/en) y [español](https://corpuslens.cobollatin.com/es) ofrecen ejemplos de consultas localizados, cambio entre tema claro y oscuro, y tarjetas de pasajes con enlaces a JW.org y WOL para cada versículo. Esos enlaces utilizan identificadores deterministas `BBCCCVVV` derivados de la instantánea EPUB verificada.
+
+Una API ASP.NET Core .NET 8 y un proceso .NET de ingestión y mantenimiento se ejecutan en contenedores Docker ARM64 detrás de Caddy, en una máquina virtual Oracle Cloud Infrastructure Ampere A1 Flex. Oracle Autonomous Database 23ai Always Free almacena el texto y los vectores, con un servicio que mantiene activa la base de datos cada 24 horas. La carga inicial procesó 16,15 millones de tokens por unos 2,10 USD y la infraestructura cuesta aproximadamente 0 USD al mes con OCI Always Free y Vercel Hobby. El repositorio registra 47 pruebas xUnit aprobadas en GitHub Actions CI.
+
+Prueba [CorpusLens en español](https://corpuslens.cobollatin.com/es) o [en inglés](https://corpuslens.cobollatin.com/en), o consulta la [implementación en GitHub](https://github.com/Cobollatin/CorpusLens).

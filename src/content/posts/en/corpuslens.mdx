@@ -1,0 +1,46 @@
+---
+title: "CorpusLens: searching passages by meaning"
+description: How a bilingual semantic search tool combines complete corpus coverage, contextual indexing, and hybrid retrieval.
+publishedAt: 2026-10-27
+locale: en
+authors: [adrian-marquina]
+draft: false
+translationKey: corpuslens
+---
+
+Bible search is easy when you remember the exact words in a particular translation. It is harder when you remember an idea in everyday language, such as “how to deal with anxiety about money,” but the passage you want is Matthew 6:25–34. A single verse may also be too small a unit: parables, narratives, and arguments often develop across several consecutive verses.
+
+[CorpusLens](https://corpuslens.cobollatin.com/en) is a live English and Spanish semantic search web application and REST API built for that problem. It unifies and replaces my earlier [JW semantic searcher](https://github.com/Cobollatin/jw-semantic-searcher) and [Bible semantic searcher](https://github.com/Cobollatin/bible-semantic-searcher) projects. Its [source code is public](https://github.com/Cobollatin/CorpusLens).
+
+## A corpus model before a search index
+
+The retrieval engine models structured text as `CorpusSource → SourceRevision → Document → DocumentNode → TextSpan → SearchChunk → ChunkSegment`. Source adapters implement `ICorpusSourceAdapter`, so parsing a particular source is separate from indexing and retrieval. The current source adapter, `NwtEpubCorpusAdapter`, parses the official downloadable NWT EPUB into a verified snapshot. This design keeps Bible-specific structure out of the retrieval core.
+
+Before a revision becomes active, `CoverageAuditor` checks its character spans against `[0, length)` at the character level. The audit verifies **100% coverage with zero silent drops** across all 66 books and 1,189 chapters. A search index is only useful if the source text made it into the index; this check makes missing text a promotion failure rather than an unnoticed search gap.
+
+## Four complementary indexing layers
+
+Each language gets four views of the same text:
+
+| Layer | Search unit |
+| --- | --- |
+| SingleVerse | Every canonical verse |
+| SlidingWindow3Step1 | Three overlapping verses, advancing one verse within a chapter |
+| SlidingWindow5Step2 | Five overlapping verses, advancing two verses within a chapter |
+| PericopeSection | Outline or section-level discourse, with `[Book | Chapter | Section | Verses]` prepended before embedding |
+
+The verse layer preserves precise matches. The overlapping windows and section layer give the search engine context when the answer spans verses. The index contains 76,960 English and 76,925 Spanish chunks: 153,885 vectors in total.
+
+## From query to passage
+
+An exact bilingual citation parser handles references such as `John 3:16` and `Mateo 6:25-34` through a rank-one fast path. For other queries, CorpusLens combines vector and lexical results using weighted Reciprocal Rank Fusion (`k = 60`, vector weight `0.80`, lexical weight `0.20`). `PassageDeduplicator` coalesces overlapping hits from the different layers into focused passage cards and highlights the primary verse.
+
+The vector side uses OpenAI `text-embedding-3-large` embeddings truncated to 1,024 dimensions through Matryoshka representation. Oracle Autonomous Database 23ai stores them in native `VECTOR(1024, FLOAT32)` columns with an IVF index targeting 95% accuracy. Oracle Text supplies lexical search through a `CONTEXT` index with `WORLD_LEXER`. A two-tier SHA-256 query-vector cache (in-memory LRU and Oracle `query_embedding_cache`) avoids repeating cached embedding work. Per-IP rate limits and hard daily and monthly OpenAI spend guards let the search degrade to lexical and cached results when the embedding budget is exhausted.
+
+## Delivery and source links
+
+The frontend is a standalone Angular application on Vercel. Its [English](https://corpuslens.cobollatin.com/en) and [Spanish](https://corpuslens.cobollatin.com/es) routes provide localized example queries, a dark/light theme toggle, and passage cards with per-verse JW.org and WOL links. Those deep links use deterministic `BBCCCVVV` identifiers derived from the verified EPUB snapshot.
+
+An ASP.NET Core .NET 8 API and a .NET ingestion and maintenance worker run in ARM64 Docker containers behind Caddy on an Oracle Cloud Infrastructure Ampere A1 Flex VM. Oracle Autonomous Database 23ai Always Free holds the text and vectors, with a 24-hour background keep-alive service. The initial backfill covered 16.15 million tokens at about $2.10, and the infrastructure runs at about $0 per month on OCI Always Free and Vercel Hobby. The repository reports 47 passing xUnit tests in GitHub Actions CI.
+
+Try [CorpusLens in English](https://corpuslens.cobollatin.com/en) or [Spanish](https://corpuslens.cobollatin.com/es), or inspect the [implementation on GitHub](https://github.com/Cobollatin/CorpusLens).
