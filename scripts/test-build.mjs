@@ -38,7 +38,7 @@ try {
   assert.match(page('en/blog'), /Route fixture/);
   assert.match(page('en/pages'), /Page fixture/);
   assert.match(page('en'), /Nash Calculator: finding best responses in a payoff matrix/);
-  assert.match(page('en'), /Python to MIPS Compiler: from a small language to assembly/);
+  assert.match(page('en/blog'), /Python to MIPS Compiler: from a small language to assembly/);
   assert.match(page('en'), /href="\/en\/authors\/"[^>]*><span>Authors<\/span>/);
   assert.match(page('es'), /href="\/es\/authors\/"[^>]*><span>Autores<\/span>/);
   for (const [locale, labels, aboutText] of [
@@ -87,6 +87,27 @@ try {
   assert.match(page('en/blog/corpuslens'), /https:\/\/github\.com\/Cobollatin\/CorpusLens/);
   assert.match(page('en/blog'), /CorpusLens: finding a passage when you remember the idea/);
   assert.match(page('es/blog'), /CorpusLens: encontrar un pasaje a partir de una idea/);
+  for (const [locale, title, counterpart] of [
+    ['en', 'Some open source contributions I did a while ago', 'es'],
+    ['es', 'Algunas contribuciones open source que hice hace un tiempo', 'en'],
+  ]) {
+    const post = page(`${locale}/blog/open-source-contributions`);
+    assert(post.includes(title));
+    assert(page(`${locale}/blog`).includes(title));
+    assert(page(`${locale}/authors/adrian-marquina`).includes(`href="/${locale}/blog/open-source-contributions/"`));
+    assert(post.includes(`value="/${counterpart}/blog/open-source-contributions/"`));
+    for (const repository of ['cieslarmichal/faker-cxx', 'stoneharry/WoW-Spell-Editor']) {
+      assert(post.includes(`href="https://github.com/${repository}"`));
+    }
+    for (const [repository, numbers] of [
+      ['cieslarmichal/faker-cxx', [1003, 1004]],
+      ['stoneharry/WoW-Spell-Editor', [211, 212]],
+    ]) {
+      for (const number of numbers) {
+        assert(post.includes(`href="https://github.com/${repository}/pull/${number}"`));
+      }
+    }
+  }
   assert.match(page('en/tools'), /href="https:\/\/corpuslens\.cobollatin\.com\/en" target="_blank" rel="noopener"/);
   assert.match(page('es/tools'), /href="https:\/\/corpuslens\.cobollatin\.com\/es" target="_blank" rel="noopener"/);
   assert.match(page('en/authors/adrian-marquina'), /href="\/en\/blog\/corpuslens\/"/);

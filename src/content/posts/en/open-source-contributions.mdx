@@ -1,0 +1,21 @@
+---
+title: "Some open source contributions I did a while ago"
+description: Merged contributions to faker-cxx and WoW-Spell-Editor.
+publishedAt: 2026-10-27
+locale: en
+authors: [adrian-marquina]
+draft: false
+translationKey: open-source-contributions
+---
+
+I made these contributions a while ago and wanted to keep a short note about them. They are four merged pull requests across two projects.
+
+## faker-cxx
+
+In <a href="https://github.com/cieslarmichal/faker-cxx" target="_blank" rel="noopener">faker-cxx</a>, I added <a href="https://github.com/cieslarmichal/faker-cxx/pull/1003" target="_blank" rel="noopener">ULID generation and unit tests</a> in November 2024, closing issue #997. In <a href="https://github.com/cieslarmichal/faker-cxx/pull/1004" target="_blank" rel="noopener">the next PR</a>, merged in December, I added UUID v1 and v3 generation alongside the existing default v4, without adding an external dependency.
+
+## WoW-Spell-Editor
+
+In <a href="https://github.com/stoneharry/WoW-Spell-Editor" target="_blank" rel="noopener">WoW-Spell-Editor</a>, my <a href="https://github.com/stoneharry/WoW-Spell-Editor/pull/211" target="_blank" rel="noopener">first PR</a> added SQL script export with language keys and column fixes for the AzerothCore spell and spellvisual tables. It also resized the Import/Export window when switching tabs.
+
+In a <a href="https://github.com/stoneharry/WoW-Spell-Editor/pull/212" target="_blank" rel="noopener">follow-up PR</a>, I refactored AbstractDBC and the import/export logic, moved AzerothCore mappings into config files, fixed a first-time import bug that had required a restart, and made SQL export faster.
