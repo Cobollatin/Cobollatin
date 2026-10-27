@@ -1,6 +1,6 @@
 ---
-title: "Nash Calculator: exploring two-player payoff games"
-description: A wxWidgets desktop calculator for pure and mixed strategies in bi-matrix games.
+title: "Nash Calculator: finding best responses in a payoff matrix"
+description: A two-player game calculator with pure-strategy matching and a mixed-strategy estimate.
 publishedAt: 2026-10-27
 locale: en
 authors: [adrian-marquina]
@@ -8,14 +8,18 @@ draft: false
 translationKey: nash-calculator
 ---
 
-[Nash Calculator](https://github.com/Cobollatin/Nash-Calculator) is a C++ desktop program for calculating Nash equilibria in two-player bi-matrix games. Its interface uses wxWidgets and provides a payoff grid for each player. The matrix configuration dialog lets you set the number of strategies, while the Calculate action selects either the pure or mixed strategy calculation.
+A payoff matrix gives each player a score for every pair of choices. The useful question is whether either player would change their choice if the other held still. I built Nash Calculator as a wxWidgets desktop tool for exploring that question in two-player games. You enter one payoff grid per player, choose the number of strategies, and calculate a pure or mixed result.
 
-## From payoff grids to a result
+## Pure strategies
 
-Each cell represents the two players' payoffs for one pair of strategies. The [window code](https://github.com/Cobollatin/Nash-Calculator/blob/master/mMain.cpp) reads both grids into payoff arrays and passes them to the corresponding functions in `nashResolver.cpp`. The result is appended to the window's text output; a Clear action clears the grids and output.
+For each of player 2's choices, the calculator finds player 1's highest payoff. It then does the reverse: for each of player 1's choices, it finds player 2's highest payoff. Ties remain in contention. A cell that is a best response for both players is a pure-strategy Nash equilibrium, so the result shows its strategy indices and payoff pair. If no cell qualifies, the calculator says so.
 
-For pure strategies, the [resolver](https://github.com/Cobollatin/Nash-Calculator/blob/master/nashResolver.cpp) marks each player's best payoff choices against the other player's fixed strategy. A cell marked for both players is reported with its strategy indices and payoff pair. If there is no such cell, the output says there is no equilibrium in pure strategies.
+This best-response marking follows the idea in *[A note on determining pure-strategy equilibrium points of bimatrix games](https://www.sciencedirect.com/science/article/pii/0898122196001538)*.
 
-The same resolver also has a mixed strategy path. It removes dominated rows or columns in its calculation and prints a probability for each remaining strategy, formatted to two decimal places. The repository's [README](https://github.com/Cobollatin/Nash-Calculator/blob/master/README.md) describes the program as based on two linked papers.
+## The mixed calculation
 
-The repository contains a Visual Studio solution and C++ project files. Explore the [source code](https://github.com/Cobollatin/Nash-Calculator) for the interface and calculations.
+The mixed path repeatedly removes rows or columns that its strict payoff comparison marks as dominated. It then uses best-response payoff totals to produce a probability for each strategy in the reduced dimensions. When a player's total is zero, it assigns equal probabilities instead. The displayed probabilities have two decimal places.
+
+This path was informed by *[An Efficient Algorithm for Finding Mixed Nash Equilibria in 2-Player Games](http://article.sapub.org/10.5923.j.jgt.20150403.01.html)*, but the current implementation does not check the resulting probabilities against the full mixed-equilibrium conditions. I treat that output as an estimate for exploring a game, not a general proof of equilibrium.
+
+The C++ project is on <a href="https://github.com/Cobollatin/Nash-Calculator" target="_blank" rel="noopener">GitHub</a>.

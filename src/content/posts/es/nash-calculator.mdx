@@ -1,6 +1,6 @@
 ---
-title: "Calculadora de Nash: juegos de pagos entre dos jugadores"
-description: Una aplicación de escritorio con wxWidgets para estrategias puras y mixtas en juegos bimatriciales.
+title: "Calculadora de Nash: mejores respuestas en una matriz de pagos"
+description: Una calculadora de juegos de dos jugadores con búsqueda de equilibrios puros y una estimación de estrategias mixtas.
 publishedAt: 2026-10-27
 locale: es
 authors: [adrian-marquina]
@@ -8,14 +8,18 @@ draft: false
 translationKey: nash-calculator
 ---
 
-[Nash Calculator](https://github.com/Cobollatin/Nash-Calculator) es un programa de escritorio en C++ para calcular equilibrios de Nash en juegos bimatriciales de dos jugadores. La interfaz utiliza wxWidgets y ofrece una matriz de pagos para cada jugador. El cuadro de configuración permite elegir el número de estrategias, y la acción de cálculo selecciona estrategias puras o mixtas.
+En una matriz de pagos, cada par de decisiones tiene un resultado para cada jugador. La pregunta es si alguno querría cambiar su decisión mientras la del otro permanece fija. Hice Nash Calculator para explorar esos juegos desde una interfaz de escritorio con wxWidgets: se introducen las dos matrices, se elige cuántas estrategias tiene cada jugador y se calcula un resultado puro o mixto.
 
-## De las matrices de pagos al resultado
+## Estrategias puras
 
-Cada celda representa los pagos de ambos jugadores para un par de estrategias. El [código de la ventana](https://github.com/Cobollatin/Nash-Calculator/blob/master/mMain.cpp) lee las dos matrices y pasa los valores a las funciones correspondientes de `nashResolver.cpp`. El resultado se añade al área de texto; la acción de limpiar vacía las matrices y el resultado.
+Para cada decisión del jugador 2, la calculadora busca el mayor pago del jugador 1. Después hace la comparación inversa para el jugador 2. Si hay empates, conserva todas las mejores respuestas. Una casilla que es la mejor respuesta de ambos jugadores corresponde a un equilibrio de Nash en estrategias puras; el resultado muestra las estrategias y los pagos de esa casilla. Si ninguna cumple la condición, lo indica.
 
-Para las estrategias puras, el [resolutor](https://github.com/Cobollatin/Nash-Calculator/blob/master/nashResolver.cpp) marca las mejores elecciones de pago de cada jugador frente a una estrategia fija del otro. Si una celda queda marcada para ambos, muestra los índices de estrategia y los dos pagos. Si no encuentra ninguna, indica que no hay equilibrio en estrategias puras.
+Esta forma de marcar las mejores respuestas sigue la idea de *[A note on determining pure-strategy equilibrium points of bimatrix games](https://www.sciencedirect.com/science/article/pii/0898122196001538)*.
 
-El mismo archivo contiene el cálculo de estrategias mixtas. Durante ese cálculo elimina filas o columnas dominadas e imprime una probabilidad para cada estrategia restante, con dos decimales. El [README](https://github.com/Cobollatin/Nash-Calculator/blob/master/README.md) señala dos artículos como base del programa.
+## El cálculo mixto
 
-El repositorio incluye una solución y archivos de proyecto de Visual Studio. Consulta el [código fuente](https://github.com/Cobollatin/Nash-Calculator) para ver la interfaz y los cálculos.
+La otra ruta elimina de forma iterativa las filas o columnas que su comparación estricta de pagos considera dominadas. Después usa los totales de pagos marcados como mejores respuestas para asignar probabilidades según las dimensiones reducidas. Si el total de un jugador es cero, reparte la probabilidad por igual. La interfaz muestra dos decimales.
+
+El cálculo toma como referencia *[An Efficient Algorithm for Finding Mixed Nash Equilibria in 2-Player Games](http://article.sapub.org/10.5923.j.jgt.20150403.01.html)*, pero la implementación actual no verifica las probabilidades con todas las condiciones de un equilibrio mixto. Por eso interpreto esa salida como una estimación para explorar el juego, no como una demostración general del equilibrio.
+
+El proyecto en C++ está en <a href="https://github.com/Cobollatin/Nash-Calculator" target="_blank" rel="noopener">GitHub</a>.

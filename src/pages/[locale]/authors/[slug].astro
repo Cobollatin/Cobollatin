@@ -31,6 +31,6 @@ const authoredTools = tools.filter((tool) => tool.authors?.includes(author.id));
     </div>}
     {posts.length > 0 && <section class="home-content"><h2>{t.blog}</h2><div class="entry-list">{posts.map((post: Post) => <a href={localePath(post.data.locale, `blog/${entrySlug(post)}/`)}><span>{post.data.title}</span><time datetime={post.data.publishedAt.toISOString()}>{new Intl.DateTimeFormat(post.data.locale, { dateStyle: 'medium' }).format(post.data.publishedAt)}</time></a>)}</div></section>}
     {pages.length > 0 && <section class="home-content"><h2>{t.pages}</h2><div class="entry-list">{pages.map((page: AuthoredPage) => <a href={localePath(page.data.locale, `pages/${entrySlug(page)}/`)}><span>{page.data.title}</span><span aria-hidden="true">↗</span></a>)}</div></section>}
-    {authoredTools.length > 0 && <section class="home-content"><h2>{t.tools}</h2><div class="entry-list">{authoredTools.map((tool) => <a href={toolHref(tool, locale)}><span>{tool.title[locale]}</span><span aria-hidden="true">↗</span></a>)}</div></section>}
+    {authoredTools.length > 0 && <section class="home-content"><h2>{t.tools}</h2><div class="entry-list">{authoredTools.map((tool) => <a href={toolHref(tool, locale)} target="_blank" rel="noopener"><span>{tool.title[locale]}</span><span aria-hidden="true">↗</span></a>)}</div></section>}
   </article>
 </Base>

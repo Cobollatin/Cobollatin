@@ -1,6 +1,6 @@
 ---
-title: "Compilador de Python a MIPS: un subconjunto definido"
-description: Un proyecto con Flex y Bison que traduce una parte de la sintaxis de Python a ensamblador MIPS.
+title: "Compilador de Python a MIPS: del código a las instrucciones"
+description: Análisis léxico, sintáctico y semántico de un subconjunto de Python antes de generar MIPS.
 publishedAt: 2026-10-27
 locale: es
 authors: [adrian-marquina]
@@ -8,16 +8,18 @@ draft: false
 translationKey: python-to-mips-compiler
 ---
 
-El [compilador de Python a MIPS](https://github.com/Cobollatin/python-to-mips-compiler) es un proyecto académico que traduce un subconjunto documentado de la sintaxis de Python a ensamblador para los simuladores MARS y SPIM. El [README](https://github.com/Cobollatin/python-to-mips-compiler/blob/main/README.md) explica la sintaxis admitida y sus límites; no presenta el proyecto como una implementación completa de Python.
+Al pasar de un lenguaje de alto nivel a ensamblador hay que decidir dónde se guarda cada valor, qué tipos admite una variable y qué saltos representan un bucle. Construí este compilador alrededor de un subconjunto pequeño de la sintaxis de Python para poder expresar esas decisiones con claridad.
 
-## Análisis y generación de código
+## Leer y comprobar el programa
 
-El [script de compilación](https://github.com/Cobollatin/python-to-mips-compiler/blob/main/build.sh) ejecuta Bison sobre `parser.y`, Flex sobre `lexer.l` y después un compilador de C sobre los archivos generados, `ast.c` y `symbol_table.c`. El [analizador](https://github.com/Cobollatin/python-to-mips-compiler/blob/main/parser.y) construye un árbol de sintaxis abstracta y comprueba tipos, argumentos de funciones y algunas operaciones no válidas. La [implementación del árbol](https://github.com/Cobollatin/python-to-mips-compiler/blob/main/ast.c) emite datos e instrucciones MIPS y llamadas al sistema del simulador.
+Flex reconoce identificadores, números, cadenas, operadores y cambios de indentación. Con esos tokens, Bison construye un árbol de sintaxis para expresiones e instrucciones. La gramática admite aritmética, comparaciones, expresiones booleanas, asignaciones, impresión, `if`/`else`, `while` y la forma limitada `for __index__ in range(start, end)`.
 
-El subconjunto incluye aritmética y comparaciones, expresiones booleanas, asignaciones tipadas, cadenas y concatenación, `if`/`else`, `while`, una forma restringida de `for __index__ in range(start, end)`, funciones numéricas, listas numéricas de tamaño fijo e impresión. El README especifica aritmética de punto flotante de precisión simple y detalla otras restricciones de indentación, funciones e índices de listas.
+Antes de generar código se comprueban reglas deliberadamente más estrictas que las de Python: una variable conserva su tipo, las condiciones deben ser booleanas y los índices de listas son literales enteros no negativos. Las funciones se definen antes de usarse, reciben argumentos numéricos y devuelven un número por todas las rutas. Otra pasada detecta lecturas de variables que podrían no estar inicializadas. Así se rechazan errores con un diagnóstico en lugar de producir ensamblador ambiguo.
 
-## Uso del proyecto
+## Generar MIPS
 
-Los comandos documentados son `./build.sh` y luego `./compiler <input_file> <output_file>.asm`. El repositorio también incluye `./run_tests.sh` y pruebas de regresión en Python. Estas comprueban el ensamblador generado y, si SPIM está instalado, lo ejecutan; sin el simulador, se omiten las comprobaciones de ejecución.
+Con el árbol validado, el generador emite datos, instrucciones MIPS, etiquetas, saltos y llamadas al sistema del simulador. Los cálculos numéricos usan punto flotante de precisión simple. Las cadenas se pueden concatenar durante la ejecución y las listas numéricas tienen longitud fija. El ensamblador generado está pensado para MARS y SPIM.
 
-Consulta el [código y las instrucciones](https://github.com/Cobollatin/python-to-mips-compiler) antes de compilar un programa de este subconjunto.
+El alcance es concreto: los bloques usan espacios, los límites del `for` son literales enteros, no hay recursión y los índices de listas son estáticos. El compilador traduce ese lenguaje definido; no pretende ejecutar cualquier programa de Python.
+
+Se compila con `./build.sh` y se usa con `./compiler entrada.py salida.asm`. El código, los ejemplos y las pruebas están en <a href="https://github.com/Cobollatin/python-to-mips-compiler" target="_blank" rel="noopener">GitHub</a>.

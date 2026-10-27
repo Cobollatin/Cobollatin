@@ -37,8 +37,8 @@ try {
   assert.match(page('en/pages/page-fixture'), /No translation; opens the home page/);
   assert.match(page('en/blog'), /Route fixture/);
   assert.match(page('en/pages'), /Page fixture/);
-  assert.match(page('en'), /Nash Calculator: exploring two-player payoff games/);
-  assert.match(page('en'), /Python to MIPS Compiler: a defined language subset/);
+  assert.match(page('en'), /Nash Calculator: finding best responses in a payoff matrix/);
+  assert.match(page('en'), /Python to MIPS Compiler: from a small language to assembly/);
   assert.match(page('en'), /Page fixture/);
   assert.match(page('en'), /href="\/en\/authors\/"[^>]*><span>Authors<\/span>/);
   assert.match(page('es'), /href="\/es\/authors\/"[^>]*><span>Autores<\/span>/);
@@ -51,24 +51,29 @@ try {
   assert.doesNotMatch(page('en/authors'), /Example Author \(sample\)/);
   assert.match(page('en/authors/adrian-marquina'), /Adrian Marquina/);
   assert.match(page('es/authors/adrian-marquina'), /Adrian Marquina/);
-  assert.match(page('en/blog/corpuslens'), /CorpusLens: searching passages by meaning/);
-  assert.match(page('es/blog/corpuslens'), /CorpusLens: buscar pasajes por su significado/);
+  assert.match(page('en/blog/corpuslens'), /CorpusLens: finding a passage when you remember the idea/);
+  assert.match(page('es/blog/corpuslens'), /CorpusLens: encontrar un pasaje a partir de una idea/);
   assert.match(page('en/blog/corpuslens'), /value="\/es\/blog\/corpuslens\/"/);
   assert.match(page('es/blog/corpuslens'), /value="\/en\/blog\/corpuslens\/"/);
   assert.match(page('en/blog/corpuslens'), /https:\/\/corpuslens\.cobollatin\.com\/en/);
   assert.match(page('es/blog/corpuslens'), /https:\/\/corpuslens\.cobollatin\.com\/es/);
   assert.match(page('en/blog/corpuslens'), /https:\/\/github\.com\/Cobollatin\/CorpusLens/);
-  assert.match(page('en/blog'), /CorpusLens: searching passages by meaning/);
-  assert.match(page('es/blog'), /CorpusLens: buscar pasajes por su significado/);
-  assert.match(page('en/tools'), /href="https:\/\/corpuslens\.cobollatin\.com\/en"/);
-  assert.match(page('es/tools'), /href="https:\/\/corpuslens\.cobollatin\.com\/es"/);
+  assert.match(page('en/blog'), /CorpusLens: finding a passage when you remember the idea/);
+  assert.match(page('es/blog'), /CorpusLens: encontrar un pasaje a partir de una idea/);
+  assert.match(page('en/tools'), /href="https:\/\/corpuslens\.cobollatin\.com\/en" target="_blank" rel="noopener"/);
+  assert.match(page('es/tools'), /href="https:\/\/corpuslens\.cobollatin\.com\/es" target="_blank" rel="noopener"/);
   assert.match(page('en/authors/adrian-marquina'), /href="\/en\/blog\/corpuslens\/"/);
   assert.match(page('es/authors/adrian-marquina'), /href="\/es\/blog\/corpuslens\/"/);
   assert.match(page('en/authors/adrian-marquina'), /href="https:\/\/corpuslens\.cobollatin\.com\/en"/);
   assert.match(page('es/authors/adrian-marquina'), /href="https:\/\/corpuslens\.cobollatin\.com\/es"/);
+  for (const locale of ['en', 'es']) {
+    const corpusLink = `href="https://corpuslens.cobollatin.com/${locale}" target="_blank" rel="noopener"`;
+    assert(page(locale).includes(corpusLink));
+    assert(page(`${locale}/authors/adrian-marquina`).includes(corpusLink));
+  }
   for (const [slug, enTitle, esTitle, repository] of [
-    ['nash-calculator', 'Nash Calculator: exploring two-player payoff games', 'Calculadora de Nash: juegos de pagos entre dos jugadores', 'Nash-Calculator'],
-    ['python-to-mips-compiler', 'Python to MIPS Compiler: a defined language subset', 'Compilador de Python a MIPS: un subconjunto definido', 'python-to-mips-compiler'],
+    ['nash-calculator', 'Nash Calculator: finding best responses in a payoff matrix', 'Calculadora de Nash: mejores respuestas en una matriz de pagos', 'Nash-Calculator'],
+    ['python-to-mips-compiler', 'Python to MIPS Compiler: from a small language to assembly', 'Compilador de Python a MIPS: del código a las instrucciones', 'python-to-mips-compiler'],
   ]) {
     const url = `https://github.com/Cobollatin/${repository}`;
     assert.match(page(`en/blog/${slug}`), new RegExp(enTitle));
@@ -76,10 +81,11 @@ try {
     assert.match(page(`en/blog/${slug}`), new RegExp(`value="/es/blog/${slug}/"`));
     assert.match(page(`es/blog/${slug}`), new RegExp(`value="/en/blog/${slug}/"`));
     for (const locale of ['en', 'es']) {
-      assert(page(`${locale}/tools`).includes(`href="${url}"`));
-      assert(page(locale).includes(url));
+      const externalLink = `href="${url}" target="_blank" rel="noopener"`;
+      assert(page(`${locale}/tools`).includes(externalLink));
+      assert(page(locale).includes(externalLink));
       assert(page(`${locale}/authors/adrian-marquina`).includes(`href="/${locale}/blog/${slug}/"`));
-      assert(page(`${locale}/authors/adrian-marquina`).includes(`href="${url}"`));
+      assert(page(`${locale}/authors/adrian-marquina`).includes(externalLink));
     }
   }
   assert.doesNotMatch(page('en/authors/adrian-marquina'), /class="author-avatar/);
