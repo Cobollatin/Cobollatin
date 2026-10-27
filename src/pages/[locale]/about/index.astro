@@ -1,0 +1,16 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { locales, messages, localePath, type Locale } from '../../../lib/i18n';
+
+export function getStaticPaths() { return locales.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const t = messages[locale];
+---
+<Base locale={locale} title={t.about} description={t.siteDescription}>
+  <div class="page">
+    <h1>{t.about}</h1>
+    <div class="prose">
+      {locale === 'en' ? <p>Cobollatin is a bilingual (English and Spanish) publishing space and project directory for software engineering. Read technical notes and articles in <a href={localePath(locale, 'blog/')}>{t.blog}</a>, explore projects and tools in <a href={localePath(locale, 'tools/')}>{t.tools}</a>, and meet the contributors in <a href={localePath(locale, 'authors/')}>{t.authors}</a>.</p> : <p>Cobollatin es un espacio de publicación bilingüe (en inglés y español) y un directorio de proyectos de ingeniería de software. Lee notas y artículos técnicos en <a href={localePath(locale, 'blog/')}>{t.blog}</a>, explora proyectos y herramientas en <a href={localePath(locale, 'tools/')}>{t.tools}</a> y conoce a quienes escriben en <a href={localePath(locale, 'authors/')}>{t.authors}</a>.</p>}
+    </div>
+  </div>
+</Base>

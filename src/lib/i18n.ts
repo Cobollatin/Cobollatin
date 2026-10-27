@@ -3,14 +3,14 @@ export type Locale = (typeof locales)[number];
 
 export const messages = {
   en: {
-    home: 'Home', blog: 'Writing', pages: 'Pages', tools: 'Tools', authors: 'Authors',
+    home: 'Home', blog: 'Writing', pages: 'Pages', tools: 'Tools', authors: 'Authors', about: 'About',
     noPosts: 'No published writing.', noPages: 'No published pages.', noTools: 'No published tools.', noAuthors: 'No published authors.',
     by: 'By', siteDescription: 'Cobollatin',
     localeLabel: 'Language', themeLabel: 'Switch theme', dark: 'Dark', light: 'Light',
     unavailable: 'No translation; opens the home page',
   },
   es: {
-    home: 'Inicio', blog: 'Escritos', pages: 'Páginas', tools: 'Herramientas', authors: 'Autores',
+    home: 'Inicio', blog: 'Escritos', pages: 'Páginas', tools: 'Herramientas', authors: 'Autores', about: 'Acerca de',
     noPosts: 'No hay escritos publicados.', noPages: 'No hay páginas publicadas.', noTools: 'No hay herramientas publicadas.', noAuthors: 'No hay autores publicados.',
     by: 'Por', siteDescription: 'Cobollatin',
     localeLabel: 'Idioma', themeLabel: 'Cambiar tema', dark: 'Oscuro', light: 'Claro',

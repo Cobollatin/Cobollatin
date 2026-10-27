@@ -39,9 +39,9 @@ const targets = locales.map((choice) => ({
         <nav aria-label={locale === 'es' ? 'Navegación principal' : 'Main navigation'}>
           <a href={localePath(locale)} aria-current={Astro.url.pathname === localePath(locale) ? 'page' : undefined}>{t.home}</a>
           <a href={localePath(locale, 'blog/')} aria-current={Astro.url.pathname.startsWith(localePath(locale, 'blog/')) ? 'page' : undefined}>{t.blog}</a>
-          <a href={localePath(locale, 'pages/')} aria-current={Astro.url.pathname.startsWith(localePath(locale, 'pages/')) ? 'page' : undefined}>{t.pages}</a>
           <a href={localePath(locale, 'authors/')} aria-current={Astro.url.pathname.startsWith(localePath(locale, 'authors/')) ? 'page' : undefined}>{t.authors}</a>
           <a href={localePath(locale, 'tools/')} aria-current={Astro.url.pathname.startsWith(localePath(locale, 'tools/')) ? 'page' : undefined}>{t.tools}</a>
+          <a href={localePath(locale, 'about/')} aria-current={Astro.url.pathname === localePath(locale, 'about/') ? 'page' : undefined}>{t.about}</a>
         </nav>
         <div class="header-controls">
           <label class="locale-control"><span class="sr-only">{t.localeLabel}</span><select id="locale-switch" aria-describedby={targets.some((target) => target.fallback) ? 'locale-note' : undefined}>

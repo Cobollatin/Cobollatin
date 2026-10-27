@@ -39,9 +39,30 @@ try {
   assert.match(page('en/pages'), /Page fixture/);
   assert.match(page('en'), /Nash Calculator: finding best responses in a payoff matrix/);
   assert.match(page('en'), /Python to MIPS Compiler: from a small language to assembly/);
-  assert.match(page('en'), /Page fixture/);
   assert.match(page('en'), /href="\/en\/authors\/"[^>]*><span>Authors<\/span>/);
   assert.match(page('es'), /href="\/es\/authors\/"[^>]*><span>Autores<\/span>/);
+  for (const [locale, labels, aboutText] of [
+    ['en', ['Home', 'Writing', 'Authors', 'Tools', 'About'], 'Cobollatin is a bilingual (English and Spanish) publishing space and project directory for software engineering.'],
+    ['es', ['Inicio', 'Escritos', 'Autores', 'Herramientas', 'Acerca de'], 'Cobollatin es un espacio de publicación bilingüe (en inglés y español) y un directorio de proyectos de ingeniería de software.'],
+  ]) {
+    const home = page(locale);
+    const about = page(`${locale}/about`);
+    const nav = home.match(/<nav aria-label="[^"]+">([\s\S]*?)<\/nav>/)?.[1];
+    const directory = home.match(/<nav class="home-directory"[^>]*>([\s\S]*?)<\/nav>/)?.[1];
+    assert(nav, `${locale} header navigation missing`);
+    assert(directory, `${locale} home directory missing`);
+    assert.deepEqual([...nav.matchAll(/<a href="([^"]+)"[^>]*>([^<]+)<\/a>/g)].map((match) => [match[1], match[2]]),
+      ['','blog/','authors/','tools/','about/'].map((path, i) => [`/${locale}/${path}`, labels[i]]));
+    assert.deepEqual([...directory.matchAll(/<a href="([^"]+)"[^>]*><span>([^<]+)<\/span>/g)].map((match) => [match[1], match[2]]),
+      ['blog/','authors/','tools/','about/'].map((path, i) => [`/${locale}/${path}`, labels[i + 1]]));
+    assert.doesNotMatch(home, new RegExp(`href="/${locale}/pages/`));
+    assert(about.includes(aboutText));
+    assert.match(about, new RegExp(`value="/${locale === 'en' ? 'es' : 'en'}/about/"`));
+    for (const section of ['blog', 'authors', 'tools']) {
+      assert(about.includes(`href="/${locale}/${section}/"`));
+    }
+    assert.match(about, new RegExp(`href="/${locale}/about/" aria-current="page"`));
+  }
   assert.match(page('en/authors'), /Fixture Author/);
   assert.match(page('es/authors'), /Fixture Author/);
   assert.match(page('en/authors'), /src="\/authors\/fixture\.svg"/);
@@ -105,7 +126,7 @@ try {
   assert(!existsSync(join(root, 'dist/en/blog/draft-fixture/index.html')));
   assert.doesNotMatch(page('en/blog'), /Draft fixture/);
   assert.doesNotMatch(page('en'), /Draft fixture/);
-  console.log('Static fixture build: published MDX post/page, author routes, counterpart, home fallback, and draft exclusion passed.');
+  console.log('Static fixture build: published MDX post/page, author and About routes, navigation, counterpart, home fallback, and draft exclusion passed.');
   const invalid = join(root, 'src/content/posts/en/invalid-author-fixture.mdx');
   assert(!existsSync(invalid), 'Refusing to replace invalid author fixture');
   fixtures.set('src/content/posts/en/invalid-author-fixture.mdx', '---\ntitle: Invalid author fixture\ndescription: Validation test.\npublishedAt: 2026-01-01\nlocale: en\nauthors: [missing-fixture-author]\n---\n\nInvalid reference.\n');
