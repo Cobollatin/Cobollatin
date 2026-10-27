@@ -18,7 +18,7 @@ const authors = await publishedAuthors();
       </a>
       {(author.data.links?.length || author.data.website) && <div class="author-links">
         {author.data.website && <a href={author.data.website}>Website</a>}
-        {author.data.links?.map((link) => <a href={link.url}>{link.label}</a>)}
+        {author.data.links?.map((link) => <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>)}
       </div>}
     </article>)}</div> : <p class="empty-state">{t.noAuthors}</p>}
   </div>

@@ -1,3 +1,14 @@
 {
-  "name": "Adrian Marquina"
+  "name": "Adrian Marquina",
+  "bio": "I do maths and software.",
+  "picture": "https://avatars.githubusercontent.com/u/40482066?v=4",
+  "links": [
+    { "label": "GitHub", "url": "https://github.com/Cobollatin" },
+    { "label": "LinkedIn", "url": "https://www.linkedin.com/in/cobollatin" },
+    { "label": "Reddit", "url": "https://www.reddit.com/user/Cobollatin/" },
+    { "label": "X / Twitter", "url": "https://twitter.com/Cobollatin" },
+    { "label": "Instagram", "url": "https://instagram.com/Cobollatin" },
+    { "label": "Facebook", "url": "https://facebook.com/Cobollatin" },
+    { "label": "YouTube", "url": "https://youtube.com/@Cobollatin" }
+  ]
 }

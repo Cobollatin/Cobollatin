@@ -42,8 +42,8 @@ try {
   assert.match(page('en'), /href="\/en\/authors\/"[^>]*><span>Authors<\/span>/);
   assert.match(page('es'), /href="\/es\/authors\/"[^>]*><span>Autores<\/span>/);
   for (const [locale, labels, aboutText] of [
-    ['en', ['Home', 'Writing', 'Authors', 'Tools', 'About'], 'Cobollatin is a bilingual (English and Spanish) publishing space and project directory for software engineering.'],
-    ['es', ['Inicio', 'Escritos', 'Autores', 'Herramientas', 'Acerca de'], 'Cobollatin es un espacio de publicación bilingüe (en inglés y español) y un directorio de proyectos de ingeniería de software.'],
+    ['en', ['Home', 'Writing', 'Authors', 'Tools', 'About'], "I'm Adrian Marquina (Cobollatin). I do maths and software."],
+    ['es', ['Inicio', 'Escritos', 'Autores', 'Herramientas', 'Acerca de'], 'Soy Adrian Marquina (Cobollatin). Me dedico a las matemáticas y al software.'],
   ]) {
     const home = page(locale);
     const about = page(`${locale}/about`);
@@ -58,9 +58,13 @@ try {
     assert.doesNotMatch(home, new RegExp(`href="/${locale}/pages/`));
     assert(about.includes(aboutText));
     assert.match(about, new RegExp(`value="/${locale === 'en' ? 'es' : 'en'}/about/"`));
-    for (const section of ['blog', 'authors', 'tools']) {
+    for (const section of ['blog', 'tools']) {
       assert(about.includes(`href="/${locale}/${section}/"`));
     }
+    assert(about.includes('href="https://github.com/Cobollatin" target="_blank" rel="noopener noreferrer"'));
+    assert(about.includes('href="https://www.linkedin.com/in/cobollatin" target="_blank" rel="noopener noreferrer"'));
+    assert(about.includes('href="mailto:contact@cobollatin.com"'));
+    assert.doesNotMatch(about, /publishing space|project directory|espacio de publicación|directorio de proyectos/i);
     assert.match(about, new RegExp(`href="/${locale}/about/" aria-current="page"`));
   }
   assert.match(page('en/authors'), /Fixture Author/);
@@ -109,7 +113,9 @@ try {
       assert(page(`${locale}/authors/adrian-marquina`).includes(externalLink));
     }
   }
-  assert.doesNotMatch(page('en/authors/adrian-marquina'), /class="author-avatar/);
+  assert.match(page('en/authors/adrian-marquina'), /class="author-avatar author-avatar-large"/);
+  assert.match(page('en/authors/adrian-marquina'), /src="https:\/\/avatars\.githubusercontent\.com\/u\/40482066\?v=4"/);
+  assert.match(page('en/authors/adrian-marquina'), /href="https:\/\/www\.linkedin\.com\/in\/cobollatin" target="_blank" rel="noopener noreferrer"/);
   assert(!existsSync(join(root, 'dist/en/authors/sample/index.html')));
   assert.match(page('en/authors/fixture-author'), /href="\/en\/blog\/route-fixture\/"/);
   assert.match(page('en/authors/fixture-author'), /src="\/authors\/fixture\.svg"/);
