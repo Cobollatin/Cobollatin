@@ -5,9 +5,10 @@ import assert from 'node:assert/strict';
 
 const root = process.cwd();
 const fixtures = new Map([
-  ['src/content/posts/en/route-fixture.mdx', `---\ntitle: Route fixture\ndescription: Synthetic route test.\npublishedAt: 2026-01-01\nlocale: en\nauthors: [sample]\ntranslationKey: route-fixture\n---\n\nPublished **MDX** fixture.\n`],
-  ['src/content/posts/es/ruta-fixture.mdx', `---\ntitle: Prueba de ruta\ndescription: Prueba sintética.\npublishedAt: 2026-01-01\nlocale: es\nauthors: [sample]\ntranslationKey: route-fixture\n---\n\nContenido **MDX** publicado.\n`],
-  ['src/content/pages/en/page-fixture.mdx', `---\ntitle: Page fixture\ndescription: Synthetic page test.\nlocale: en\nauthors: [sample]\n---\n\nPublished **page** fixture.\n`],
+  ['src/content/authors/fixture-author.json', '{"name":"Fixture Author"}\n'],
+  ['src/content/posts/en/route-fixture.mdx', `---\ntitle: Route fixture\ndescription: Synthetic route test.\npublishedAt: 2026-01-01\nlocale: en\nauthors: [fixture-author]\ntranslationKey: route-fixture\n---\n\nPublished **MDX** fixture.\n`],
+  ['src/content/posts/es/ruta-fixture.mdx', `---\ntitle: Prueba de ruta\ndescription: Prueba sintética.\npublishedAt: 2026-01-01\nlocale: es\nauthors: [fixture-author]\ntranslationKey: route-fixture\n---\n\nContenido **MDX** publicado.\n`],
+  ['src/content/pages/en/page-fixture.mdx', `---\ntitle: Page fixture\ndescription: Synthetic page test.\nlocale: en\nauthors: [fixture-author]\n---\n\nPublished **page** fixture.\n`],
   ['src/content/posts/en/draft-fixture.mdx', `---\ntitle: Draft fixture\ndescription: Exclusion test.\npublishedAt: 2026-01-01\nlocale: en\nauthors: [sample]\ndraft: true\n---\n\nThis must stay unpublished.\n`],
 ]);
 
@@ -36,13 +37,23 @@ try {
   assert.match(page('en/pages'), /Page fixture/);
   assert.match(page('en'), /Route fixture/);
   assert.match(page('en'), /Page fixture/);
+  assert.match(page('en'), /href="\/en\/authors\/"[^>]*><span>Authors<\/span>/);
+  assert.match(page('es'), /href="\/es\/authors\/"[^>]*><span>Autores<\/span>/);
+  assert.match(page('en/authors'), /Fixture Author/);
+  assert.match(page('es/authors'), /Fixture Author/);
+  assert.doesNotMatch(page('en/authors'), /Example Author \(sample\)/);
+  assert.match(page('en/authors/fixture-author'), /href="\/en\/blog\/route-fixture\/"/);
+  assert.match(page('es/authors/fixture-author'), /href="\/es\/blog\/ruta-fixture\/"/);
+  assert.match(page('es/authors/fixture-author'), /href="\/en\/pages\/page-fixture\/"/);
+  assert.match(page('en/authors/fixture-author'), /value="\/es\/authors\/fixture-author\/"/);
+  assert.match(page('en/blog/route-fixture'), /href="\/en\/authors\/"[^>]*>Authors<\/a>/);
   assert.doesNotMatch(page('en'), /Curious work|Find your way in|first piece is still/);
   assert.doesNotMatch(page('en/tools'), /word-counter|Word counter/);
   assert(!existsSync(join(root, 'dist/en/tools/word-counter/index.html')));
   assert(!existsSync(join(root, 'dist/en/blog/draft-fixture/index.html')));
   assert.doesNotMatch(page('en/blog'), /Draft fixture/);
   assert.doesNotMatch(page('en'), /Draft fixture/);
-  console.log('Static fixture build: published MDX post/page, counterpart, home fallback, and draft exclusion passed.');
+  console.log('Static fixture build: published MDX post/page, author routes, counterpart, home fallback, and draft exclusion passed.');
   const invalid = join(root, 'src/content/posts/en/invalid-author-fixture.mdx');
   assert(!existsSync(invalid), 'Refusing to replace invalid author fixture');
   fixtures.set('src/content/posts/en/invalid-author-fixture.mdx', '---\ntitle: Invalid author fixture\ndescription: Validation test.\npublishedAt: 2026-01-01\nlocale: en\nauthors: [missing-fixture-author]\n---\n\nInvalid reference.\n');

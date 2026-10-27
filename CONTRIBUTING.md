@@ -16,6 +16,8 @@ Create `src/content/authors/<id>.json` with a stable lowercase hyphenated ID:
 
 The existing `sample` author is synthetic and belongs only to draft examples and tests. Replace it with a real contributor ID for real content. Every `authors` ID in a document must resolve to an author record; the build validates this.
 
+Authors referenced by published posts or pages appear at `/<locale>/authors/` and `/<locale>/authors/<id>/` in both supported locales. A profile lists work in that locale, or English work when no translation is published for that section. Unreferenced records, including `sample`, are not published as profiles.
+
 ## Posts and pages
 
 Posts can use `.md` or `.mdx` and live in `src/content/posts/en/` or `src/content/posts/es/`. Post filenames must be one lowercase hyphenated slug; posts publish at `/<locale>/blog/<slug>/`. Pages use `.mdx` under `src/content/pages/<locale>/`, can have nested lowercase hyphenated paths, and publish at `/<locale>/pages/<path>/`. The reserved slug `index` is unavailable.

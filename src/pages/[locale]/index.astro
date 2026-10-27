@@ -16,6 +16,7 @@ const pages = (await publishedPages(locale)).slice(0, 3);
     <nav class="home-directory" aria-label={locale === 'es' ? 'Secciones' : 'Sections'}>
       <a href={localePath(locale, 'blog/')}><span>{t.blog}</span><span aria-hidden="true">↗</span></a>
       <a href={localePath(locale, 'pages/')}><span>{t.pages}</span><span aria-hidden="true">↗</span></a>
+      <a href={localePath(locale, 'authors/')}><span>{t.authors}</span><span aria-hidden="true">↗</span></a>
       <a href={localePath(locale, 'tools/')}><span>{t.tools}</span><span aria-hidden="true">↗</span></a>
     </nav>
     {posts.length > 0 && <section class="home-content" aria-labelledby="home-writing">

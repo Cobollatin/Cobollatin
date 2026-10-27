@@ -56,7 +56,7 @@ p { line-height: 1.65; }
 .home { min-height: 68vh; padding: clamp(4rem, 9vw, 8rem) 0 5.5rem; }
 .home-masthead { padding-bottom: clamp(3.5rem, 7vw, 6rem); }
 .home h1 { margin: 0; font-size: clamp(2.8rem, 6vw, 5.8rem); }
-.home-directory { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.home-directory { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .home-directory a { display: flex; justify-content: space-between; gap: 1rem; padding: 1.5rem 1.2rem; font-size: clamp(1.05rem, 1.5vw, 1.3rem); font-weight: 650; text-decoration: none; }
 .home-directory a:first-child { padding-left: 0; }
 .home-directory a + a { border-left: 1px solid var(--line); }

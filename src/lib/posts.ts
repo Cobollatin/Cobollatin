@@ -7,6 +7,21 @@ export type Post = CollectionEntry<'posts'>;
 export type AuthoredPage = CollectionEntry<'pages'>;
 export type AuthoredEntry = Post | AuthoredPage;
 
+export async function publishedAuthors(): Promise<CollectionEntry<'authors'>[]> {
+  const [posts, pages, authors] = await Promise.all([
+    publishedPosts(), publishedPages(), getCollection('authors'),
+  ]);
+  const publishedIds = new Set([...posts, ...pages].flatMap((entry) => entry.data.authors.map((author) => author.id)));
+  return authors.filter((author) => publishedIds.has(author.id))
+    .sort((a, b) => a.data.name.localeCompare(b.data.name));
+}
+
+export function authorContent<T extends AuthoredEntry>(entries: T[], authorId: string, locale: Locale): T[] {
+  const authored = entries.filter((entry) => entry.data.authors.some((author) => author.id === authorId));
+  const localized = authored.filter((entry) => entry.data.locale === locale);
+  return localized.length ? localized : authored.filter((entry) => entry.data.locale === 'en');
+}
+
 export async function validateAuthors(entries: AuthoredEntry[], kind: 'posts' | 'pages'): Promise<void> {
   for (const entry of entries) {
     for (const author of entry.data.authors) {
